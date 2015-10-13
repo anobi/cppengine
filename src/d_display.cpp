@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include <SDL2/SDL_opengl.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include "d_display.hpp"
 
 SDL_GLContext D_Context; 
@@ -27,14 +29,64 @@ void Display::Update(){
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
-	glRotatef(0.2f,1.0f,1.0f,1.0f);
-	glColor3f(0.0f,1.0f,0.0f); 
+	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
-	glBegin( GL_QUADS );
-		glVertex2f( -0.5f, -0.5f );
-		glVertex2f( 0.5f, -0.5f );
-		glVertex2f( 0.5f, 0.5f );
-		glVertex2f( -0.5f, 0.5f );
+    //
+    // IT A CUBE
+    //
+    
+    //left
+	glColor3f(0.5f,0.5f,0.5f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.5f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 0.5f, 0.0f );
+        glVertex3f( 0.5f, 0.5f, 0.0f );
+	glEnd();
+
+    //front
+	glColor3f(0.8f,0.8f,0.8f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 0.0f, 0.5f );
+        glVertex3f( 0.0f, 0.5f, 0.0f );
+        glVertex3f( 0.0f, 0.5f, 0.5f );
+	glEnd();
+
+    //right
+	glColor3f(0.2f,0.2f,0.2f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.0f, 0.0f, 0.5f );
+        glVertex3f( 0.5f, 0.0f, 0.5f );
+        glVertex3f( 0.0f, 0.5f, 0.5f );
+        glVertex3f( 0.5f, 0.5f, 0.5f );
+	glEnd();
+
+    //back
+	glColor3f(1.0f,1.0f,1.0f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.5f, 0.0f, 0.5f );
+        glVertex3f( 0.5f, 0.0f, 0.0f );
+        glVertex3f( 0.5f, 0.5f, 0.5f );
+        glVertex3f( 0.5f, 0.5f, 0.0f );
+	glEnd();
+
+    //floor
+	glColor3f(0.6f,0.6f,0.6f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.5f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 0.0f, 0.5f );
+        glVertex3f( 0.5f, 0.0f, 0.5f );
+	glEnd();
+
+    //ceiling
+	glColor3f(0.1f,0.1f,0.1f); 
+	glBegin( GL_TRIANGLE_STRIP );
+        glVertex3f( 0.0f, 0.5f, 0.0f );
+        glVertex3f( 0.5f, 0.5f, 0.0f );
+        glVertex3f( 0.0f, 0.5f, 0.5f );
+        glVertex3f( 0.5f, 0.5f, 0.5f );
 	glEnd();
 	
 	SDL_GL_SwapWindow(D_Window);
@@ -61,7 +113,7 @@ void Display::SetViewport(int width, int height){
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
