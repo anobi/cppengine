@@ -102,6 +102,7 @@ void Display::InitGL(){
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -109,11 +110,23 @@ void Display::InitGL(){
 
 void Display::SetViewport(int width, int height){
 	GLfloat ratio;
+
 	ratio = (GLfloat) width / (GLfloat) height;
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+    SetPerspective(width, height, 60.0f);
+
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+}
+
+void Display::SetPerspective(int width, int height, float fov){
+	GLfloat ratio = (GLfloat) width / (GLfloat) height;
+    GLfloat zNear = 0.1f;
+    GLfloat zFar = 255.0f;
+    GLfloat fH = tan(float(fov / 360.0f * 3.14159f)) * zNear;
+    GLfloat fW = fH * ratio;
+
+    glFrustum(-fH, fW, -fH, fH, zNear, zFar);
 }
