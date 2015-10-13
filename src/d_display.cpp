@@ -1,8 +1,14 @@
 #include <iostream>
 #include <math.h>
 #include <SDL2/SDL_opengl.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+
+//GL headers for osx/linux
+#if defined(__APPLE__)
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
+
 #include "d_display.hpp"
 
 SDL_GLContext D_Context; 

@@ -5,7 +5,7 @@ CFLAGS = -Wall -std=c++14
 LIBS = -lSDL2main -lSDL2
 
 OS := $(shell uname)
-ifeq (OS, Darwin)
+ifeq ($(OS), Darwin)
 	LIBS += -framework OpenGL
 else
 	CFLAGS += -stdlib=libstdc++
