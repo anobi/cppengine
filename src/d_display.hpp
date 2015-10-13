@@ -8,7 +8,7 @@ class Display {
 private:
 	void InitGL();
 	void SetViewport(int width, int height);
-    void SetPerspective(int width, int height, float fov);
+    void SetPerspective(int width, int height, float fov, bool usePerspective);
 
 public:
     Display();

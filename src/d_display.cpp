@@ -116,17 +116,22 @@ void Display::SetViewport(int width, int height){
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    SetPerspective(width, height, 60.0f);
+    SetPerspective(width, height, 60.0f, true);
 
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void Display::SetPerspective(int width, int height, float fov){
+void Display::SetPerspective(int width, int height, float fov, bool usePerspective){
 	GLfloat ratio = (GLfloat) width / (GLfloat) height;
     GLfloat zNear = 0.1f;
     GLfloat zFar = 255.0f;
     GLfloat fH = tan(float(fov / 360.0f * 3.14159f)) * zNear;
     GLfloat fW = fH * ratio;
 
-    glFrustum(-fH, fW, -fH, fH, zNear, zFar);
+    if(usePerspective) {
+        glFrustum(-fW, fW, -fH, fH, zNear, zFar);
+    }
+    else {
+        glOrtho(-fW, fW, -fH, fH, zNear, zFar);
+    }
 }
