@@ -1,9 +1,9 @@
 #include <iostream>
 #include <chrono>
 #include <SDL2/SDL.h>
-#include "g_game.hpp"
-#include "d_display.hpp"
-#include "g_input.hpp"
+#include "Game.hpp"
+#include "Display.hpp"
+#include "Input.hpp"
 
 Display display;
 Input input;

@@ -4,12 +4,12 @@
 
 //GL headers for osx/linux
 #ifdef __APPLE__
-	#include <OpenGL/gl.h>
+#include <OpenGL/gl.h>
 #else
-	#include <GL/gl.h>
+#include <GL/gl.h>
 #endif
 
-#include "d_display.hpp"
+#include "Display.hpp"
 
 SDL_GLContext D_Context; 
 
