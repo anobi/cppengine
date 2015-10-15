@@ -1,13 +1,14 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "lib/Vector.hpp"
+#include "Vector.hpp"
+
 #include <vector>
 
 typedef struct {
-    vector3<float> normal;
-    vector3<float> position;
-    vector3<float> color;
+    vector3 normal;
+    vector3 position;
+    vector3 color;
 } vertex_t;
 
 typedef struct {
@@ -22,7 +23,7 @@ typedef struct {
 class Entity {
 
 private:
-    vector3<float> location;
+    vector3 location;
     bool alive;
     renderEntity_t* renderEntity;
 
@@ -31,9 +32,10 @@ public:
     ~Entity();
 
     void Spawn();
+	void Update();
     void Kill();
     void Remove();
-    vector3<float> GetLocation();
+    vector3 GetLocation();
     void SetLocation(float x, float y, float z);
     
 };

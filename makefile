@@ -17,3 +17,6 @@ all: $(OBJ)
 
 run: $(OBJ)
 	exec $(BUILD)
+
+clean: $(OBJ)
+	rm $(PRE) && rm $(BUILD)
