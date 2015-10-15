@@ -1,38 +1,49 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-class vector3{
+template <class T>
+class vector3 {
 public:
-    float x, y, z;
-    vector3();
-    explicit vector3(const float x, const float y, const float z);
-    void Set(const float x, const float y, const float z);
-    void Zero();
 
-    float   operator [](int i) const;
-    float & operator [](int i);
+    T x, y, z;
+    vector3();
+
+    int  operator [](int i) const;
+    int& operator [](int i);
+    bool operator == (const vector3 &v) const;
     vector3 operator + (const vector3 &v) const;
     vector3 operator - (const vector3 &v) const;
     vector3 operator * (const vector3 &v) const;
-    vector3 operator * (const float a) const;
-    vector3 operator / (const float av) const;
-};
+    vector3 operator / (const vector3 &v) const;
+    vector3 operator + (const T a) const;
+    vector3 operator - (const T a) const;
+    vector3 operator * (const T a) const;
+    vector3 operator / (const T a) const;
 
-inline vector3::vector3(){}
-inline vector3::vector3(const float x, const float y, const float z){
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
-inline void vector3::Set(const float x, const float y, const float z){
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
-inline void vector3::Zero(){
-    this->x = 0.0f;
-    this->y = 0.0f;
-    this->z = 0.0f;
-}
+    inline explicit vector3(const T x, const T y, const T z){
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    };
+
+    inline void Set(const T x, const T y, const T z){
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    };
+
+    inline void Zero(){
+        this->x = T();
+        this->y = T();
+        this->z = T();
+    };
+
+    inline void Normalize(){
+        
+    };
+
+    inline T Dot(){};
+    inline T Length(){};
+};
 
 #endif
