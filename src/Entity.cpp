@@ -26,7 +26,7 @@ void Entity::Remove(){
 	
 }
 
-vector3 Entity::GetLocation(){
+vector3<float> Entity::GetLocation(){
 	return location;
 }
 
