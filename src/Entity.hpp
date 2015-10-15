@@ -12,6 +12,7 @@ typedef struct {
 
 typedef struct {
     std::vector<vertex_t> vertices;
+    // + textures, shaders etc..
 } renderEntity_t;
 
 /////////////////

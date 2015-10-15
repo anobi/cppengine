@@ -8,17 +8,33 @@ public:
     T x, y, z;
     vector3();
 
-    int  operator [](int i) const;
-    int& operator [](int i);
-    bool operator == (const vector3 &v) const;
-    vector3 operator + (const vector3 &v) const;
-    vector3 operator - (const vector3 &v) const;
-    vector3 operator * (const vector3 &v) const;
-    vector3 operator / (const vector3 &v) const;
-    vector3 operator + (const T a) const;
-    vector3 operator - (const T a) const;
-    vector3 operator * (const T a) const;
-    vector3 operator / (const T a) const;
+    inline bool operator == (const vector3 &v) const {
+        return (x == v.x && y == v.y && z == v.z);
+    };
+    inline vector3 operator + (const vector3 &v) const{
+        return vector3(x + v.x, y + v.y, z + v.z);
+    };
+    inline vector3 operator - (const vector3 &v) const{
+        return vector3(x - v.x, y - v.y, z - v.z);
+    };
+    inline vector3 operator * (const vector3 &v) const{
+        return vector3(x * v.x, y * v.y, z * v.z);
+    };
+    inline vector3 operator / (const vector3 &v) const{
+        return vector3(x / v.x, y / v.y, z / v.z);
+    };
+    inline vector3 operator + (const T a) const{
+        return vector3(x + a, y + a, z + a);
+    };
+    inline vector3 operator - (const T a) const{
+        return vector3(x - a, y - a, z - a);
+    };
+    inline vector3 operator * (const T a) const{
+        return vector3(x * a, y * a, z * a);
+    };
+    inline vector3 operator / (const T a) const{
+        return vector3(x / a, y / a, z / a);
+    };
 
     inline explicit vector3(const T x, const T y, const T z){
         this->x = x;
@@ -43,7 +59,9 @@ public:
     };
 
     inline T Dot(){};
-    inline T Length(){};
+    inline T Length(){
+        return T(sqrt(x*x + y*y + z*z));
+    };
 };
 
 #endif
