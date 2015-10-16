@@ -104,3 +104,7 @@ void Game::Quit(){
     std::cout << "QUIT\n";
     gameState = GAMESTATE_STOPPED;
 }
+
+std::vector<std::shared_ptr<Entity> > Game::GetEntities(){
+    return entities;
+};

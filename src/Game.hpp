@@ -29,6 +29,8 @@ public:
 	void Shutdown();
 	void Loop();
 	void Quit();
+
+    std::vector<std::shared_ptr<Entity> > GetEntities();
 };
 
 #endif

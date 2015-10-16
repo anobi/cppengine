@@ -25,11 +25,12 @@ class Entity {
 private:
     vector3<float> location;
     bool alive;
-    renderEntity_t renderEntity;
 
 public:
     Entity();
     ~Entity();
+
+    renderEntity_t renderEntity;
 
 	void Init();
     void Spawn();

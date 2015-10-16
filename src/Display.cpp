@@ -10,6 +10,7 @@
 #endif
 
 #include "Display.hpp"
+#include "Renderer.hpp"
 
 SDL_GLContext D_Context; 
 
@@ -37,63 +38,8 @@ void Display::Update(){
 	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
 	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
-    //
-    // IT A CUBE
-    //
-    
-    //left
-	glColor3f(0.5f,0.5f,0.5f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.5f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.5f, 0.0f );
-        glVertex3f( 0.5f, 0.5f, 0.0f );
-	glEnd();
+    //render entities here
 
-    //front
-	glColor3f(0.8f,0.8f,0.8f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.0f, 0.5f );
-        glVertex3f( 0.0f, 0.5f, 0.0f );
-        glVertex3f( 0.0f, 0.5f, 0.5f );
-	glEnd();
-
-    //right
-	glColor3f(0.2f,0.2f,0.2f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.0f, 0.0f, 0.5f );
-        glVertex3f( 0.5f, 0.0f, 0.5f );
-        glVertex3f( 0.0f, 0.5f, 0.5f );
-        glVertex3f( 0.5f, 0.5f, 0.5f );
-	glEnd();
-
-    //back
-	glColor3f(1.0f,1.0f,1.0f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.5f, 0.0f, 0.5f );
-        glVertex3f( 0.5f, 0.0f, 0.0f );
-        glVertex3f( 0.5f, 0.5f, 0.5f );
-        glVertex3f( 0.5f, 0.5f, 0.0f );
-	glEnd();
-
-    //floor
-	glColor3f(0.6f,0.6f,0.6f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.5f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.0f, 0.5f );
-        glVertex3f( 0.5f, 0.0f, 0.5f );
-	glEnd();
-
-    //ceiling
-	glColor3f(0.1f,0.1f,0.1f); 
-	glBegin( GL_TRIANGLE_STRIP );
-        glVertex3f( 0.0f, 0.5f, 0.0f );
-        glVertex3f( 0.5f, 0.5f, 0.0f );
-        glVertex3f( 0.0f, 0.5f, 0.5f );
-        glVertex3f( 0.5f, 0.5f, 0.5f );
-	glEnd();
 	
 	SDL_GL_SwapWindow(D_Window);
 }
