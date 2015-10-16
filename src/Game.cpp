@@ -5,9 +5,6 @@
 #include "Display.hpp"
 #include "Input.hpp"
 
-Display display;
-Input input;
-
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
 }
@@ -41,6 +38,10 @@ bool Game::Init(){
 
 void Game::Start(){
     if(Init()){
+
+		Entity* testEnt = new Entity();
+		testEnt->MakeTestEntity();
+		
         gameState = GAMESTATE_RUNNING;
         Loop();
     } else {
@@ -79,6 +80,9 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
         //update entities
+		for(auto e : entities){
+			e.Update();
+		}
         //update world
         //render
         display.Update();

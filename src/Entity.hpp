@@ -25,19 +25,20 @@ class Entity {
 private:
     vector3<float> location;
     bool alive;
-    renderEntity_t* renderEntity;
+    renderEntity_t renderEntity;
 
 public:
     Entity();
     ~Entity();
 
+	void Init();
     void Spawn();
 	void Update();
     void Kill();
     void Remove();
     vector3<float> GetLocation();
     void SetLocation(float x, float y, float z);
-    
+	void MakeTestEntity();
 };
 
 #endif
