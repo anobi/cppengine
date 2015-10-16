@@ -7,6 +7,7 @@
 
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
+    display = std::make_unique<Display>();
 }
 
 bool Game::Init(){
@@ -21,7 +22,7 @@ bool Game::Init(){
 
     //Display
     std::cout << "* Display: ";
-    if(!display.Init()){
+    if(!display->Init()){
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
     } else std::cout << "done\n";
@@ -39,9 +40,11 @@ bool Game::Init(){
 void Game::Start(){
     if(Init()){
 
-		Entity* testEnt = new Entity();
-		testEnt->MakeTestEntity();
-		
+        auto testEnt = std::make_unique<Entity>();
+        testEnt->MakeTestEntity();
+        testEnt->SetLocation(-2.0f, -0.0f, -0.0f);
+        entities.push_back(std::move(testEnt));
+
         gameState = GAMESTATE_RUNNING;
         Loop();
     } else {
@@ -80,12 +83,12 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
         //update entities
-		for(auto e : entities){
-			e.Update();
+		for(auto &e : entities){
+			e->Update();
 		}
         //update world
         //render
-        display.Update();
+        display->Update();
     }
     Shutdown();
 }
@@ -93,7 +96,7 @@ void Game::Loop(){
 void Game::Shutdown(){
     std::cout << "Shutting down...\n";
     input.Shutdown();
-    display.Shutdown();
+    display->Shutdown();
     SDL_Quit();
 }
 

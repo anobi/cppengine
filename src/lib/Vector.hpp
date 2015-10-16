@@ -45,10 +45,10 @@ public:
 		return vector3(x / a, y / a, z / a);
 	};
 
-	inline void Set(const T ax, T ay, const T az){
-		x = ax;
-		this->y = ay;
-		this->z = az;
+	inline void Set(const T x, T y, const T z){
+		this->x = x;
+		this->y = y;
+		this->z = z;
 	}
 
 	inline void Zero(){
@@ -58,11 +58,13 @@ public:
 	}
 
 	inline void Normalize(){
-
+        x = x / Length();
+        y = y / Length();
+        z = z / Length();
 	}
 
-	inline T Dot(){
-		return 0.0f;
+	inline T Dot(vector3<T> &v){
+		return T(x * v.x + y * v.y + z * v.z);
 	}
 
 	inline T Length(){

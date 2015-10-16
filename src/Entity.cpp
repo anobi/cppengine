@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Entity.hpp"
 
 Entity::Entity(){
@@ -18,7 +19,7 @@ void Entity::Spawn(){
 }
 
 void Entity::Update(){
-	
+    //std::cout << "%s", renderEntity.vertices.size();
 }
 
 void Entity::Kill(){

@@ -1,6 +1,7 @@
 #ifndef G_GAME_H
 #define G_GAME_H
 
+#include <memory>
 #include <vector>
 #include "Display.hpp"
 #include "Input.hpp"
@@ -14,14 +15,14 @@ typedef enum {
 class Game {
 
 private:
-	Display display;
 	Input input;
+    std::unique_ptr<Display> display;
+    std::vector<std::shared_ptr<Entity> > entities;
 
 public:
 	Game();
 
 	gameState_t gameState;
-	std::vector<Entity> entities;
 
 	bool Init();
 	void Start();
