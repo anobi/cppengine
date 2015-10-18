@@ -1,20 +1,24 @@
+//GL headers for osx/linux
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #include "Renderer.hpp"
 
 Renderer::Renderer(){
-    this->display = nullptr;
 }
 
 Renderer::~Renderer(){
     
 }
 
-void Renderer::Init(Display *display){
-    this->display = display; 
+void Renderer::Init(){
 }
 
 void Renderer::RenderEntity(renderEntity_t entity){
-    int bufferSize = entity.vertices.size(); 
+    int bufferSize = entity.vertices.size() * 3; 
     GLfloat vertexBufferData[bufferSize];
     int i = 0;
 

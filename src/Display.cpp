@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <memory>
 #include <SDL2/SDL_opengl.h>
 
 //GL headers for osx/linux
@@ -16,7 +17,7 @@ SDL_GLContext D_Context;
 
 Display::Display(){
     D_Window = 0;
-    D_Renderer = NULL;
+    renderer = std::make_unique<Renderer>();
 }
 
 bool Display::Init(){
@@ -24,13 +25,14 @@ bool Display::Init(){
 
 	D_Window = SDL_CreateWindow("asd", 0, 0, 800, 600, SDL_WINDOW_OPENGL);
 	D_Context = SDL_GL_CreateContext(D_Window);
+	renderer->Init();
 
 	InitGL();
     
     return true;
 }
 
-void Display::Update(){
+void Display::Update(std::vector<std::shared_ptr<Entity> > entities){
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -39,6 +41,9 @@ void Display::Update(){
 	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
     //render entities here
+	for(auto e : entities){
+		renderer->RenderEntity(e->renderEntity);
+	}
 
 	
 	SDL_GL_SwapWindow(D_Window);

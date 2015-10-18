@@ -88,7 +88,7 @@ void Game::Loop(){
 		}
         //update world
         //render
-        display->Update();
+        display->Update(entities);
     }
     Shutdown();
 }

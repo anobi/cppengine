@@ -49,6 +49,10 @@ void Entity::MakeTestEntity(){
 	l2.position = vector3<float>(0.5f, 0.0f, 0.0f);
 	l3.position = vector3<float>(0.0f, 0.5f, 0.0f);
 	l4.position = vector3<float>(0.5f, 0.5f, 0.0f);
+	l1.color = vector3<float>(0.2f, 0.2f, 0.2f);
+	l2.color = vector3<float>(0.2f, 0.2f, 0.2f);
+	l3.color = vector3<float>(0.2f, 0.2f, 0.2f);
+	l4.color = vector3<float>(0.2f, 0.2f, 0.2f);
 	renderEntity.vertices.push_back(l1);
 	renderEntity.vertices.push_back(l2);
 	renderEntity.vertices.push_back(l3);
@@ -63,6 +67,10 @@ void Entity::MakeTestEntity(){
 	f2.position = vector3<float>(0.0f, 0.0f, 0.5f);
 	f3.position = vector3<float>(0.0f, 0.5f, 0.0f);
 	f4.position = vector3<float>(0.0f, 0.5f, 0.5f);
+	f1.color = vector3<float>(0.4f, 0.4f, 0.4f);
+	f2.color = vector3<float>(0.4f, 0.4f, 0.4f);
+	f3.color = vector3<float>(0.4f, 0.4f, 0.4f);
+	f4.color = vector3<float>(0.4f, 0.4f, 0.4f);
 	renderEntity.vertices.push_back(f1);
 	renderEntity.vertices.push_back(f2);
 	renderEntity.vertices.push_back(f3);
@@ -77,6 +85,10 @@ void Entity::MakeTestEntity(){
 	r2.position = vector3<float>(0.5f, 0.0f, 0.5f);
 	r3.position = vector3<float>(0.0f, 0.5f, 0.5f);
 	r4.position = vector3<float>(0.5f, 0.5f, 0.5f);
+	r1.color = vector3<float>(0.6f, 0.6f, 0.6f);
+	r2.color = vector3<float>(0.6f, 0.6f, 0.6f);
+	r3.color = vector3<float>(0.6f, 0.6f, 0.6f);
+	r4.color = vector3<float>(0.6f, 0.6f, 0.6f);
 	renderEntity.vertices.push_back(r1);
 	renderEntity.vertices.push_back(r2);
 	renderEntity.vertices.push_back(r3);
@@ -91,6 +103,10 @@ void Entity::MakeTestEntity(){
 	b2.position = vector3<float>(0.5f, 0.0f, 0.0f);
 	b3.position = vector3<float>(0.5f, 0.5f, 0.5f);
 	b4.position = vector3<float>(0.5f, 0.5f, 0.0f);
+	b1.color = vector3<float>(0.8f, 0.8f, 0.8f);
+	b2.color = vector3<float>(0.8f, 0.8f, 0.8f);
+	b3.color = vector3<float>(0.8f, 0.8f, 0.8f);
+	b4.color = vector3<float>(0.8f, 0.8f, 0.8f);
 	renderEntity.vertices.push_back(b1);
 	renderEntity.vertices.push_back(b2);
 	renderEntity.vertices.push_back(b3);
@@ -105,6 +121,10 @@ void Entity::MakeTestEntity(){
 	t2.position = vector3<float>(0.5f, 0.5f, 0.0f);
 	t3.position = vector3<float>(0.0f, 0.5f, 0.5f);
 	t4.position = vector3<float>(0.5f, 0.5f, 0.5f);
+	t1.color = vector3<float>(0.9f, 0.9f, 0.9f);
+	t2.color = vector3<float>(0.9f, 0.9f, 0.9f);
+	t3.color = vector3<float>(0.9f, 0.9f, 0.9f);
+	t4.color = vector3<float>(0.9f, 0.9f, 0.9f);
 	renderEntity.vertices.push_back(t1);
 	renderEntity.vertices.push_back(t2);
 	renderEntity.vertices.push_back(t3);
@@ -119,8 +139,12 @@ void Entity::MakeTestEntity(){
 	d2.position = vector3<float>(0.5f, 0.0f, 0.0f);
 	d3.position = vector3<float>(0.0f, 0.0f, 0.5f);
 	d4.position = vector3<float>(0.5f, 0.0f, 0.5f);
-	renderEntity.vertices.push_back(b1);
-	renderEntity.vertices.push_back(b2);
-	renderEntity.vertices.push_back(b3);
-	renderEntity.vertices.push_back(b4);
+	d1.color = vector3<float>(0.3f, 0.3f, 0.3f);
+	d2.color = vector3<float>(0.3f, 0.3f, 0.3f);
+	d3.color = vector3<float>(0.3f, 0.3f, 0.3f);
+	d4.color = vector3<float>(0.3f, 0.3f, 0.3f);
+	renderEntity.vertices.push_back(d1);
+	renderEntity.vertices.push_back(d2);
+	renderEntity.vertices.push_back(d3);
+	renderEntity.vertices.push_back(d4);
 }

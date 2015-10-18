@@ -1,7 +1,7 @@
 CC = clang++
 BUILD = bin/game
 SRC = src/*.cpp
-CFLAGS = -Wall -std=c++14
+CFLAGS = -Wall -std=c++14 -g
 LIBS = -lSDL2main -lSDL2
 
 OS := $(shell uname)

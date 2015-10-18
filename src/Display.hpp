@@ -2,6 +2,8 @@
 #define D_DISPLAY_H
 
 #include <SDL2/SDL.h>
+#include <memory>
+#include "Renderer.hpp"
 
 class Display {
 
@@ -14,11 +16,10 @@ public:
     Display();
     
     SDL_Window* D_Window;
-    SDL_Renderer* D_Renderer;
-	SDL_RendererInfo D_RendererInfo;
+	std::unique_ptr<Renderer> renderer;
 
     bool Init();
-    void Update();
+    void Update(std::vector<std::shared_ptr<Entity> > entities);
     void Shutdown();
 };
 

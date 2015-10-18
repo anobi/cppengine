@@ -2,17 +2,15 @@
 #define RENDERER_H
 
 #include <memory>
-#include "Display.hpp"
 #include "Entity.hpp"
 
 class Renderer {
 private:
-    Display *display;
 public:
     Renderer();
     ~Renderer();
 
-    void Init(Display *display);
+    void Init();
     void RenderEntity(renderEntity_t entity);
 };
 
