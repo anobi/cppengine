@@ -37,6 +37,7 @@ bin/
 #Visual Studio shit
 *.suo
 *.vcxproj.user
+*.vcxproj.filters
 *.sdf
 *.opensdf
 .vs
