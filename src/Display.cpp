@@ -26,9 +26,10 @@ bool Display::Init(){
 
 	D_Window = SDL_CreateWindow("asd", 0, 0, 800, 600, SDL_WINDOW_OPENGL);
 	D_Context = SDL_GL_CreateContext(D_Window);
+	glewInit();
 	renderer->Init();
-
 	InitGL();
+
     
     return true;
 }

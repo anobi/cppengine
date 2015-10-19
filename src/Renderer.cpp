@@ -18,9 +18,10 @@ void Renderer::Init(){
 }
 
 void Renderer::RenderEntity(renderEntity_t entity){
-    constexpr int bufferSize = sizeof(entity.vertices) * 3; 
-    GLfloat vertexBufferData[bufferSize];
-	GLfloat colorBufferData[bufferSize];
+    constexpr int bufferSize = sizeof(entity.vertices);
+
+    GLfloat vertexBufferData[72];
+	GLfloat colorBufferData[72];
     int i = 0;
 
     for(auto v : entity.vertices){
@@ -43,8 +44,6 @@ void Renderer::RenderEntity(renderEntity_t entity){
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, bufferSize);
+	glDrawArrays(GL_TRIANGLES, 0, 72);
 	glDisableVertexAttribArray(0);
-
-
 }
