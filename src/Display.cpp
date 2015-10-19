@@ -1,13 +1,15 @@
+#define GLEW_STATIC
+
 #include <iostream>
 #include <math.h>
 #include <memory>
-#include <SDL2/SDL_opengl.h>
 
 //GL headers for osx/linux
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+#include <GL/gl3.h>
+#include <GL/glfw.h>
 #endif
 
 #include "Display.hpp"

@@ -1,8 +1,8 @@
 //GL headers for osx/linux
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 #else
-#include <GL/gl.h>
+#include <GL/gl3.h>
 #endif
 
 #include "Renderer.hpp"
@@ -20,19 +20,31 @@ void Renderer::Init(){
 void Renderer::RenderEntity(renderEntity_t entity){
     int bufferSize = entity.vertices.size() * 3; 
     GLfloat vertexBufferData[bufferSize];
+	GLfloat colorBufferData[bufferSize];
     int i = 0;
 
     for(auto v : entity.vertices){
         vertexBufferData[i] = v.position.x;
         vertexBufferData[i+1] = v.position.y;
         vertexBufferData[i+2] = v.position.z;
+        colorBufferData[i] = v.color.x;
+        colorBufferData[i+1] = v.color.y;
+        colorBufferData[i+2] = v.color.z;
         i +=3;
     }
 
-    glPushMatrix();
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertexBufferData);
-    glDrawArrays(GL_TRIANGLES, 0, bufferSize);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData)
+				 , vertexBufferData, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, bufferSize);
+	glDisableVertexAttribArray(0);
+
+
 }
