@@ -46,7 +46,7 @@ void Game::Start(){
 
         auto testEnt = std::make_unique<Entity>();
         testEnt->MakeTestEntity();
-        testEnt->SetLocation(-2.0f, -0.0f, -0.0f);
+        testEnt->SetLocation(-0.0f, -0.0f, -0.0f);
         entities.push_back(std::move(testEnt));
 
         gameState = GAMESTATE_RUNNING;

@@ -44,6 +44,6 @@ void Renderer::RenderEntity(renderEntity_t entity){
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, 72);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 72);
 	glDisableVertexAttribArray(0);
 }
