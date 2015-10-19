@@ -2,7 +2,7 @@
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #else
-#include <GL/gl3.h>
+#include <GL/glew.h>
 #endif
 
 #include "Renderer.hpp"
@@ -18,7 +18,7 @@ void Renderer::Init(){
 }
 
 void Renderer::RenderEntity(renderEntity_t entity){
-    int bufferSize = entity.vertices.size() * 3; 
+    constexpr int bufferSize = sizeof(entity.vertices) * 3; 
     GLfloat vertexBufferData[bufferSize];
 	GLfloat colorBufferData[bufferSize];
     int i = 0;

@@ -1,6 +1,10 @@
 #include <iostream>
 #include <chrono>
+#ifdef _WIN32
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"

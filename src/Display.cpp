@@ -8,8 +8,7 @@
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl3.h>
-#include <GL/glfw.h>
+#include <GL/glew.h>
 #endif
 
 #include "Display.hpp"
