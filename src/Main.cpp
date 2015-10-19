@@ -1,9 +1,10 @@
 #include "Game.hpp"
-#include <Windows.h>
 
 
 
 #ifdef _WIN32
+
+#include <Windows.h>
 int CALLBACK WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_ HINSTANCE hPrevInstance,

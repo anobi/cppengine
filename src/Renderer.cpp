@@ -1,6 +1,6 @@
 //GL headers for osx/linux
 #ifdef __APPLE__
-#include <OpenGL/gl3.h>
+#include <OpenGL/gl.h>
 #else
 #include <GL/glew.h>
 #endif
@@ -18,7 +18,8 @@ void Renderer::Init(){
 }
 
 void Renderer::RenderEntity(renderEntity_t entity){
-    constexpr int bufferSize = sizeof(entity.vertices);
+
+    //constexpr int bufferSize = sizeof(entity.vertices);
 
     GLfloat vertexBufferData[72];
 	GLfloat colorBufferData[72];

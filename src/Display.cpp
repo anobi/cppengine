@@ -1,12 +1,10 @@
-#define GLEW_STATIC
-
 #include <iostream>
 #include <math.h>
 #include <memory>
 
 //GL headers for osx/linux
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
+#include <OpenGl/gl.h>
 #else
 #include <GL/glew.h>
 #endif
@@ -26,7 +24,9 @@ bool Display::Init(){
 
 	D_Window = SDL_CreateWindow("asd", 0, 0, 800, 600, SDL_WINDOW_OPENGL);
 	D_Context = SDL_GL_CreateContext(D_Window);
+	#ifndef __APPLE__
 	glewInit();
+	#endif
 	renderer->Init();
 	InitGL();
 
