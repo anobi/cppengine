@@ -22,7 +22,7 @@ void Renderer::RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount)
 
     std::vector<vector3<GLfloat> > vertexData;
     std::vector<vector3<GLfloat> > colorData;
-    for(auto v : entity.vertices){
+    for (auto v : entity.vertices) {
         vertexData.push_back(vector3<GLfloat>(v.position.x
                                               , v.position.y
                                               , v.position.z));
