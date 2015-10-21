@@ -9,7 +9,7 @@ ifeq ($(OS), Darwin)
 	LIBS += -framework OpenGL
 else
 	CFLAGS += -stdlib=libstdc++
-	LIBS += -lGL -lGLU
+	LIBS += -lGL -lGLU -lGLEW
 endif
 
 all: $(OBJ)

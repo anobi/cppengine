@@ -23,7 +23,8 @@ public:
 	std::unique_ptr<Renderer> renderer;
 
     bool Init();
-    void Update(std::vector<std::shared_ptr<Entity> > entities);
+    void LoadMeshes(std::vector<std::shared_ptr<Entity> > entities);
+    void Update();
     void Shutdown();
 };
 

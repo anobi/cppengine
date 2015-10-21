@@ -1,10 +1,8 @@
 //GL headers for osx/linux
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/glew.h>
-#endif
+#include <vector>
+#include <memory>
 
+#include "lib/OpenGL.hpp"
 #include "Renderer.hpp"
 
 Renderer::Renderer(){
@@ -17,34 +15,38 @@ Renderer::~Renderer(){
 void Renderer::Init(){
 }
 
-void Renderer::RenderEntity(renderEntity_t entity){
+void Renderer::RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount){
 
-    //constexpr int bufferSize = sizeof(entity.vertices);
+    glGenVertexArrays(1, vao);
+    glBindVertexArray(*vao);
 
-    GLfloat vertexBufferData[72];
-	GLfloat colorBufferData[72];
-    int i = 0;
-
+    std::vector<vector3<GLfloat> > vertexData;
+    std::vector<vector3<GLfloat> > colorData;
     for(auto v : entity.vertices){
-        vertexBufferData[i] = v.position.x;
-        vertexBufferData[i+1] = v.position.y;
-        vertexBufferData[i+2] = v.position.z;
-        colorBufferData[i] = v.color.x;
-        colorBufferData[i+1] = v.color.y;
-        colorBufferData[i+2] = v.color.z;
-        i +=3;
+        vertexData.push_back(vector3<GLfloat>(v.position.x
+                                              , v.position.y
+                                              , v.position.z));
+        colorData.push_back(vector3<GLfloat>(v.color.x
+                                             , v.color.y
+                                             , v.color.z));
     }
+    *pointcount = vertexData.size() * 3;
 
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData)
-				 , vertexBufferData, GL_STATIC_DRAW);
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER
+                 , vertexData.size() * sizeof(vector3<GLfloat>)
+				 , &vertexData, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);
 
+    GLuint color_vbo;
+    glGenBuffers(1, &color_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	glBufferData(GL_ARRAY_BUFFER
+                 , colorData.size() * sizeof(vector3<GLfloat>)
+				 , &colorData, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 72);
-	glDisableVertexAttribArray(0);
 }

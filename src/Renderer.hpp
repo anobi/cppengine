@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <memory>
+#include "lib/OpenGL.hpp"
 #include "Entity.hpp"
 
 class Renderer {
@@ -11,7 +12,7 @@ public:
     ~Renderer();
 
     void Init();
-    void RenderEntity(renderEntity_t entity);
+    void RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount);
 };
 
 #endif

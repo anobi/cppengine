@@ -13,6 +13,8 @@
 #include "Renderer.hpp"
 
 SDL_GLContext D_Context; 
+GLuint vao;
+int pointcount;
 
 Display::Display(){
     D_Window = 0;
@@ -24,17 +26,13 @@ bool Display::Init(){
 
 	D_Window = SDL_CreateWindow("asd", 0, 0, 800, 600, SDL_WINDOW_OPENGL);
 	D_Context = SDL_GL_CreateContext(D_Window);
-	#ifndef __APPLE__
-	glewInit();
-	#endif
-	renderer->Init();
+
 	InitGL();
 
-    
     return true;
 }
 
-void Display::Update(std::vector<std::shared_ptr<Entity> > entities){
+void Display::Update(){
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -43,12 +41,18 @@ void Display::Update(std::vector<std::shared_ptr<Entity> > entities){
 	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
     //render entities here
-	for(auto e : entities){
-		renderer->RenderEntity(e->renderEntity);
-	}
-
 	
+    glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, pointcount);
+
 	SDL_GL_SwapWindow(D_Window);
+}
+
+void Display::LoadMeshes(std::vector<std::shared_ptr<Entity> > entities){
+    
+	for(auto e : entities){
+		renderer->RenderEntity(e->renderEntity, &vao, &pointcount);
+	}
 }
 
 void Display::Shutdown(){
@@ -58,6 +62,12 @@ void Display::Shutdown(){
 }
 
 void Display::InitGL(){
+
+	#ifndef __APPLE__
+    glewExperimental = GL_TRUE;
+	glewInit();
+	#endif
+    
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
