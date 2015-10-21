@@ -3,11 +3,7 @@
 #include <memory>
 
 //GL headers for osx/linux
-#ifdef __APPLE__
-#include <OpenGl/gl.h>
-#else
-#include <GL/glew.h>
-#endif
+#include "lib/OpenGL.hpp"
 
 #include "Display.hpp"
 #include "Renderer.hpp"

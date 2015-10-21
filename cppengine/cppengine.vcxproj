@@ -132,6 +132,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\src\Display.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
@@ -144,12 +147,9 @@
     <ClInclude Include="..\src\Entity.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
     <ClInclude Include="..\src\Input.hpp" />
+    <ClInclude Include="..\src\lib\OpenGL.hpp" />
     <ClInclude Include="..\src\lib\Vector.hpp" />
     <ClInclude Include="..\src\Renderer.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.gitignore" />
-    <None Include="..\makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
