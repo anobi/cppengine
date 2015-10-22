@@ -6,7 +6,7 @@ LIBS = -lSDL2main -lSDL2
 
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
-	LIBS += -framework OpenGL
+	LIBS += -framework OpenGL -lglew
 else
 	CFLAGS += -stdlib=libstdc++
 	LIBS += -lGL -lGLU -lGLEW

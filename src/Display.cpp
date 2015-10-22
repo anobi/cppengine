@@ -13,7 +13,7 @@ Display::Display() {
 bool Display::Init(Renderer* renderer) {
     SDL_Init(SDL_INIT_VIDEO);
 
-	_window = SDL_CreateWindow("asd", 256, 256, 1024, 780, SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("asd", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
 	_context = SDL_GL_CreateContext(_window);
 	_renderer = renderer;
 
@@ -45,10 +45,8 @@ void Display::Shutdown() {
 
 void Display::InitGL() {
 
-	#ifndef __APPLE__
     glewExperimental = GL_TRUE;
 	glewInit();
-	#endif
     
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -60,8 +58,6 @@ void Display::InitGL() {
 }
 
 void Display::SetViewport(int width, int height) {
-
-	GLfloat ratio = (GLfloat) width / (GLfloat) height;
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	glMatrixMode(GL_PROJECTION);

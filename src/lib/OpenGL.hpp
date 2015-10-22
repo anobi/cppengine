@@ -2,7 +2,9 @@
 #define OPENGL_H
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
+//that shit doesnt work
+//#include <OpenGL/gl.h>
+#include <GL/glew.h>
 #else
 #include <GL/glew.h>
 #endif
