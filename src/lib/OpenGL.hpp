@@ -3,7 +3,7 @@
 
 #ifdef __APPLE__
 //that shit doesnt work
-//#include <OpenGL/gl.h>
+//#include <OpenGL/gl3.h>
 #include <GL/glew.h>
 #else
 #include <GL/glew.h>

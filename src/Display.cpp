@@ -13,9 +13,15 @@ Display::Display() {
 bool Display::Init(Renderer* renderer) {
     SDL_Init(SDL_INIT_VIDEO);
 
-	_window = SDL_CreateWindow("asd", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); 
+
+	_window = SDL_CreateWindow("cppengine", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
 	_context = SDL_GL_CreateContext(_window);
 	_renderer = renderer;
+
+	std::cout << glGetString(GL_VERSION) << " : ";
 
 	InitGL();
 
