@@ -20,10 +20,10 @@ public:
     Display();
     
     SDL_Window* D_Window;
-	std::unique_ptr<Renderer> renderer;
+	Renderer renderer;
 
     bool Init();
-    void LoadMeshes(std::vector<std::shared_ptr<Entity> > entities);
+    void LoadMeshes(std::vector<Entity>* entities);
     void Update();
     void Shutdown();
 };

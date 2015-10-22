@@ -14,7 +14,6 @@ int pointcount;
 
 Display::Display(){
     D_Window = 0;
-    renderer = std::make_unique<Renderer>();
 }
 
 bool Display::Init(){
@@ -33,8 +32,8 @@ void Display::Update(){
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
-	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
+	//glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
+	//glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
     //render entities here
 	
@@ -44,16 +43,22 @@ void Display::Update(){
 	SDL_GL_SwapWindow(D_Window);
 }
 
-void Display::LoadMeshes(std::vector<std::shared_ptr<Entity> > entities){
+void Display::LoadMeshes(std::vector<Entity>* entities){
     
-	for(auto e : entities){
-		renderer->RenderEntity(e->renderEntity, &vao, &pointcount);
+	for(auto e : *entities){
+		renderer.RenderEntity(e.renderEntity, &vao, &pointcount);
 	}
 }
 
 void Display::Shutdown(){
 	std::cout << "* Display\n";
+    
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+
 	SDL_DestroyWindow(D_Window);
+
+    D_Context = NULL;
 	D_Window = NULL;
 }
 

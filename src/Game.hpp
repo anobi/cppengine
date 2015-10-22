@@ -16,13 +16,13 @@ class Game {
 
 private:
 	Input input;
-    std::unique_ptr<Display> display;
-    std::vector<std::shared_ptr<Entity> > entities;
+    Display display;
 
 public:
 	Game();
 
 	gameState_t gameState;
+    std::vector<Entity> entities;
 
 	bool Init();
 	void Start();
@@ -30,7 +30,7 @@ public:
 	void Loop();
 	void Quit();
 
-    std::vector<std::shared_ptr<Entity> > GetEntities();
+    std::vector<Entity>* GetEntities();
 };
 
 #endif
