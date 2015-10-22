@@ -67,7 +67,7 @@ void Entity::MakeTestEntity() {
 	f1.position = vector3<float>(0.0f, 0.0f, 0.5f);
 	f2.position = f4.position = vector3<float>(0.5f, 0.0f, 0.5f);
 	f3.position = f6.position = vector3<float>(0.0f, 0.5f, 0.5f);
-	f5.position = vector3<float>(5.0f, 0.5f, 0.5f);
+	f5.position = vector3<float>(0.5f, 0.5f, 0.5f);
 
 	f1.color = f2.color = f3.color = f4.color = f5.color = f6.color = vector3<float>(0.0f, 1.0f, 0.0f);
 

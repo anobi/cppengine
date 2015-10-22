@@ -17,11 +17,8 @@ void Renderer::Init(){
 
 void Renderer::RenderEntity(renderEntity_t entity){
 
-	GLuint v;
-	int p;
 
-    glGenVertexArrays(1, &v);
-    glBindVertexArray(v);
+
 
     std::vector<vector3<GLfloat> > vertexData;
     std::vector<vector3<GLfloat> > colorData;
@@ -33,30 +30,34 @@ void Renderer::RenderEntity(renderEntity_t entity){
                                              , v.color.y
                                              , v.color.z));
     }
-    p = vertexData.size() * 3;
 
-	GLuint vbo;
+	int pointcount = 0;
+    pointcount = vertexData.size() * 3;
+
+	GLuint vao = 0;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	GLuint vbo = 0;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER
                  , vertexData.size() * sizeof(vector3<GLfloat>)
-				 , &vertexData, GL_STATIC_DRAW);
+				 , vertexData.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
-    GLuint color_vbo;
+    /*GLuint color_vbo = 0;
     glGenBuffers(1, &color_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
 	glBufferData(GL_ARRAY_BUFFER
                  , colorData.size() * sizeof(vector3<GLfloat>)
-				 , &colorData, GL_STATIC_DRAW);
+				 , colorData.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);*/
 
-	glBindVertexArray(v);
-
-	glDrawArrays(GL_TRIANGLES, 0, p);
+	glDrawArrays(GL_TRIANGLES, 0, pointcount);
 
 	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	//glDisableVertexAttribArray(1);
 }
