@@ -1,28 +1,28 @@
+#include "Display.hpp"
+
 #include <iostream>
 #include <math.h>
 #include <memory>
 
-//GL headers for osx/linux
 #include "lib/OpenGL.hpp"
-
-#include "Display.hpp"
 #include "Renderer.hpp"
 
-Display::Display(){
+Display::Display() {
 }
 
-bool Display::Init(){
+bool Display::Init(Renderer* renderer) {
     SDL_Init(SDL_INIT_VIDEO);
 
 	_window = SDL_CreateWindow("asd", 256, 256, 1024, 780, SDL_WINDOW_OPENGL);
 	_context = SDL_GL_CreateContext(_window);
+	_renderer = renderer;
 
 	InitGL();
 
     return true;
 }
 
-void Display::Update(std::vector<Entity>* entities){
+void Display::Update(std::vector<Entity>* entities) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -30,15 +30,12 @@ void Display::Update(std::vector<Entity>* entities){
 	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
 	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
-    //render entities here
-	for (auto e : *entities) {
-		renderer.RenderEntity(e.renderEntity);
-	}
+	_renderer->RenderEntities(entities);
 
 	SDL_GL_SwapWindow(_window);
 }
 
-void Display::Shutdown(){
+void Display::Shutdown() {
 	std::cout << "* Display\n";
 	SDL_DestroyWindow(_window);
 
@@ -46,7 +43,7 @@ void Display::Shutdown(){
 	_window = NULL;
 }
 
-void Display::InitGL(){
+void Display::InitGL() {
 
 	#ifndef __APPLE__
     glewExperimental = GL_TRUE;
@@ -62,20 +59,18 @@ void Display::InitGL(){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void Display::SetViewport(int width, int height){
-	GLfloat ratio;
+void Display::SetViewport(int width, int height) {
 
-	ratio = (GLfloat) width / (GLfloat) height;
+	GLfloat ratio = (GLfloat) width / (GLfloat) height;
+
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
     SetPerspective(width, height, 60.0f, true);
-
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void Display::SetPerspective(int width, int height, float fov, bool usePerspective){
+void Display::SetPerspective(int width, int height, float fov, bool usePerspective) {
 	GLfloat ratio = (GLfloat) width / (GLfloat) height;
     GLfloat zNear = 0.1f;
     GLfloat zFar = 255.0f;

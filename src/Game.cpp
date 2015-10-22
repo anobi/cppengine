@@ -23,16 +23,25 @@ bool Game::Init(){
         return false;
     } else std::cout << "done\n";
 
-    //Display
-    std::cout << "* Display: ";
-    if(!display.Init()){
-        std::cout << "Error: %s\n", SDL_GetError();
-        return false;
-    } else std::cout << "done\n";
+	//Rendering
+	std::cout << "* Renderer: ";
+	if (!_renderer.Init()) {
+		std::cout << "Error: %s\n", SDL_GetError();
+		return false;
+	}
+	else std::cout << "done\n";
+
+	//Display
+	std::cout << "* Display: ";
+	if (!_display.Init(&_renderer)) {
+		std::cout << "Error: %s\n", SDL_GetError();
+		return false;
+	}
+	else std::cout << "done\n";
     
     //Input system
     std::cout << "* Input: ";
-    if(!input.Init()){
+    if(!_input.Init()){
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
     } else std::cout << "done\n";
@@ -89,18 +98,23 @@ void Game::Loop(){
 		for(auto e : entities){
 			e.Update();
 		}
+
         //update world
-        //render
-        display.Update(&entities);
+
+		//render and refresh display
+        _display.Update(&entities);
     }
     Shutdown();
 }
 
 void Game::Shutdown(){
     std::cout << "Shutting down...\n";
-    input.Shutdown();
-    display.Shutdown();
-    SDL_Quit();
+
+    _input.Shutdown();
+	_display.Shutdown();
+	_renderer.Shutdown();
+
+	SDL_Quit();
 }
 
 void Game::Quit(){

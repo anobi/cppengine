@@ -11,8 +11,10 @@ public:
     Renderer();
     ~Renderer();
 
-    void Init();
-    void RenderEntity(renderEntity_t entity);
+    bool Init();
+	void RenderEntities(std::vector<Entity>* entities);
+    void RenderEntity(renderEntity_t entity, int* pointcount);
+	void Shutdown();
 };
 
 #endif

@@ -15,8 +15,9 @@ typedef enum {
 class Game {
 
 private:
-	Input input;
-    Display display;
+	Input _input;
+    Display _display;
+	Renderer _renderer;
 
 public:
 	Game();

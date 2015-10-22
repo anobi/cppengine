@@ -15,6 +15,7 @@ private:
 
 	SDL_GLContext _context;
 	SDL_Window* _window;
+	Renderer* _renderer;
 
 	void InitGL();
 	void SetViewport(int width, int height);
@@ -22,9 +23,8 @@ private:
 
 public:
     Display();
-	Renderer renderer;
 
-    bool Init();
+    bool Init(Renderer* renderer);
     void Update(std::vector<Entity>* entities);
     void Shutdown();
 };
