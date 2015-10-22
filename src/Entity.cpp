@@ -46,11 +46,11 @@ void Entity::MakeTestEntity() {
 	vertex_t l1, l2, l3, l4, l5, l6 = vertex_t();
 
 	l1.position = vector3<float>(0.0f, 0.0f, 0.0f);
-	l2.position, l4.position = vector3<float>(0.0f, 0.0f, 0.5f);
-	l3.position, l6.position = vector3<float>(0.0f, 0.5f, 0.0f);
+	l2.position = l4.position = vector3<float>(0.0f, 0.0f, 0.5f);
+	l3.position = l6.position = vector3<float>(0.0f, 0.5f, 0.0f);
 	l5.position = vector3<float>(0.0f, 0.5f, 0.5f);
 
-	l1.color, l2.color, l3.color, l4.color, l5.color, l6.color = vector3<float>(0.2f, 0.2f, 0.2f);
+	l1.color = l2.color = l3.color = l4.color = l5.color = l6.color = vector3<float>(0.2f, 0.2f, 0.2f);
 
 	renderEntity.vertices.push_back(l1);
 	renderEntity.vertices.push_back(l2);
@@ -65,11 +65,11 @@ void Entity::MakeTestEntity() {
 	vertex_t f1, f2, f3, f4, f5, f6 = vertex_t();
 
 	f1.position = vector3<float>(0.0f, 0.0f, 0.5f);
-	f2.position, f4.position = vector3<float>(0.5f, 0.0f, 0.5f);
-	f3.position, f6.position = vector3<float>(0.0f, 0.5f, 0.5f);
+	f2.position = f4.position = vector3<float>(0.5f, 0.0f, 0.5f);
+	f3.position = f6.position = vector3<float>(0.0f, 0.5f, 0.5f);
 	f5.position = vector3<float>(5.0f, 0.5f, 0.5f);
 
-	f1.color, f2.color, f3.color, f4.color, f5.color, f6.color = vector3<float>(0.4f, 0.4f, 0.4f);
+	f1.color = f2.color = f3.color = f4.color = f5.color = f6.color = vector3<float>(0.4f, 0.4f, 0.4f);
 
 	renderEntity.vertices.push_back(f1);
 	renderEntity.vertices.push_back(f2);
@@ -84,12 +84,12 @@ void Entity::MakeTestEntity() {
 	vertex_t r1, r2, r3, r4, r5, r6 = vertex_t();
 
 	r1.position = vector3<float>(0.5f, 0.0f, 0.5f);
-	r2.position, r4.position = vector3<float>(0.5f, 0.0f, 0.0f);
-	r3.position, r6.position = vector3<float>(0.5f, 0.5f, 0.0f);
+	r2.position = r4.position = vector3<float>(0.5f, 0.0f, 0.0f);
+	r3.position = r6.position = vector3<float>(0.5f, 0.5f, 0.0f);
 	r5.position = vector3<float>(0.5f, 0.5f, 0.5f);
 
-	r1.color, r2.color, r3.color, 
-	r4.color, r5.color, r6.color = vector3<float>(0.6f, 0.6f, 0.6f);
+	r1.color = r2.color = r3.color = 
+	r4.color = r5.color = r6.color = vector3<float>(0.6f, 0.6f, 0.6f);
 
 	renderEntity.vertices.push_back(r1);
 	renderEntity.vertices.push_back(r2);
@@ -102,12 +102,12 @@ void Entity::MakeTestEntity() {
 	vertex_t b1, b2, b3, b4, b5, b6 = vertex_t();
 
 	b1.position = vector3<float>(0.0f, 0.0f, 0.0f);
-	b2.position, b4.position = vector3<float>(0.5f, 0.0f, 0.0f);
-	b3.position, b6.position = vector3<float>(0.0f, 0.5f, 0.0f);
+	b2.position = b4.position = vector3<float>(0.5f, 0.0f, 0.0f);
+	b3.position = b6.position = vector3<float>(0.0f, 0.5f, 0.0f);
 	b5.position = vector3<float>(0.5f, 0.5f, 0.0f);
 
-	b1.color, b2.color, b3.color, 
-	b4.color, b5.color, b6.color = vector3<float>(0.8f, 0.8f, 0.8f);
+	b1.color = b2.color = b3.color = 
+	b4.color = b5.color = b6.color = vector3<float>(0.8f, 0.8f, 0.8f);
 
 	renderEntity.vertices.push_back(b1);
 	renderEntity.vertices.push_back(b2);
@@ -120,12 +120,12 @@ void Entity::MakeTestEntity() {
 	vertex_t t1, t2, t3, t4, t5, t6 = vertex_t();
 
 	t1.position = vector3<float>(0.0f, 0.5f, 0.0f);
-	t2.position, t4.position = vector3<float>(0.5f, 0.5f, 0.0f);
-	t3.position, t6.position = vector3<float>(0.0f, 0.5f, 0.5f);
+	t2.position = t4.position = vector3<float>(0.5f, 0.5f, 0.0f);
+	t3.position = t6.position = vector3<float>(0.0f, 0.5f, 0.5f);
 	t5.position = vector3<float>(0.5f, 0.5f, 0.5f);
 
-	t1.color, t2.color, t3.color, 
-	t4.color, t5.color, t6.color = vector3<float>(1.0f, 1.0f, 1.0f);
+	t1.color = t2.color = t3.color = 
+	t4.color = t5.color = t6.color = vector3<float>(1.0f, 1.0f, 1.0f);
 
 	renderEntity.vertices.push_back(t1);
 	renderEntity.vertices.push_back(t2);
@@ -138,12 +138,12 @@ void Entity::MakeTestEntity() {
 	vertex_t d1, d2, d3, d4, d5, d6 = vertex_t();
 
 	d1.position = vector3<float>(0.0f, 0.0f, 0.0f);
-	d2.position, d4.position = vector3<float>(0.5f, 0.0f, 0.0f);
-	d3.position, d6.position = vector3<float>(0.0f, 0.0f, 0.5f);
+	d2.position = d4.position = vector3<float>(0.5f, 0.0f, 0.0f);
+	d3.position = d6.position = vector3<float>(0.0f, 0.0f, 0.5f);
 	d5.position = vector3<float>(0.5f, 0.0f, 0.5f);
 
-	d1.color, d2.color, d3.color, 
-	d4.color, d5.color, d6.color = vector3<float>(0.3f, 0.3f, 0.3f);
+	d1.color = d2.color = d3.color =
+	d4.color = d5.color = d6.color = vector3<float>(0.3f, 0.3f, 0.3f);
 
 	renderEntity.vertices.push_back(d1);
 	renderEntity.vertices.push_back(d2);
