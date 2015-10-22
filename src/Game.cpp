@@ -48,8 +48,6 @@ void Game::Start(){
         testEnt.SetLocation(-0.0f, -0.0f, -0.0f);
         entities.push_back(testEnt);
 
-        display.LoadMeshes(&entities);
-
         gameState = GAMESTATE_RUNNING;
         Loop();
     } else {
@@ -93,7 +91,7 @@ void Game::Loop(){
 		}
         //update world
         //render
-        display.Update();
+        display.Update(&entities);
     }
     Shutdown();
 }

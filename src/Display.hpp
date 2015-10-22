@@ -12,19 +12,20 @@
 class Display {
 
 private:
+
+	SDL_GLContext _context;
+	SDL_Window* _window;
+
 	void InitGL();
 	void SetViewport(int width, int height);
     void SetPerspective(int width, int height, float fov, bool usePerspective);
 
 public:
     Display();
-    
-    SDL_Window* D_Window;
 	Renderer renderer;
 
     bool Init();
-    void LoadMeshes(std::vector<Entity>* entities);
-    void Update();
+    void Update(std::vector<Entity>* entities);
     void Shutdown();
 };
 

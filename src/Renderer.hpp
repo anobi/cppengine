@@ -12,7 +12,7 @@ public:
     ~Renderer();
 
     void Init();
-    void RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount);
+    void RenderEntity(renderEntity_t entity);
 };
 
 #endif

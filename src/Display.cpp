@@ -8,58 +8,42 @@
 #include "Display.hpp"
 #include "Renderer.hpp"
 
-SDL_GLContext D_Context; 
-GLuint vao;
-int pointcount;
-
 Display::Display(){
-    D_Window = 0;
 }
 
 bool Display::Init(){
     SDL_Init(SDL_INIT_VIDEO);
 
-	D_Window = SDL_CreateWindow("asd", 0, 0, 800, 600, SDL_WINDOW_OPENGL);
-	D_Context = SDL_GL_CreateContext(D_Window);
+	_window = SDL_CreateWindow("asd", 256, 256, 1024, 780, SDL_WINDOW_OPENGL);
+	_context = SDL_GL_CreateContext(_window);
 
 	InitGL();
 
     return true;
 }
 
-void Display::Update(){
+void Display::Update(std::vector<Entity>* entities){
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-	//glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
-	//glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
+	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
+	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
     //render entities here
-	
-    glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, pointcount);
-
-	SDL_GL_SwapWindow(D_Window);
-}
-
-void Display::LoadMeshes(std::vector<Entity>* entities){
-    
-	for(auto e : *entities){
-		renderer.RenderEntity(e.renderEntity, &vao, &pointcount);
+	for (auto e : *entities) {
+		renderer.RenderEntity(e.renderEntity);
 	}
+
+	SDL_GL_SwapWindow(_window);
 }
 
 void Display::Shutdown(){
 	std::cout << "* Display\n";
-    
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
+	SDL_DestroyWindow(_window);
 
-	SDL_DestroyWindow(D_Window);
-
-    D_Context = NULL;
-	D_Window = NULL;
+    _context = NULL;
+	_window = NULL;
 }
 
 void Display::InitGL(){
@@ -74,7 +58,7 @@ void Display::InitGL(){
 	glClearDepth(1.0f);
 
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 

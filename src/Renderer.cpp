@@ -15,10 +15,13 @@ Renderer::~Renderer(){
 void Renderer::Init(){
 }
 
-void Renderer::RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount){
+void Renderer::RenderEntity(renderEntity_t entity){
 
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(*vao);
+	GLuint v;
+	int p;
+
+    glGenVertexArrays(1, &v);
+    glBindVertexArray(v);
 
     std::vector<vector3<GLfloat> > vertexData;
     std::vector<vector3<GLfloat> > colorData;
@@ -30,7 +33,7 @@ void Renderer::RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount)
                                              , v.color.y
                                              , v.color.z));
     }
-    *pointcount = vertexData.size() * 3;
+    p = vertexData.size() * 3;
 
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
@@ -49,4 +52,11 @@ void Renderer::RenderEntity(renderEntity_t entity, GLuint* vao, int* pointcount)
 				 , &colorData, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(v);
+
+	glDrawArrays(GL_TRIANGLES, 0, p);
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 }
