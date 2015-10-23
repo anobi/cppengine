@@ -133,6 +133,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="..\src\shaders\test_frag.glsl" />
+    <None Include="..\src\shaders\test_vert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Display.cpp" />
