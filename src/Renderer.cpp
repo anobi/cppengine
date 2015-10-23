@@ -16,8 +16,7 @@ bool Renderer::Init() {
 }
 
 void Renderer::Shutdown() {
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+
 }
 
 void Renderer::RenderEntities(std::vector<Entity>* entities) {
@@ -49,16 +48,17 @@ void Renderer::RenderEntity(renderEntity_t entity, int* pointcount) {
 	GLuint vbo = 0;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertexData.size(), vertexData.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(vector3<GLfloat>), vertexData.data(), GL_STATIC_DRAW);
 
     glUseProgram(entity.shader);
 
     GLint posAttrib = glGetAttribLocation(entity.shader, "position");
-	glEnableVertexAttribArray(posAttrib);
 	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 2*sizeof(vector3<GLfloat>), 0);
+	glEnableVertexAttribArray(posAttrib);
+
 
     GLint colAttrib = glGetAttribLocation(entity.shader, "color");
-	glEnableVertexAttribArray(colAttrib);
 	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
 		2 * sizeof(vector3<GLfloat>),(void*)(sizeof(vector3<GLfloat>)));
+	glEnableVertexAttribArray(colAttrib);
 }
