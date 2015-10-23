@@ -216,6 +216,7 @@ GLuint Entity::LoadShader(const char* vertex_shader_path, const char* fragment_s
     GLuint program = glCreateProgram();
     glAttachShader(program, vertexShader);
     glAttachShader(program, fragmentShader);
+    glBindFragDataLocation(program, 0, "outColor");
     glLinkProgram(program);
 
     glGetProgramiv(program, GL_LINK_STATUS, &result);
