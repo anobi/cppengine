@@ -15,8 +15,11 @@ Entity::~Entity(){
 
 void Entity::Init() {
     MakeTestEntity();
-    renderEntity.shader = LoadShader("shaders/test_vert.glsl"
-                                   , "shaders/test_frag.glsl");
+#ifdef _WIN32
+    renderEntity.shader = LoadShader("..\shaders\test_vert.glsl" , "..\shaders\test_frag.glsl");
+#else
+    renderEntity.shader = LoadShader("shaders/test_vert.glsl" , "shaders/test_frag.glsl");
+#endif
 }
 
 void Entity::Spawn() {
