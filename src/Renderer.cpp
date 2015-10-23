@@ -45,6 +45,8 @@ void Renderer::RenderEntity(renderEntity_t entity, int* pointcount) {
 
     *pointcount += vertexData.size() * 3;
 
+    glUseProgram(entity.shader);
+    
 	GLuint vao = 0;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);

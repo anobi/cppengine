@@ -1,9 +1,12 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "lib/Vector.hpp"
-
 #include <vector>
+#include <string>
+
+#include "lib/Vector.hpp"
+#include "lib/OpenGL.hpp"
+
 
 typedef struct {
     vector3<float> normal;
@@ -13,6 +16,7 @@ typedef struct {
 
 typedef struct {
     std::vector<vertex_t> vertices;
+    GLuint shader;
     // + textures, shaders etc..
 } renderEntity_t;
 
@@ -25,6 +29,8 @@ class Entity {
 private:
     vector3<float> location;
     bool alive;
+    GLuint LoadShader(const char* vertex_shader_path, const char* fragment_shader_path);
+    std::string ReadFile(const char* filePath);
 
 public:
     Entity();
