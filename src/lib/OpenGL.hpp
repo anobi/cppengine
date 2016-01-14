@@ -1,5 +1,5 @@
-#ifndef OPENGL_H
-#define OPENGL_H
+#ifndef GLUTILS_H
+#define GLUTILS_H
 
 #ifdef __APPLE__
 //that shit doesnt work
@@ -9,4 +9,10 @@
 #include <GL/glew.h>
 #endif
 
-#endif // OPENGL_H
+
+class GLUtils {
+public:
+	static GLuint LoadShader(const char* vertex_shader_path, const char* fragment_shader_path);
+};
+
+#endif // GLUTILS_H

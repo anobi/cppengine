@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <memory>
+#include <vector>
 #include "lib/OpenGL.hpp"
 #include "Entity.hpp"
 
@@ -13,7 +14,6 @@ public:
 
     bool Init();
 	void RenderEntities(std::vector<Entity>* entities);
-    void RenderEntity(renderEntity_t entity, int* pointcount);
 	void Shutdown();
 };
 

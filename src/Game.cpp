@@ -54,7 +54,6 @@ void Game::Start(){
 
         Entity testEnt;
         testEnt.Init();
-        testEnt.SetLocation(-0.0f, -0.0f, -0.0f);
         entities.push_back(testEnt);
 
         gameState = GAMESTATE_RUNNING;

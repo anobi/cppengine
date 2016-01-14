@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #endif
 #include <memory>
+#include <vector>
 #include "Renderer.hpp"
 
 class Display {

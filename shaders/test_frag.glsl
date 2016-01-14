@@ -1,8 +1,7 @@
 #version 140
 
 in vec3 color;
-out vec4 outColor;
 
-void main(void) {
-    outColor = vec4(color, 1.0f);
+void main() {
+    gl_color = vec4(color, 1.0f);
 }
