@@ -9,6 +9,10 @@
 
 class Mesh {
 public:
+
+	Mesh();
+	~Mesh();
+
 	glm::tvec3<vertex_t> vertices;
 	glm::tvec3<GLuint> indices;
 	glm::tvec1<texture_t> textures;
