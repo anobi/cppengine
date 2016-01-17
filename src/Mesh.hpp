@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "lib/Types.hpp"
-#include "lib/OpenGL.hpp"
+#include "Shader.hpp"
 
 class Mesh {
 public:
@@ -22,10 +22,10 @@ public:
 
 	void Init();
 	void Load();
-	void Draw();
+	void Draw(glm::mat4 mvp);
 
 private:
-	GLuint shader;
+	Shader shader;
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;

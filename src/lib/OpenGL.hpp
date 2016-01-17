@@ -9,10 +9,4 @@
 #include <GL/glew.h>
 #endif
 
-
-class GLUtils {
-public:
-	static GLuint LoadShader(const char* vertex_shader_path, const char* fragment_shader_path);
-};
-
 #endif // GLUTILS_H

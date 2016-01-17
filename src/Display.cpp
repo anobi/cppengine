@@ -3,6 +3,8 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "lib/OpenGL.hpp"
 #include "Renderer.hpp"
@@ -33,7 +35,15 @@ void Display::Update(Mesh* mesh) {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	mesh->Draw();
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 1000.0f);
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(0, 3, 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0));// Head is up (set to 0,-1,0 to look upside-down)
+	glm::mat4 Model = glm::mat4(1.0f);
+	glm::mat4 mvp = Projection * View * Model;
+
+	mesh->Draw(mvp);
 
 	SDL_GL_SwapWindow(_window);
 }

@@ -11,39 +11,39 @@ void Mesh::Init() {
 	const float cube[] = {
 		//left
 		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.5f,
+		0.0f, 0.5f, 0.0f,
+		0.0f, 0.5f, 0.5f,
 
 		//front
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.5f,
+		0.5f, 0.0f, 0.5f,
+		0.0f, 0.5f, 0.5f,
+		0.5f, 0.5f, 0.5f,
 
 		//right
-		1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 1.0f,
+		0.5f, 0.0f, 0.5f,
+		0.5f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f,
 
 		//back
 		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
+		0.5f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
 
 		//top
-		0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
+		0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
+		0.0f, 0.5f, 0.5f,
+		0.5f, 0.5f, 0.5f,
 
 		//bottom
 		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f
+		0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f,
+		0.5f, 0.0f, 0.5f
 	};
 
 	int count = sizeof(cube) / sizeof(float);
@@ -60,6 +60,7 @@ void Mesh::Load() {
 	int vcount = this->vertices.size();
 	for (int i = 0; i < vcount; i++) {
 		positions.push_back(this->vertices[i].position);
+		positions.push_back(glm::fvec3(0.0f, 1.0f, 0.0f));
 	}
 
 	glGenVertexArrays(1, &VAO);
@@ -67,32 +68,28 @@ void Mesh::Load() {
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::fvec3), &positions[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::fvec3), positions.data(), GL_STATIC_DRAW);
 
-	#ifdef _WIN32
-	shader = GLUtils::LoadShader("../shaders/test_vert.glsl", "../shaders/test_frag.glsl");
-	#else
-	shader = LoadShader("shaders/test_vert.glsl", "shaders/test_frag.glsl");
-	#endif
+	shader = Shader("default");
 
-	GLint posAttrib = glGetAttribLocation(this->shader, "position");
+	GLint posAttrib = glGetAttribLocation(shader.Program(), "position");
 	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(glm::fvec3), 0);
 	glEnableVertexAttribArray(posAttrib);
 
-	GLint colAttrib = glGetAttribLocation(this->shader, "color");
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-		sizeof(glm::fvec3), (void*)(sizeof(glm::fvec3)));
-	glEnableVertexAttribArray(colAttrib);
-
-
+	glBindVertexArray(0);
 }
 
-void Mesh::Draw() {
+void Mesh::Draw(glm::mat4 mvp) {
 
 	glBindVertexArray(VAO);
-	//Load();
 
-	glUseProgram(this->shader);
+	GLuint MatrixID = glGetUniformLocation(shader.Program(), "mvp");
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+
+	GLuint col = glGetUniformLocation(shader.Program(), "inColor");
+	glProgramUniform4f(shader.Program(), col, 0.0f, 0.0f, 1.0f, 1.0f);
+
+	shader.Bind();
 
 	glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() / 2 * 3);
 
