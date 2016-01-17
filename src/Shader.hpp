@@ -17,11 +17,11 @@ public:
 	GLuint Program();
 
 private:
-	static const int NUM_SHADERS = 2;
-	static const int NUM_UNIFORMS = 3;
+	static const unsigned int NUM_SHADERS = 2;
+	static const unsigned int NUM_UNIFORMS = 3;
 
-	GLuint CreateShader(std::string &source, unsigned int type);
-	std::string ReadFile(std::string &filename);
+	GLuint CreateShader(const std::string &source, unsigned int type);
+	std::string ReadFile(const std::string &filename);
 	std::string GetShaderStatus(GLuint program);
 
 

@@ -13,7 +13,7 @@ Shader::Shader(const std::string &fileName) {
 	shaders[0] = CreateShader(ReadFile(fileName + ".vert"), GL_VERTEX_SHADER);
 	shaders[1] = CreateShader(ReadFile(fileName + ".frag"), GL_FRAGMENT_SHADER);
 
-	for (int i = 0; i < NUM_SHADERS; i++) {
+	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
 		glAttachShader(program, shaders[i]);
 	}
 
@@ -33,7 +33,7 @@ Shader::Shader(const std::string &fileName) {
 }
 
 Shader::~Shader() {
-	for (int i = 0; i < NUM_SHADERS; i++) {
+	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
 		glDetachShader(program, shaders[i]);
 		glDeleteShader(shaders[i]);
 	}
@@ -41,7 +41,7 @@ Shader::~Shader() {
 }
 
 
-GLuint Shader::CreateShader(std::string &source, unsigned int type) {
+GLuint Shader::CreateShader(const std::string &source, unsigned int type) {
 	GLuint shader = glCreateShader(type);	
 	
 	const char* shaderSrc = source.c_str();
@@ -72,7 +72,7 @@ void Shader::Update(const Transform &transform, const Camera &camera) {
 ** Helpers
 **/
 
-std::string Shader::ReadFile(std::string &fileName) {
+std::string Shader::ReadFile(const std::string &fileName) {
 
 	std::string filePath;
 
