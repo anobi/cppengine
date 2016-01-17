@@ -3,38 +3,35 @@
 
 #include <iostream>
 #include <vector>
-#include <glm/glm.hpp>
+#include "lib/OpenGL.hpp"
+#include "lib/Vertex.hpp"
 
-#include "lib/Types.hpp"
-#include "Shader.hpp"
+class Model {
+public:
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> texCoords;
+	std::vector<unsigned int> indices;
+
+	//void CalculateNormals();
+};
 
 class Mesh {
 public:
 
-	Mesh();
+	Mesh(Vertex* vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices);
 	~Mesh();
 
-	std::vector<vertex_t> vertices;
-	std::vector<GLuint> indices;
-	std::vector<texture_t> textures;
-
-	Mesh(std::vector<vertex_t> vertices, std::vector<GLuint> indices, std::vector<texture_t> textures);
-
-	void Init();
-	void Load();
-	void Draw(glm::mat4 mvp);
+	void Draw();
 
 private:
-	Shader shader;
-	GLuint VAO;
-	GLuint VBO;
-	GLuint EBO;
-	void Setup();
+	static const unsigned int NUM_BUFFERS = 4;
+	unsigned int mNumIndices;
+
+	GLuint mVAO;
+	GLuint mVBOs[NUM_BUFFERS];
+
+	void SetupMesh(Model &model);
 };
 
 #endif
-
-/*
-reminder:
-
-*/

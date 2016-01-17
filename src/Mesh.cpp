@@ -1,12 +1,7 @@
 #include "Mesh.hpp"
 #include "lib/Geometry.hpp"
 
-Mesh::Mesh(){}
-Mesh::~Mesh() {
-	glDeleteVertexArrays(1, &VAO);
-}
-
-void Mesh::Init() {
+Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) {
 
 	const float cube[] = {
 		//left
@@ -46,52 +41,65 @@ void Mesh::Init() {
 		0.5f, 0.0f, 0.5f
 	};
 
-	int count = sizeof(cube) / sizeof(float);
-	for (int i = 0; i < count; i += 3) {
-		vertex_t vertex;
-		vertex.position = glm::fvec3(cube[i], cube[i + 1], cube[i + 2]);
-		vertices.push_back(vertex);
+	Model model;
+
+	for (unsigned int i = 0; i < numVertices; i++) {
+		model.positions.push_back(*vertices[i].Position());
+		model.normals.push_back(*vertices[i].Normal());
+		model.texCoords.push_back(*vertices[i].TexCoords());
 	}
+
+	for (unsigned int i = 0; i < numIndices; i++) {
+		model.indices.push_back(indices[i]);
+	}
+
+	SetupMesh(model);
 }
 
-void Mesh::Load() {
+Mesh::~Mesh() {
+	glDeleteBuffers(NUM_BUFFERS, mVBOs);
+	glDeleteVertexArrays(1, &mVAO);
+}
 
-	std::vector<glm::fvec3> positions;
-	int vcount = this->vertices.size();
-	for (int i = 0; i < vcount; i++) {
-		positions.push_back(this->vertices[i].position);
-		positions.push_back(glm::fvec3(0.0f, 1.0f, 0.0f));
-	}
+void Mesh::SetupMesh(Model &model) {
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	mNumIndices = model.indices.size();
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::fvec3), positions.data(), GL_STATIC_DRAW);
+	glGenVertexArrays(1, &mVAO);
+	glBindVertexArray(mVAO);
 
-	shader = Shader("default");
+	glGenBuffers(NUM_BUFFERS, mVBOs);
 
-	GLint posAttrib = glGetAttribLocation(shader.Program(), "position");
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(glm::fvec3), 0);
-	glEnableVertexAttribArray(posAttrib);
+	//positions
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.positions[0]) * model.positions.size(), &model.positions[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//texture coordinates, rename to uv mayhaps?
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//normals
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.normals[0]) * model.normals.size(), &model.normals[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//index buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[3]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model.indices[0]) * model.indices.size(), &model.indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw(glm::mat4 mvp) {
+void Mesh::Draw() {
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(mVAO);
 
-	GLuint MatrixID = glGetUniformLocation(shader.Program(), "mvp");
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
-
-	GLuint col = glGetUniformLocation(shader.Program(), "inColor");
-	glProgramUniform4f(shader.Program(), col, 0.0f, 0.0f, 1.0f, 1.0f);
-
-	shader.Bind();
-
-	glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() / 2 * 3);
+	glDrawArrays(GL_TRIANGLES, 0, mNumIndices);
 
 	glBindVertexArray(0);
 }

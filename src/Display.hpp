@@ -8,7 +8,6 @@
 #endif
 #include <memory>
 #include <vector>
-#include "Renderer.hpp"
 #include "Mesh.hpp"
 
 class Display {
@@ -17,7 +16,6 @@ private:
 
 	SDL_GLContext _context;
 	SDL_Window* _window;
-	Renderer* _renderer;
 
 	void InitGL();
 	void SetViewport(int width, int height);
@@ -26,8 +24,8 @@ private:
 public:
     Display();
 
-    bool Init(Renderer* renderer);
-    void Update(Mesh* mesh);
+    bool Init();
+    void Update();
     void Shutdown();
 };
 

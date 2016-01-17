@@ -10,8 +10,6 @@
 #include "Input.hpp"
 #include "Mesh.hpp"
 
-Mesh cube;
-
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
 }
@@ -26,17 +24,9 @@ bool Game::Init(){
         return false;
     } else std::cout << "done\n";
 
-	//Rendering
-	std::cout << "* Renderer: ";
-	if (!_renderer.Init()) {
-		std::cout << "Error: %s\n", SDL_GetError();
-		return false;
-	}
-	else std::cout << "done\n";
-
 	//Display
 	std::cout << "* Display: ";
-	if (!_display.Init(&_renderer)) {
+	if (!_display.Init()) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -54,9 +44,6 @@ bool Game::Init(){
 
 void Game::Start(){
     if(Init()){
-
-		cube.Init();
-        cube.Load();
 
         gameState = GAMESTATE_RUNNING;
         Loop();
@@ -103,7 +90,7 @@ void Game::Loop(){
         //update world
 
 		//render and refresh display
-        _display.Update(&cube);
+        _display.Update();
     }
     Shutdown();
 }
@@ -113,7 +100,6 @@ void Game::Shutdown(){
 
     _input.Shutdown();
 	_display.Shutdown();
-	_renderer.Shutdown();
 
 	SDL_Quit();
 }

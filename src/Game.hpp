@@ -17,7 +17,6 @@ class Game {
 private:
 	Input _input;
     Display _display;
-	Renderer _renderer;
 
 public:
 	Game();

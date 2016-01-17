@@ -7,12 +7,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "lib/OpenGL.hpp"
-#include "Renderer.hpp"
 
 Display::Display() {
 }
 
-bool Display::Init(Renderer* renderer) {
+bool Display::Init() {
     SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -21,7 +20,6 @@ bool Display::Init(Renderer* renderer) {
 
 	_window = SDL_CreateWindow("cppengine", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
 	_context = SDL_GL_CreateContext(_window);
-	_renderer = renderer;
 
 	std::cout << glGetString(GL_VERSION) << " : ";
 
@@ -30,8 +28,7 @@ bool Display::Init(Renderer* renderer) {
     return true;
 }
 
-void Display::Update(Mesh* mesh) {
-
+void Display::Update() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -42,8 +39,6 @@ void Display::Update(Mesh* mesh) {
 		glm::vec3(0, 1, 0));// Head is up (set to 0,-1,0 to look upside-down)
 	glm::mat4 Model = glm::mat4(1.0f);
 	glm::mat4 mvp = Projection * View * Model;
-
-	mesh->Draw(mvp);
 
 	SDL_GL_SwapWindow(_window);
 }
