@@ -8,6 +8,9 @@
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"
+#include "Mesh.hpp"
+
+Mesh cube;
 
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
@@ -52,9 +55,8 @@ bool Game::Init(){
 void Game::Start(){
     if(Init()){
 
-        Entity testEnt;
-        testEnt.Init();
-        entities.push_back(testEnt);
+		cube.Init();
+        cube.Load();
 
         gameState = GAMESTATE_RUNNING;
         Loop();
@@ -101,7 +103,7 @@ void Game::Loop(){
         //update world
 
 		//render and refresh display
-        _display.Update(&entities);
+        _display.Update(&cube);
     }
     Shutdown();
 }

@@ -1,37 +1,100 @@
 #include "Mesh.hpp"
+#include "lib/Geometry.hpp"
 
-void Mesh::Draw() {
-/*
-	std::vector<vector3<GLfloat> > vertexData;
+Mesh::Mesh(){}
+Mesh::~Mesh() {
+	glDeleteVertexArrays(1, &VAO);
+}
 
-	for (auto v : entity.vertices) {
-		vertexData.push_back(vector3<GLfloat>(v.position.x, v.position.y, v.position.z));
-		vertexData.push_back(vector3<GLfloat>(v.color.x, v.color.y, v.color.z));
+void Mesh::Init() {
+
+	const float cube[] = {
+		//left
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
+
+		//front
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+
+		//right
+		1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 1.0f,
+
+		//back
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+
+		//top
+		0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+
+		//bottom
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f
+	};
+
+	int count = sizeof(cube) / sizeof(float);
+	for (int i = 0; i < count; i += 3) {
+		vertex_t vertex;
+		vertex.position = glm::fvec3(cube[i], cube[i + 1], cube[i + 2]);
+		vertices.push_back(vertex);
+	}
+}
+
+void Mesh::Load() {
+
+	std::vector<glm::fvec3> positions;
+	int vcount = this->vertices.size();
+	for (int i = 0; i < vcount; i++) {
+		positions.push_back(this->vertices[i].position);
 	}
 
-	*pointcount += vertexData.size() / 2 * 3;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-	GLuint vao = 0;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::fvec3), &positions[0], GL_STATIC_DRAW);
 
-	GLuint vbo = 0;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(vector3<GLfloat>), vertexData.data(), GL_STATIC_DRAW);
+	#ifdef _WIN32
+	shader = GLUtils::LoadShader("../shaders/test_vert.glsl", "../shaders/test_frag.glsl");
+	#else
+	shader = LoadShader("shaders/test_vert.glsl", "shaders/test_frag.glsl");
+	#endif
 
-	glUseProgram(entity.shader);
-
-	GLint posAttrib = glGetAttribLocation(entity.shader, "position");
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(vector3<GLfloat>), 0);
+	GLint posAttrib = glGetAttribLocation(this->shader, "position");
+	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(glm::fvec3), 0);
 	glEnableVertexAttribArray(posAttrib);
 
-
-	GLint colAttrib = glGetAttribLocation(entity.shader, "color");
+	GLint colAttrib = glGetAttribLocation(this->shader, "color");
 	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-		2 * sizeof(vector3<GLfloat>), (void*)(sizeof(vector3<GLfloat>)));
+		sizeof(glm::fvec3), (void*)(sizeof(glm::fvec3)));
 	glEnableVertexAttribArray(colAttrib);
 
-	glDrawArrays(GL_TRIANGLES, 0, pointcount);
-	*/
+
+}
+
+void Mesh::Draw() {
+
+	glBindVertexArray(VAO);
+	//Load();
+
+	glUseProgram(this->shader);
+
+	glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() / 2 * 3);
+
+	glBindVertexArray(0);
 }

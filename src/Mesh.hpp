@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include <iostream>
+#include <vector>
 #include <glm/glm.hpp>
 
 #include "lib/Types.hpp"
@@ -13,15 +14,18 @@ public:
 	Mesh();
 	~Mesh();
 
-	glm::tvec3<vertex_t> vertices;
-	glm::tvec3<GLuint> indices;
-	glm::tvec1<texture_t> textures;
+	std::vector<vertex_t> vertices;
+	std::vector<GLuint> indices;
+	std::vector<texture_t> textures;
 
-	Mesh(glm::tvec3<vertex_t> vertices, glm::tvec3<GLuint> indices, glm::tvec1<texture_t> textures);
+	Mesh(std::vector<vertex_t> vertices, std::vector<GLuint> indices, std::vector<texture_t> textures);
 
+	void Init();
+	void Load();
 	void Draw();
 
 private:
+	GLuint shader;
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
@@ -33,9 +37,4 @@ private:
 /*
 reminder:
 
-#ifdef _WIN32
-renderEntity.shader = GLUtils::LoadShader("../shaders/test_vert.glsl", "../shaders/test_frag.glsl");
-#else
-renderEntity.shader = LoadShader("shaders/test_vert.glsl", "shaders/test_frag.glsl");
-#endif
 */

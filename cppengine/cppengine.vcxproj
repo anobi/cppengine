@@ -141,6 +141,7 @@
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
+    <ClCompile Include="..\src\lib\Geometry.cpp" />
     <ClCompile Include="..\src\lib\OpenGL.cpp" />
     <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\Main.cpp" />

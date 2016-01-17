@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <iostream>
+#include <vector>
 #include "OpenGL.hpp"
 
 typedef struct {

@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include "Renderer.hpp"
+#include "Mesh.hpp"
 
 class Display {
 
@@ -26,7 +27,7 @@ public:
     Display();
 
     bool Init(Renderer* renderer);
-    void Update(std::vector<Entity>* entities);
+    void Update(Mesh* mesh);
     void Shutdown();
 };
 

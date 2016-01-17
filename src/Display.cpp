@@ -28,15 +28,12 @@ bool Display::Init(Renderer* renderer) {
     return true;
 }
 
-void Display::Update(std::vector<Entity>* entities) {
+void Display::Update(Mesh* mesh) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-	glRotatef(0.4f,0.0f,1.0f,0.0f);    // Rotate The cube around the Y axis
-	glRotatef(0.1f,0.2f,0.0f,0.2f);    // Rotate The cube around the Y axis
 
-	_renderer->RenderEntities(entities);
+	mesh->Draw();
 
 	SDL_GL_SwapWindow(_window);
 }
