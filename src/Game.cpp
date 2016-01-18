@@ -63,7 +63,7 @@ void Game::Loop(){
 
 	Mesh cube = Mesh("../res/cube.obj");
 	Shader shader = Shader("default");
-	Camera camera = Camera(glm::vec3(-2, 0, 0), 60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+	Camera camera = Camera(glm::vec3(1, 1, 0), 60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
 	Transform transform = Transform();
 
     SDL_Event event;

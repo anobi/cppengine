@@ -42,6 +42,7 @@ bin/
 *.vcxproj.filters
 *.sdf
 *.opensdf
+*.opendb
 .vs
 [Dd]ebug/
 [Rr]elease/

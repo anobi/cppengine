@@ -46,13 +46,13 @@ Mesh::Mesh(const std::string fileName) {
 					model.normals.push_back(glm::vec3(norm.x, norm.y, norm.z));
 				}
 
-				////texture coordinates
-				//if (mesh->HasTextureCoords(0)) {
-				//	auto uv = mesh->mTextureCoords[v];
-				//	model.texCoords.push_back(glm::vec2(uv->x, uv->y));
-				//}
+				//texture coordinates
+				if (mesh->HasTextureCoords(v)) {
+					auto uv = mesh->mTextureCoords[v];
+					model.texCoords.push_back(glm::vec2(uv->x, uv->y));
+				}
 
-				//indices
+				//indices, wtf is this pushing thousands of shits into indices?
 				if (mesh->HasFaces()) {
 					for (unsigned int f = 0; f < mesh->mNumFaces; f++) {
 						for (unsigned int in = 0; in < mesh->mFaces[f].mNumIndices; in++) {
@@ -73,7 +73,7 @@ Mesh::~Mesh() {
 
 void Mesh::SetupMesh(Model &model) {
 
-	mNumIndices = model.indices.size();
+	mNumIndices = model.positions.size();
 
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
@@ -86,17 +86,17 @@ void Mesh::SetupMesh(Model &model) {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	////texture coordinates, rename to uv mayhaps?
-	//glBindBuffer(GL_ARRAY_BUFFER, mVBOs[1]);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	//texture coordinates, rename to uv mayhaps?
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//normals
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(model.normals[0]) * model.normals.size(), &model.normals[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[3]);
