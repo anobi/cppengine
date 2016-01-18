@@ -18,7 +18,6 @@ private:
 	SDL_Window* _window;
 
 	void InitGL();
-	void SetViewport(int width, int height);
 
 public:
     Display();
