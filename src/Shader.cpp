@@ -117,6 +117,7 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 		for (auto c : shaderError) {
 			errorMessage += c;
 		}
+        std::cerr << errorMessage << std::endl;
 	}
 	return errorMessage;
 }

@@ -18,6 +18,8 @@ bool Display::Init() {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); 
 
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+
 	_window = SDL_CreateWindow("cppengine", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
 	_context = SDL_GL_CreateContext(_window);
 

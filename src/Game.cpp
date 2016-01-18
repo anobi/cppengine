@@ -98,9 +98,6 @@ void Game::Loop(){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		float sinCounter = sinf(counter);
-		float absSinCounter = abs(sinCounter);
-
 		transform.Rotation()->y = counter * 100;
 
         //update world

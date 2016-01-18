@@ -2,7 +2,7 @@ CC = clang++
 BUILD = bin/game
 SRC = src/*.cpp
 CFLAGS = -Wall -std=c++14 -g
-LIBS = -lSDL2main -lSDL2
+LIBS = -lSDL2main -lSDL2 -lassimp
 
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
