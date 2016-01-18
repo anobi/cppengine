@@ -2,6 +2,8 @@
 #include <assimp/Importer.hpp>
 #include "Mesh.hpp"
 
+Mesh::Mesh(){}
+
 Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) {
 
 	Model model;
@@ -23,17 +25,45 @@ Mesh::Mesh(const std::string fileName) {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName, 0);
 
-	Vertex *vertices;
-	unsigned int *indices;
-	unsigned int numVertices = 0;
-	unsigned int numIndices = 0;
+	Model model;
 
 	if (scene->HasMeshes()) {
 		//construct the vertexes
 		for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
-			numVertices += scene->mMeshes[i]->mNumVertices;
+			for (unsigned int v = 0; v < scene->mMeshes[i]->mNumVertices; v++) {
+
+				const aiMesh *mesh = scene->mMeshes[i];
+
+				//positions
+				if (scene->mMeshes[i]->HasPositions()) {
+					aiVector3D vert = scene->mMeshes[i]->mVertices[v];
+					model.positions.push_back(glm::vec3(vert.x, vert.y, vert.z));
+				}
+
+				//normals
+				if (mesh->HasNormals()) {
+					aiVector3D norm = mesh->mNormals[v];
+					model.normals.push_back(glm::vec3(norm.x, norm.y, norm.z));
+				}
+
+				////texture coordinates
+				//if (mesh->HasTextureCoords(0)) {
+				//	auto uv = mesh->mTextureCoords[v];
+				//	model.texCoords.push_back(glm::vec2(uv->x, uv->y));
+				//}
+
+				//indices
+				if (mesh->HasFaces()) {
+					for (unsigned int f = 0; f < mesh->mNumFaces; f++) {
+						for (unsigned int in = 0; in < mesh->mFaces[f].mNumIndices; in++) {
+							model.indices.push_back(mesh->mFaces[f].mIndices[in]);
+						}
+					}
+				}
+			}
 		}
 	}
+	SetupMesh(model);
 }
 
 Mesh::~Mesh() {
@@ -56,17 +86,17 @@ void Mesh::SetupMesh(Model &model) {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//texture coordinates, rename to uv mayhaps?
-	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	////texture coordinates, rename to uv mayhaps?
+	//glBindBuffer(GL_ARRAY_BUFFER, mVBOs[1]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//normals
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(model.normals[0]) * model.normals.size(), &model.normals[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[3]);

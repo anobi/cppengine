@@ -70,8 +70,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\bin\</OutDir>
-    <IncludePath>Z:\Projektit\Code\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>Z:\Projektit\Code\Libraries\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>Z:\Projektit\Code\Libraries\include;C:\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib;Z:\Projektit\Code\Libraries\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>Z:\Projektit\Code\Libraries\include;$(IncludePath)</IncludePath>
@@ -85,7 +85,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Windows</SubSystem>

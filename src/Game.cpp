@@ -8,6 +8,7 @@
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"
+#include "Shader.hpp"
 #include "Mesh.hpp"
 
 Game::Game(){
@@ -39,6 +40,8 @@ bool Game::Init(){
         return false;
     } else std::cout << "done\n";
 
+
+
     return true;
 }
 
@@ -57,6 +60,11 @@ void Game::Loop(){
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
+
+	Mesh cube = Mesh("../res/cube.obj");
+	Shader shader = Shader("default");
+	Camera camera = Camera(glm::vec3(-2, 0, 0), 60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+	Transform transform = Transform();
 
     SDL_Event event;
     while(gameState == GAMESTATE_RUNNING) {
@@ -88,6 +96,9 @@ void Game::Loop(){
 		}
 
         //update world
+		shader.Bind();
+		shader.Update(transform, camera);
+		cube.Draw();
 
 		//render and refresh display
         _display.Update();

@@ -7,6 +7,8 @@
 
 #include "Shader.hpp"
 
+Shader::Shader(){}
+
 Shader::Shader(const std::string &fileName) {
 	program = glCreateProgram();
 
