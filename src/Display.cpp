@@ -32,7 +32,7 @@ void Display::Update() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 1000.0f);
+	glm::mat4 Projection = glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 1000.0f);
 	glm::mat4 View = glm::lookAt(
 		glm::vec3(0, 3, 3), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin

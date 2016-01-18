@@ -1,45 +1,8 @@
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
 #include "Mesh.hpp"
-#include "lib/Geometry.hpp"
 
 Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) {
-
-	const float cube[] = {
-		//left
-		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.5f,
-
-		//front
-		0.0f, 0.0f, 0.5f,
-		0.5f, 0.0f, 0.5f,
-		0.0f, 0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-
-		//right
-		0.5f, 0.0f, 0.5f,
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.5f,
-
-		//back
-		0.0f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-
-		//top
-		0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-
-		//bottom
-		0.0f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f,
-		0.5f, 0.0f, 0.5f
-	};
 
 	Model model;
 
@@ -54,6 +17,23 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 	}
 
 	SetupMesh(model);
+}
+
+Mesh::Mesh(const std::string fileName) {
+	Assimp::Importer importer;
+	const aiScene *scene = importer.ReadFile(fileName, 0);
+
+	Vertex *vertices;
+	unsigned int *indices;
+	unsigned int numVertices = 0;
+	unsigned int numIndices = 0;
+
+	if (scene->HasMeshes()) {
+		//construct the vertexes
+		for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
+			numVertices += scene->mMeshes[i]->mNumVertices;
+		}
+	}
 }
 
 Mesh::~Mesh() {
