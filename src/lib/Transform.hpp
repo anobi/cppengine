@@ -8,10 +8,10 @@
 
 struct Transform {
 public:
-	Transform() {
-		this->position = glm::vec3();
-		this->rotation = glm::vec3();
-		this->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	Transform(const glm::vec3& pos = glm::vec3(), const glm::vec3& rot = glm::vec3(), const glm::vec3& scale = glm::vec3(1.0f, 1.0f, 1.0f)) {
+		this->position = pos;
+		this->rotation = rot;
+		this->scale = scale;
 	}
 
 	inline glm::mat4 GetModel() const {

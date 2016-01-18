@@ -9,6 +9,7 @@
 #include "Display.hpp"
 #include "Input.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "Mesh.hpp"
 
 Game::Game(){
@@ -40,8 +41,6 @@ bool Game::Init(){
         return false;
     } else std::cout << "done\n";
 
-
-
     return true;
 }
 
@@ -61,12 +60,13 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Mesh cube = Mesh("../res/cube.obj");
+	Mesh cube = Mesh("../res/monkey3.obj");
 	Shader shader = Shader("default");
-	Camera camera = Camera(glm::vec3(1, 1, 0), 60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
-	Transform transform = Transform();
+	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -10.0f), 45.0f, (float)800 / (float)600, 0.1f, 1000.0f);
+	Transform transform;
 
     SDL_Event event;
+	float counter = 0.0f;
     while(gameState == GAMESTATE_RUNNING) {
 
         auto loop_start = high_resolution_clock::now();
@@ -95,6 +95,14 @@ void Game::Loop(){
 			e.Update();
 		}
 
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		float sinCounter = sinf(counter);
+		float absSinCounter = abs(sinCounter);
+
+		transform.Rotation()->y = counter * 100;
+
         //update world
 		shader.Bind();
 		shader.Update(transform, camera);
@@ -102,6 +110,7 @@ void Game::Loop(){
 
 		//render and refresh display
         _display.Update();
+		counter += 0.0001f;
     }
     Shutdown();
 }

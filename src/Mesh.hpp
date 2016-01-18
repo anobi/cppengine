@@ -31,11 +31,6 @@ private:
 	glm::vec2 texCoords;
 };
 
-struct Texture {
-	GLuint id;
-	std::string type;
-};
-
 class Model {
 public:
 	std::vector<glm::vec3> positions;

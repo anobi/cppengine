@@ -1,5 +1,6 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include "Mesh.hpp"
 
 Mesh::Mesh(){}
@@ -23,16 +24,20 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 
 Mesh::Mesh(const std::string fileName) {
 	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile(fileName, 0);
+	const aiScene *scene = importer.ReadFile(fileName,
+		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+
+	if (scene == NULL) return;
 
 	Model model;
 
 	if (scene->HasMeshes()) {
 		//construct the vertexes
 		for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
-			for (unsigned int v = 0; v < scene->mMeshes[i]->mNumVertices; v++) {
 
-				const aiMesh *mesh = scene->mMeshes[i];
+			const aiMesh *mesh = scene->mMeshes[i];
+
+			for (unsigned int v = 0; v < scene->mMeshes[i]->mNumVertices; v++) {
 
 				//positions
 				if (scene->mMeshes[i]->HasPositions()) {
@@ -51,19 +56,22 @@ Mesh::Mesh(const std::string fileName) {
 					auto uv = mesh->mTextureCoords[v];
 					model.texCoords.push_back(glm::vec2(uv->x, uv->y));
 				}
+			}
 
-				//indices, wtf is this pushing thousands of shits into indices?
-				if (mesh->HasFaces()) {
-					for (unsigned int f = 0; f < mesh->mNumFaces; f++) {
-						for (unsigned int in = 0; in < mesh->mFaces[f].mNumIndices; in++) {
-							model.indices.push_back(mesh->mFaces[f].mIndices[in]);
-						}
-					}
+			//indices
+			if (mesh->HasFaces()) {
+				for (unsigned int f = 0; f < mesh->mNumFaces; f++) {
+					const aiFace &face = mesh->mFaces[f];
+					assert(face.mNumIndices == 3);
+
+					model.indices.push_back(face.mIndices[0]);
+					model.indices.push_back(face.mIndices[1]);
+					model.indices.push_back(face.mIndices[2]);
 				}
 			}
 		}
+		SetupMesh(model);
 	}
-	SetupMesh(model);
 }
 
 Mesh::~Mesh() {
@@ -73,7 +81,7 @@ Mesh::~Mesh() {
 
 void Mesh::SetupMesh(Model &model) {
 
-	mNumIndices = model.positions.size();
+	mNumIndices = model.indices.size();
 
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
@@ -109,7 +117,7 @@ void Mesh::Draw() {
 
 	glBindVertexArray(mVAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, mNumIndices);
+	glDrawElementsBaseVertex(GL_TRIANGLES, mNumIndices, GL_UNSIGNED_INT, 0, 0);
 
 	glBindVertexArray(0);
 }

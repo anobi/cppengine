@@ -6,7 +6,7 @@
 
 struct Camera {
 public:
-	Camera(glm::vec3 position, float fov, float aspectRatio, float zNear, float zFar) {
+	Camera(const glm::vec3 &position, float fov, float aspectRatio, float zNear, float zFar) {
 		this->position = position;
 		this->forward = glm::vec3(0.0f, 0.0f, 1.0f);
 		this->up = glm::vec3(0.0f, 1.0f, 0.0f);
