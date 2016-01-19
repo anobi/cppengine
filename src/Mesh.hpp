@@ -51,6 +51,8 @@ public:
 	void Draw();
 
 private:
+
+	Mesh(const Mesh& other);
 	static const unsigned int NUM_BUFFERS = 4;
 	unsigned int mNumIndices;
 

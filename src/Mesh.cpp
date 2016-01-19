@@ -25,7 +25,7 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 Mesh::Mesh(const std::string fileName) {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
-		aiProcess_Triangulate | aiProcess_GenSmoothNormals);
+		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 
 	if (scene == NULL) return;
 
@@ -115,9 +115,9 @@ void Mesh::SetupMesh(Model &model) {
 
 void Mesh::Draw() {
 
-	glBindVertexArray(mVAO);
+	glBindVertexArray(this->mVAO);
 
-	glDrawElementsBaseVertex(GL_TRIANGLES, mNumIndices, GL_UNSIGNED_INT, 0, 0);
+	glDrawElementsBaseVertex(GL_TRIANGLES, this->mNumIndices, GL_UNSIGNED_INT, 0, 0);
 
 	glBindVertexArray(0);
 }

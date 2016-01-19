@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "lib/stb_image.h"
 
+Texture::Texture(){}
 
 Texture::Texture(const std::string& fileName)
 {

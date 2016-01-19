@@ -8,9 +8,7 @@
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "Mesh.hpp"
+#include "Entity.hpp"
 
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
@@ -60,12 +58,19 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Mesh barrel = Mesh("../res/Barrel.blend");
-	Texture barrelTexture = Texture("../res/Barrel.png");
-	Shader shader = Shader("default");
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)800 / (float)600, 0.0f, 100.0f);
 
-	Transform transform;
+	std::vector<Entity*> entities;
+
+	Entity* barrel = new Entity("../res/Barrel.blend", "default", "../res/Barrel.png");
+	barrel->SetPosition(glm::vec3(-1.0, 0.0, 0.0));
+	barrel->SetScale(glm::vec3(0.5f));
+	entities.push_back(barrel);
+
+	Entity* monkey = new Entity("../res/monkey3.obj", "default", "../res/Barrel.png");
+	monkey->SetPosition(glm::vec3(1.0, 0.0, 0.0));
+	monkey->SetScale(glm::vec3(0.5f));
+	entities.push_back(monkey);
 
     SDL_Event event;
 	float counter = 0.0f;
@@ -92,21 +97,18 @@ void Game::Loop(){
         if(delay >= 0){
             SDL_Delay(delay);
         }
-        //update entities
-		for(auto e : entities){
-			e.Update();
-		}
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transform.Rotation()->y = counter * 10;
-
         //update world
-		shader.Bind();
-		barrelTexture.Bind();
-		shader.Update(transform, camera);
-		barrel.Draw();
+
+        //update entities
+		int numEntities = entities.size();
+		for (int i = 0; i < numEntities; i++) {
+			entities[i]->Rotation()->y = counter * 10;
+			entities[i]->Update(camera);
+		}
 
 		//render and refresh display
         _display.Update();
