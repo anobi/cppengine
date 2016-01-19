@@ -62,11 +62,9 @@ void Game::Loop(){
 
 	Mesh cube = Mesh("../res/monkey3.obj");
 	Shader shader = Shader("default");
-	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -10.0f), 60.0f, (float)800 / (float)600, 0.1f, 100.0f);
+	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)800 / (float)600, 0.0f, 100.0f);
+
 	Transform transform;
-	transform.Scale(glm::vec3(0.2));
-	transform.Position()->z = -1;
-	transform.Position()->x = -0.5;
 
     SDL_Event event;
 	float counter = 0.0f;
@@ -101,7 +99,7 @@ void Game::Loop(){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transform.Rotation()->y = counter * 100;
+		transform.Rotation()->y = counter * 10;
 
         //update world
 		shader.Bind();
@@ -110,7 +108,7 @@ void Game::Loop(){
 
 		//render and refresh display
         _display.Update();
-		counter += 0.0001f;
+		counter += 0.001f;
     }
     Shutdown();
 }
