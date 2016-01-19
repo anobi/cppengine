@@ -60,7 +60,8 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Mesh cube = Mesh("../res/monkey3.obj");
+	Mesh barrel = Mesh("../res/Barrel.blend");
+	Texture barrelTexture = Texture("../res/Barrel.png");
 	Shader shader = Shader("default");
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)800 / (float)600, 0.0f, 100.0f);
 
@@ -103,8 +104,9 @@ void Game::Loop(){
 
         //update world
 		shader.Bind();
+		barrelTexture.Bind();
 		shader.Update(transform, camera);
-		cube.Draw();
+		barrel.Draw();
 
 		//render and refresh display
         _display.Update();
