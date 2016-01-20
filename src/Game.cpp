@@ -63,12 +63,12 @@ void Game::Loop(){
 	std::vector<Entity*> entities;
 
 	Entity* barrel = new Entity("../res/Barrel.blend", "default", "../res/Barrel.png");
-	barrel->SetPosition(glm::vec3(-1.0, 0.0, 0.0));
+	barrel->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 	barrel->SetScale(glm::vec3(0.5f));
 	entities.push_back(barrel);
 
 	Entity* monkey = new Entity("../res/monkey3.obj", "default", "../res/Barrel.png");
-	monkey->SetPosition(glm::vec3(1.0, 0.0, 0.0));
+	monkey->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
 	monkey->SetScale(glm::vec3(0.5f));
 	entities.push_back(monkey);
 

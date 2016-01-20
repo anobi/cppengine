@@ -36,9 +36,9 @@ public:
 	inline glm::vec3 *Rotation() { return &this->rotation; }
 	inline glm::vec3 *Scale() { return &this->scale; }
 
-	inline void SetPosition(glm::vec3 &position) { this->position = position; }
-	inline void SetRotation(glm::vec3 &rotation) { this->rotation = rotation; }
-	inline void SetScale(glm::vec3 &scale) { this->scale = scale; }
+	inline void SetPosition(const glm::vec3 &position) { this->position = position; }
+	inline void SetRotation(const glm::vec3 &rotation) { this->rotation = rotation; }
+	inline void SetScale(const glm::vec3 &scale) { this->scale = scale; }
 
 private:
 	glm::vec3 position;
