@@ -67,10 +67,9 @@ void Game::Loop(){
 	barrel->SetScale(glm::vec3(0.5f));
 	entities.push_back(barrel);
 
-	Entity* monkey = new Entity("../res/cube.obj", "default", "../res/Wood.png");
-	monkey->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-	monkey->SetScale(glm::vec3(0.5f));
-	entities.push_back(monkey);
+	Entity* cube = new Entity("../res/cube.obj", "default", "../res/Wood.png");
+	cube->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+	entities.push_back(cube);
 
     SDL_Event event;
 	float counter = 0.0f;
