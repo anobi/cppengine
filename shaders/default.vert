@@ -1,20 +1,16 @@
 #version 330 core
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 texCoord;
 
-uniform mat4 modelViewProjection;
-uniform mat4 wNormal;
-uniform vec3 diffuse;
+uniform mat4 ModelViewProjection;
+uniform mat4 Normal;
 
-in vec3 position;
-in vec3 normal;
-in vec2 texCoord;
-
-out vec3 color;
 out vec2 texCoord0;
 out vec3 normal0;
 
 void main() {
-    gl_Position = modelViewProjection * vec4(position, 1.0f);
+    gl_Position = ModelViewProjection * vec4(position, 1.0f);
 	texCoord0 = texCoord;
-	normal0 = (wNormal * vec4(normal, 0.0)).xyz;
-	color = diffuse;
+	normal0 = (Normal * vec4(normal, 0.0)).xyz;
 }

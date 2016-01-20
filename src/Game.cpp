@@ -67,7 +67,7 @@ void Game::Loop(){
 	barrel->SetScale(glm::vec3(0.5f));
 	entities.push_back(barrel);
 
-	Entity* monkey = new Entity("../res/monkey3.obj", "default", "../res/Barrel.png");
+	Entity* monkey = new Entity("../res/cube.obj", "default", "../res/Wood.png");
 	monkey->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
 	monkey->SetScale(glm::vec3(0.5f));
 	entities.push_back(monkey);

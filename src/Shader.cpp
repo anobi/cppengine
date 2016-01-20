@@ -20,8 +20,8 @@ Shader::Shader(const std::string &fileName) {
 	}
 
 	glBindAttribLocation(program, 0, "position");
-	glBindAttribLocation(program, 1, "texCoord");
-	glBindAttribLocation(program, 2, "normal");
+	glBindAttribLocation(program, 1, "normal");
+	glBindAttribLocation(program, 2, "texCoord");
 
 	glLinkProgram(program);
 	std::string lError = GetShaderStatus(program);
@@ -29,9 +29,9 @@ Shader::Shader(const std::string &fileName) {
 	glValidateProgram(program);
 	std::string vError = GetShaderStatus(program);
 
-	uniforms[0] = glGetUniformLocation(program, "diffuse");
-	uniforms[1] = glGetUniformLocation(program, "modelViewProjection");
-	uniforms[2] = glGetUniformLocation(program, "wNormal");
+	uniforms[0] = glGetUniformLocation(program, "Normal");
+	uniforms[1] = glGetUniformLocation(program, "ModelViewProjection");
+	uniforms[2] = glGetUniformLocation(program, "LightDirection");
 }
 
 Shader::~Shader() {
@@ -65,9 +65,9 @@ void Shader::Update(const Transform &transform, const Camera &camera) {
 	glm::mat4 modelViewProjection = transform.GetModelViewProjection(camera);
 	glm::mat4 normal = transform.GetModel();
 
-	glUniform3f(uniforms[0], 0.0f, 0.0f, 1.0f);
+	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);
 	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &modelViewProjection[0][0]);
-	glUniformMatrix4fv(uniforms[2], 1, GL_FALSE, &normal[0][0]);
+	glUniform3f(uniforms[2], 0.0f, 1.0f, 0.0f);
 }
 
 /*
