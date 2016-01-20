@@ -25,7 +25,7 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 Mesh::Mesh(const std::string fileName) {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
-		aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs |aiProcess_FixInfacingNormals);
+		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs |aiProcess_FixInfacingNormals);
 
 	if (scene == NULL) return;
 

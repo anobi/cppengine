@@ -63,13 +63,18 @@ void Game::Loop(){
 	std::vector<Entity*> entities;
 
 	Entity* barrel = new Entity("../res/Barrel.blend", "default", "../res/Barrel.png");
-	barrel->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+	barrel->SetPosition(glm::vec3(-1.0f, -0.5f, 0.0f));
 	barrel->SetScale(glm::vec3(0.5f));
 	entities.push_back(barrel);
 
 	Entity* cube = new Entity("../res/cube.obj", "default", "../res/Wood.png");
-	cube->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+	cube->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
 	entities.push_back(cube);
+
+	Entity* monkey = new Entity("../res/monkey3.obj", "default", "../res/Wood.png");
+	monkey->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	monkey->SetScale(glm::vec3(0.5f));
+	entities.push_back(monkey);
 
     SDL_Event event;
 	float counter = 0.0f;
