@@ -9,5 +9,8 @@ uniform vec3 LightDirection;
 out vec4 fragColor;
 
 void main(void) {
-	fragColor = texture(texture_diffuse, texCoord0);
+
+	float light = clamp(dot(normal0, LightDirection), 0.0f, 1.0f);
+
+	fragColor = texture(texture_diffuse, texCoord0) * light;
 }

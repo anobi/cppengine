@@ -67,7 +67,7 @@ void Shader::Update(const Transform &transform, const Camera &camera) {
 
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);
 	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &modelViewProjection[0][0]);
-	glUniform3f(uniforms[2], 0.0f, 1.0f, 0.0f);
+	glUniform3f(uniforms[2], 0.5f, 1.0f, -1.0f);
 }
 
 /*
