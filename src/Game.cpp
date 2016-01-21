@@ -77,25 +77,25 @@ void Game::Loop(){
 	Entity barrel;
 	barrel.GetTransform()->SetScale(glm::vec3(0.5f));
 	barrel.GetTransform()->SetPosition(glm::vec3(-1.0f, -0.5f, 0.0f));
-	barrel.AddComponent(new Mesh("../res/barrel.blend"));
 	barrel.AddComponent(new Shader("default"));
 	barrel.AddComponent(new Texture("../res/Barrel.png"));
+	barrel.AddComponent(new Mesh("../res/barrel.blend"));
 	entities.push_back(&barrel);
 
 	Entity box;
 	box.GetTransform()->SetScale(glm::vec3(0.5f));
 	box.GetTransform()->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
-	box.AddComponent(new Mesh("../res/cube.obj"));
 	box.AddComponent(new Shader("default"));
 	box.AddComponent(new Texture("../res/Wood.png"));
+	box.AddComponent(new Mesh("../res/cube.obj"));
 	entities.push_back(&box);
 
 	Entity monkey;
 	monkey.GetTransform()->SetScale(glm::vec3(0.5f));
 	monkey.GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	monkey.AddComponent(new Mesh("../res/monkey3.obj"));
 	monkey.AddComponent(new Shader("default"));
 	monkey.AddComponent(new Texture("../res/Wood.png"));
+	monkey.AddComponent(new Mesh("../res/monkey3.obj"));
 	entities.push_back(&monkey);
 
     SDL_Event event;
