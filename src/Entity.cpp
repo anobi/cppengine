@@ -1,21 +1,17 @@
 #include "Entity.hpp"
+#include "EntityComponent.hpp"
 
-Entity::Entity(const std::string& mesh, const std::string& shader, const std::string& texture) {
-	this->mMesh = new Mesh(mesh);
-	this->mShader = new Shader(shader);
-	this->mTransform = new Transform();
-	this->mTexture = new Texture(texture);
+Entity::~Entity() {}
+
+void Entity::Render(Shader& shader, Renderer& renderer, Camera& camera) {
+	for (unsigned int i = 0; i < mComponents.size(); i++) {
+		this->mComponents[i]->Render(shader, renderer, camera);
+	}
 }
 
-Entity::~Entity() {
-	this->mMesh->~Mesh();
-	this->mShader->~Shader();
-	this->mTexture->~Texture();
-}
+void Entity::Update(){}
 
-void Entity::Update(Camera& camera) {
-	this->mTexture->Bind();
-	this->mShader->Bind();
-	this->mShader->Update(*mTransform, camera);
-	this->mMesh->Draw();
+void Entity::AddComponent(EntityComponent* component) {
+	this->mComponents.push_back(component);
+	component->AddToParent(this);
 }

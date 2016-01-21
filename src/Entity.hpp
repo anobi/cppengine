@@ -2,38 +2,35 @@
 #define ENTITY_H
 
 #include <iostream>
+#include <vector>
 
-#include "Mesh.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "lib/Camera.hpp"
 #include "lib/Transform.hpp"
 
 /////////////////
 // E N T I T Y //
 /////////////////
 
+class EntityComponent;
+class Shader;
+class Texture;
+class Renderer;
+class Camera;
+
 class Entity {
 public:
-    Entity();
-    Entity(const std::string& mesh, const std::string& shader, const std::string& texture);
+	Entity() : mTransform() {}
     ~Entity();
 
-	void Update(Camera& camera);
+	void Update();
+	void Render(Shader& shader, Renderer& renderer, Camera& camera);
 
-	inline glm::vec3 *Position() { return this->mTransform->Position(); }
-	inline glm::vec3 *Rotation() { return this->mTransform->Rotation(); }
-	inline glm::vec3 *Scale() { return this->mTransform->Scale(); }
+	void AddComponent(EntityComponent* component);
 
-	inline void SetPosition(const glm::vec3 &position) { this->mTransform->SetPosition(position); }
-	inline void SetRotation(const glm::vec3 &rotation) { this->mTransform->SetRotation(rotation); }
-	inline void SetScale(const glm::vec3 &scale) { this->mTransform->SetScale(scale); }
+	inline Transform* GetTransform() { return &mTransform; }
 
 private:
-	Mesh* mMesh;
-	Shader* mShader;
-	Transform* mTransform;
-	Texture* mTexture;
+	std::vector<EntityComponent*> mComponents;
+	Transform mTransform;
 };
 
 #endif

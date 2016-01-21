@@ -6,6 +6,7 @@
 #include "Display.hpp"
 #include "Input.hpp"
 #include "Entity.hpp"
+#include "Renderer.hpp"
 
 typedef enum {
 	GAMESTATE_RUNNING,
@@ -15,8 +16,9 @@ typedef enum {
 class Game {
 
 private:
-	Input _input;
-    Display _display;
+	Input mInput;
+    Display mDisplay;
+	Renderer mRenderer;
 
 public:
 	Game();

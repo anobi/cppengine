@@ -4,7 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#include "lib/OpenGL.hpp"
+
+#include "../lib/OpenGL.hpp"
+#include "../EntityComponent.hpp"
+#include "Shader.hpp"
 
 struct Vertex {
 
@@ -41,14 +44,19 @@ public:
 	//void CalculateNormals();
 };
 
-class Mesh {
+class Mesh : public EntityComponent {
 public:
 	Mesh(Vertex* vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices);
 	Mesh(const std::string fileName);
 	Mesh();
 	~Mesh();
 
-	void Draw();
+	virtual void Render(Shader& shader, Renderer& renderer, Camera& camera) {
+		shader.Bind();
+		shader.UpdateUniforms(*GetTransform(), camera);
+		Draw();
+	}
+
 
 private:
 
@@ -60,6 +68,7 @@ private:
 	GLuint mVBOs[NUM_BUFFERS];
 
 	void SetupMesh(Model &model);
+	void Draw();
 };
 
 #endif

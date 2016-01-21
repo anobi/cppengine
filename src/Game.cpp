@@ -9,6 +9,9 @@
 #include "Display.hpp"
 #include "Input.hpp"
 #include "Entity.hpp"
+#include "EntityComponents/Texture.hpp"
+
+std::vector<SDL_Keycode> move_keys_down;
 
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
@@ -26,7 +29,15 @@ bool Game::Init(){
 
 	//Display
 	std::cout << "* Display: ";
-	if (!_display.Init()) {
+	if (!mDisplay.Init()) {
+		std::cout << "Error: %s\n", SDL_GetError();
+		return false;
+	}
+	else std::cout << "done\n";
+
+	//Renderer
+	std::cout << "* Remderer: ";
+	if (!mRenderer.Init(&mDisplay)) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -34,7 +45,7 @@ bool Game::Init(){
     
     //Input system
     std::cout << "* Input: ";
-    if(!_input.Init()){
+    if(!mInput.Init()){
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
     } else std::cout << "done\n";
@@ -59,41 +70,39 @@ void Game::Loop(){
     using std::chrono::milliseconds;
 
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)800 / (float)600, 0.1f, 100.0f);
+	mRenderer.SetCamera(camera);
 
 	std::vector<Entity*> entities;
 
-	Entity* barrel = new Entity("../res/Barrel.blend", "default", "../res/Barrel.png");
-	barrel->SetPosition(glm::vec3(-1.0f, -0.5f, 0.0f));
-	barrel->SetScale(glm::vec3(0.5f));
-	entities.push_back(barrel);
+	Entity barrel;
+	barrel.GetTransform()->SetScale(glm::vec3(0.5f));
+	barrel.GetTransform()->SetPosition(glm::vec3(-1.0f, -0.5f, 0.0f));
+	barrel.AddComponent(new Mesh("../res/barrel.blend"));
+	barrel.AddComponent(new Shader("default"));
+	barrel.AddComponent(new Texture("../res/Barrel.png"));
+	entities.push_back(&barrel);
 
-	Entity* cube = new Entity("../res/cube.obj", "default", "../res/Wood.png");
-	cube->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
-	entities.push_back(cube);
+	Entity box;
+	box.GetTransform()->SetScale(glm::vec3(0.5f));
+	box.GetTransform()->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
+	box.AddComponent(new Mesh("../res/cube.obj"));
+	box.AddComponent(new Shader("default"));
+	box.AddComponent(new Texture("../res/Wood.png"));
+	entities.push_back(&box);
 
-	Entity* monkey = new Entity("../res/monkey3.obj", "default", "../res/Wood.png");
-	monkey->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	monkey->SetScale(glm::vec3(0.5f));
-	entities.push_back(monkey);
+	Entity monkey;
+	monkey.GetTransform()->SetScale(glm::vec3(0.5f));
+	monkey.GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	monkey.AddComponent(new Mesh("../res/monkey3.obj"));
+	monkey.AddComponent(new Shader("default"));
+	monkey.AddComponent(new Texture("../res/Wood.png"));
+	entities.push_back(&monkey);
 
     SDL_Event event;
 	float counter = 0.0f;
     while(gameState == GAMESTATE_RUNNING) {
 
         auto loop_start = high_resolution_clock::now();
-
-        while(SDL_PollEvent(&event)){
-            if(event.type == SDL_QUIT){
-                Quit();
-            };
-            if(event.type == SDL_KEYDOWN){
-                switch(event.key.keysym.sym){
-                case SDLK_ESCAPE:
-                    Quit();
-                    break;
-                }
-            }
-        }
         auto loop_end = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
         auto delay = ((milliseconds)1000 / 60 - elapsed).count();
@@ -102,20 +111,37 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {
+				Quit();
+			};
+
+			if (event.type == SDL_KEYDOWN) {
+				auto key = event.key.keysym.sym;
+				switch (key) {
+				case SDLK_ESCAPE: {
+					Quit();
+					break;
+					}
+				}
+			}
+		}
 
         //update world
 
-        //update entities
+        //update entities & render
+
+		//TODO: figure out where to put this shit
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		int numEntities = entities.size();
 		for (int i = 0; i < numEntities; i++) {
-			entities[i]->Rotation()->y = counter * 10;
-			entities[i]->Update(camera);
+			entities[i]->GetTransform()->GetRotation()->y = counter * 10;
+			mRenderer.Render(*entities[i]);
 		}
 
-		//render and refresh display
-        _display.Update();
+		mDisplay.Update();
 		counter += 0.001f;
     }
     Shutdown();
@@ -124,8 +150,8 @@ void Game::Loop(){
 void Game::Shutdown(){
     std::cout << "Shutting down...\n";
 
-    _input.Shutdown();
-	_display.Shutdown();
+    mInput.Shutdown();
+	mDisplay.Shutdown();
 
 	SDL_Quit();
 }

@@ -2,6 +2,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include "Mesh.hpp"
+#include "Shader.hpp"
 
 Mesh::Mesh(){}
 

@@ -61,7 +61,8 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
-void Shader::Update(const Transform &transform, const Camera &camera) {
+void Shader::UpdateUniforms(const Transform& transform, const Camera& camera) const {
+
 	glm::mat4 modelViewProjection = transform.GetModelViewProjection(camera);
 	glm::mat4 normal = transform.GetModel();
 

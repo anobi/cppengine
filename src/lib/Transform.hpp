@@ -6,11 +6,11 @@
 
 #include "Camera.hpp"
 
-struct Transform {
+class Transform {
 public:
 	Transform() {
-		this->position = glm::vec3();
-		this->rotation = glm::vec3();
+		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	}
 
@@ -32,9 +32,9 @@ public:
 		return viewProjection * model;
 	}
 
-	inline glm::vec3 *Position() { return &this->position; }
-	inline glm::vec3 *Rotation() { return &this->rotation; }
-	inline glm::vec3 *Scale() { return &this->scale; }
+	inline glm::vec3 *GetPosition() { return &this->position; }
+	inline glm::vec3 *GetRotation() { return &this->rotation; }
+	inline glm::vec3 *GetScale() { return &this->scale; }
 
 	inline void SetPosition(const glm::vec3 &position) { this->position = position; }
 	inline void SetRotation(const glm::vec3 &rotation) { this->rotation = rotation; }

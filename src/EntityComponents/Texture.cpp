@@ -1,7 +1,7 @@
 #include "Texture.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION    
-#include "lib/stb_image.h"
+#include "../lib/stb_image.h"
 
 Texture::Texture(){}
 
@@ -27,7 +27,6 @@ Texture::~Texture()
 	glDeleteTextures(1, &mTexture);
 }
 
-void Texture::Bind()
-{
+void Texture::Render(Shader& shader, Renderer& renderer, Camera& camera) {
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 }
