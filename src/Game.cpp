@@ -83,17 +83,18 @@ void Game::Loop(){
 	entities.push_back(&barrel);
 
 	Entity box;
+	box.GetTransform()->SetScale(glm::vec3(0.5f));
 	box.GetTransform()->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
 	box.AddComponent(new Shader("default"));
-	box.AddComponent(new Texture("../res/Wood.png"));
-	box.AddComponent(new Mesh("../res/cube.obj"));
+	box.AddComponent(new Texture("../res/Box.000.png"));
+	box.AddComponent(new Mesh("../res/uvcube.obj"));
 	entities.push_back(&box);
 
 	Entity monkey;
 	monkey.GetTransform()->SetScale(glm::vec3(0.5f));
 	monkey.GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
 	monkey.AddComponent(new Shader("default"));
-	monkey.AddComponent(new Texture("../res/Wood.png"));
+	monkey.AddComponent(new Texture("../res/Stone.Floor.001.png"));
 	monkey.AddComponent(new Mesh("../res/monkey3.obj"));
 	entities.push_back(&monkey);
 
