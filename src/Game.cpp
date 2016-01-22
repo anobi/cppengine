@@ -83,7 +83,6 @@ void Game::Loop(){
 	entities.push_back(&barrel);
 
 	Entity box;
-	box.GetTransform()->SetScale(glm::vec3(0.5f));
 	box.GetTransform()->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
 	box.AddComponent(new Shader("default"));
 	box.AddComponent(new Texture("../res/Wood.png"));
