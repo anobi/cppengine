@@ -100,10 +100,14 @@ void Game::Loop(){
 
     SDL_Event event;
 	float counter = 0.0f;
-    while(gameState == GAMESTATE_RUNNING) {
+	float velX = 0.0f;
+	float velY = 0.0f;
+	float velZ = 0.0f;
+	float speed = 25.0f;
 
+    while(gameState == GAMESTATE_RUNNING) {
         auto loop_start = high_resolution_clock::now();
-        auto loop_end = high_resolution_clock::now();
+		auto loop_end = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
         auto delay = ((milliseconds)1000 / 60 - elapsed).count();
 
@@ -111,21 +115,46 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
 
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				Quit();
-			};
 
-			if (event.type == SDL_KEYDOWN) {
-				auto key = event.key.keysym.sym;
-				switch (key) {
-				case SDLK_ESCAPE: {
+		//
+		// CONTROLS, WHOA
+		//
+		SDL_PollEvent(&event);
+
+		if (event.type == SDL_QUIT) {
+			Quit();
+		};
+
+		if (event.type == SDL_KEYDOWN) {
+			switch (event.key.keysym.sym) {
+				case SDLK_ESCAPE:
 					Quit();
 					break;
-					}
-				}
+				case SDLK_LEFT: velX += speed; break;
+				case SDLK_RIGHT: velX -= speed; break;
+				case SDLK_UP: velZ += speed; break;
+				case SDLK_DOWN: velZ -= speed; break;
 			}
 		}
+
+		if (event.type == SDL_KEYUP) {
+			switch (event.key.keysym.sym) {
+				case SDLK_LEFT: velX = 0; break;
+				case SDLK_RIGHT: velX = 0; break;
+				case SDLK_UP: velZ = 0; break;
+				case SDLK_DOWN: velZ = 0; break;
+			}
+		}
+
+		float ut = delay / 1024.0f;
+
+		glm::vec3 cPos = camera.GetPosition();
+		glm::vec3 movPos = glm::vec3(glm::clamp(velX, -speed, speed) * ut, velY, glm::clamp(velZ, -speed, speed) * ut);
+		glm::vec3 movement = cPos + movPos;
+
+		camera.SetPosition(movement);
+
+		//end of controls, whoa
 
         //update world
 
