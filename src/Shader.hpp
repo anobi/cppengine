@@ -2,9 +2,9 @@
 #define SHADER_H
 
 #include <iostream>
-#include "../lib/OpenGL.hpp"
+#include "lib/OpenGL.hpp"
 
-#include "../EntityComponent.hpp"
+#include "EntityComponent.hpp"
 
 class Shader : public EntityComponent {
 
@@ -14,7 +14,8 @@ public:
 	~Shader();
 
 	void Bind();
-	virtual void UpdateUniforms(const Transform& transform, const Camera& camera) const;
+	void UpdateUniforms(const Transform& transform, const Camera& camera) const;
+	void Render(Shader& shader, Camera& camera) {}
 
 private:
 	static const unsigned int NUM_SHADERS = 2;

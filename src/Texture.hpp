@@ -2,8 +2,8 @@
 #define TEXTURE_H
 
 #include <iostream>
-#include "../lib/OpenGL.hpp"
-#include "../EntityComponent.hpp"
+#include "lib/OpenGL.hpp"
+#include "EntityComponent.hpp"
 
 class Texture : public EntityComponent {
 public:
@@ -11,7 +11,9 @@ public:
 	Texture();
 	~Texture();
 
-	virtual void Render(Shader& shader, Renderer& renderer, Camera& camera);
+	void Render(Shader& shader, Camera& camera){
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+    }
 
 private:
 	GLuint mTexture;

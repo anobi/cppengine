@@ -6,8 +6,8 @@
 #include "Display.hpp"
 #include "Entity.hpp"
 #include "lib/Camera.hpp"
-#include "EntityComponents/Light.hpp"
-#include "EntityComponents/Shader.hpp"
+#include "Light.hpp"
+#include "Shader.hpp"
 
 class Entity;
 

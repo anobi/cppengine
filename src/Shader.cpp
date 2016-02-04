@@ -86,7 +86,7 @@ std::string Shader::ReadFile(const std::string &fileName) {
 #endif
 
 	std::string content;
-	std::ifstream stream(filePath, std::ios::in);
+	std::fstream stream(filePath, std::ios::in);
 
 	if (!stream.is_open()) {
 		std::cerr << "Cannot read file " << filePath << std::endl;

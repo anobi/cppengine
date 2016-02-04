@@ -22,7 +22,7 @@ public:
     ~Entity();
 
 	void Update();
-	void Render(Shader& shader, Renderer& renderer, Camera& camera);
+	void Render(Shader& shader, Camera& camera);
 
 	void AddComponent(EntityComponent* component);
 

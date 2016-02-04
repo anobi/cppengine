@@ -9,7 +9,8 @@
 #include "Display.hpp"
 #include "Input.hpp"
 #include "Entity.hpp"
-#include "EntityComponents/Texture.hpp"
+#include "Mesh.hpp"
+#include "Texture.hpp"
 
 std::vector<SDL_Keycode> move_keys_down;
 
@@ -161,7 +162,7 @@ void Game::Loop(){
         //update entities & render
 
 		//TODO: figure out where to put this shit
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int numEntities = entities.size();

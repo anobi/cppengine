@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "../EntityComponent.hpp"
+#include "EntityComponent.hpp"
 
 class Light : EntityComponent{
 public:

@@ -5,8 +5,8 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "../lib/OpenGL.hpp"
-#include "../EntityComponent.hpp"
+#include "lib/OpenGL.hpp"
+#include "EntityComponent.hpp"
 #include "Shader.hpp"
 
 struct Vertex {
@@ -51,7 +51,7 @@ public:
 	Mesh();
 	~Mesh();
 
-	virtual void Render(Shader& shader, Renderer& renderer, Camera& camera) {
+	void Render(Shader& shader, Camera& camera) {
 		shader.Bind();
 		shader.UpdateUniforms(*GetTransform(), camera);
 		Draw();

@@ -8,7 +8,6 @@
 #endif
 #include <memory>
 #include <vector>
-#include "EntityComponents/Mesh.hpp"
 
 class Display {
 

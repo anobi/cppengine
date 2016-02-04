@@ -1,14 +1,13 @@
-CC = clang++
+CC = g++
 BUILD = bin/game
 SRC = src/*.cpp
 CFLAGS = -Wall -std=c++14 -g
-LIBS = -lSDL2main -lSDL2 -lassimp
+LIBS = -lSDL2 -lassimp
 
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
 	LIBS += -framework OpenGL -lglew
 else
-	CFLAGS += -stdlib=libstdc++
 	LIBS += -lGL -lGLU -lGLEW
 endif
 
