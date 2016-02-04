@@ -139,10 +139,10 @@
   <ItemGroup>
     <ClCompile Include="..\src\Display.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
-    <ClCompile Include="..\src\EntityComponents\Light.cpp" />
-    <ClCompile Include="..\src\EntityComponents\Mesh.cpp" />
-    <ClCompile Include="..\src\EntityComponents\Shader.cpp" />
-    <ClCompile Include="..\src\EntityComponents\Texture.cpp" />
+    <ClCompile Include="..\src\Light.cpp" />
+    <ClCompile Include="..\src\Mesh.cpp" />
+    <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
@@ -150,10 +150,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\EntityComponent.hpp" />
-    <ClInclude Include="..\src\EntityComponents\Light.hpp" />
-    <ClInclude Include="..\src\EntityComponents\Mesh.hpp" />
-    <ClInclude Include="..\src\EntityComponents\Shader.hpp" />
-    <ClInclude Include="..\src\EntityComponents\Texture.hpp" />
+    <ClInclude Include="..\src\Light.hpp" />
+    <ClInclude Include="..\src\Mesh.hpp" />
+    <ClInclude Include="..\src\Shader.hpp" />
+    <ClInclude Include="..\src\Texture.hpp" />
     <ClInclude Include="..\src\lib\Camera.hpp" />
     <ClInclude Include="..\src\Display.hpp" />
     <ClInclude Include="..\src\Entity.hpp" />
