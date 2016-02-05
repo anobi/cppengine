@@ -104,7 +104,7 @@ void Game::Loop(){
 	float velX = 0.0f;
 	float velY = 0.0f;
 	float velZ = 0.0f;
-	float speed = 25.0f;
+	float speed = 0.02f;
 
     while(gameState == GAMESTATE_RUNNING) {
         auto loop_start = high_resolution_clock::now();
@@ -131,10 +131,12 @@ void Game::Loop(){
 				case SDLK_ESCAPE:
 					Quit();
 					break;
-				case SDLK_LEFT: velX += speed; break;
-				case SDLK_RIGHT: velX -= speed; break;
-				case SDLK_UP: velZ += speed; break;
-				case SDLK_DOWN: velZ -= speed; break;
+				case SDLK_LEFT: velX++; break;
+				case SDLK_RIGHT: velX--; break;
+				case SDLK_UP: velZ++; break;
+				case SDLK_DOWN: velZ--; break;
+				case SDLK_LCTRL: velY--; break;
+				case SDLK_SPACE: velY++; break;
 			}
 		}
 
@@ -144,13 +146,13 @@ void Game::Loop(){
 				case SDLK_RIGHT: velX = 0; break;
 				case SDLK_UP: velZ = 0; break;
 				case SDLK_DOWN: velZ = 0; break;
+				case SDLK_LCTRL: velY = 0; break;
+				case SDLK_SPACE: velY= 0; break;
 			}
 		}
 
-		float ut = delay / 1024.0f;
-
 		glm::vec3 cPos = camera.GetPosition();
-		glm::vec3 movPos = glm::vec3(glm::clamp(velX, -speed, speed) * ut, velY, glm::clamp(velZ, -speed, speed) * ut);
+		glm::vec3 movPos = glm::vec3(glm::clamp(velX, -speed, speed) * delay, glm::clamp(velY, -speed, speed) * delay, glm::clamp(velZ, -speed, speed) * delay);
 		glm::vec3 movement = cPos + movPos;
 
 		camera.SetPosition(movement);
