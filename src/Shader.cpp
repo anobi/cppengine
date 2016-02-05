@@ -79,11 +79,7 @@ std::string Shader::ReadFile(const std::string &fileName) {
 
 	std::string filePath;
 
-#ifdef _WIN32
-	filePath = "../shaders/" + fileName;
-#else
 	filePath = "shaders/" + fileName;
-#endif
 
 	std::string content;
 	std::fstream stream(filePath, std::ios::in);
