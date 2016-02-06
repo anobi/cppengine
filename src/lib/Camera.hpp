@@ -31,6 +31,14 @@ public:
 			cos(mTransform->GetRotation()->y) * cos(mTransform->GetRotation()->x));
 	}
 
+	inline const glm::vec3 GetRight() const {
+		return glm::vec3(
+			sin(mTransform->GetRotation()->x - 3.14f / 2.0f),
+			0,
+			cos(mTransform->GetRotation()->x - 3.14f / 2.0f)
+			);
+	}
+
 	Transform* mTransform;
 
 private:

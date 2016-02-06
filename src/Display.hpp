@@ -24,6 +24,9 @@ public:
     bool Init();
     void Update();
     void Shutdown();
+
+	inline SDL_Window* GetWindow() { return this->_window; }
+	inline const SDL_Window& GetWindow() const { return *this->_window; }
 };
 
 #endif

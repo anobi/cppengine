@@ -49,6 +49,8 @@ bool Game::Init(){
         return false;
     } else std::cout << "done\n";
 
+	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
     return true;
 }
 
@@ -105,7 +107,7 @@ void Game::Loop(){
 	float counter = 0.0f;
 
 	float speed = 0.02f;
-	float rotSpeed = 0.005f;
+	float rotSpeed = 0.001f;
 
     while(gameState == GAMESTATE_RUNNING) {
         auto loop_start = high_resolution_clock::now();
@@ -123,23 +125,48 @@ void Game::Loop(){
 		glm::vec3& cPos = *camera.mTransform->GetPosition();
 		glm::vec3& cRot = *camera.mTransform->GetRotation();
 
-		SDL_PollEvent(&event);
+		int x, y;
+		SDL_GetRelativeMouseState(&x, &y);
+		const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
+		SDL_PollEvent(&event);
 		if (event.type == SDL_QUIT) {
 			Quit();
-		};
+		}
+		if(event.type == SDL_MOUSEMOTION){
+			cRot.x -= x * rotSpeed * delay;
+			cRot.y -= y * rotSpeed * delay;
+		}
+
+		if(keystate[SDL_SCANCODE_A]){
+			cPos -= camera.GetRight() * speed * (float)delay;
+		}
+
+		if(keystate[SDL_SCANCODE_D]){
+			cPos += camera.GetRight() * speed * (float)delay;
+		}
+
+		if(keystate[SDL_SCANCODE_W]){
+			cPos += camera.GetDirection() * speed * (float)delay;
+		}
+
+		if(keystate[SDL_SCANCODE_S]){
+			cPos -= camera.GetDirection() * speed * (float)delay;
+		}
+
+		if(keystate[SDL_SCANCODE_SPACE]){
+			cPos.y += speed * delay;
+		}
+
+		if(keystate[SDL_SCANCODE_LCTRL]){
+			cPos.y -= speed * delay;
+		}
 
 		if (event.type == SDL_KEYDOWN) {
 			switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
 					Quit();
 					break;
-				case SDLK_LEFT: cRot.x += rotSpeed * delay; break;
-				case SDLK_RIGHT: cRot.x -= rotSpeed * delay; break;
-				case SDLK_UP: cPos += camera.GetDirection() * speed * (float)delay; break;
-				case SDLK_DOWN: cPos -= camera.GetDirection() * speed * (float)delay; break;
-				case SDLK_LCTRL: cPos.y -= speed * delay; break;
-				case SDLK_SPACE: cPos.y += speed * delay; break;
 			}
 		}
 
