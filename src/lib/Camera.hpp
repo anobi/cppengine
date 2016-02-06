@@ -19,7 +19,7 @@ public:
 
 	glm::mat4 GetViewProjection() const {
 		return mProjection * glm::lookAt(*mTransform->GetPosition(),
-										 mForward,
+										 *mTransform->GetPosition() + *mTransform->GetRotation(),
 										 mUp);
 	}
 	Transform* mTransform;
