@@ -2,6 +2,7 @@
 #define CONTROLS_H
 
 #include <SDL2/SDL.h>
+#include "Display.hpp"
 #include "lib/Camera.hpp"
 
 class Controls {
@@ -12,7 +13,7 @@ public:
 	};
 	~Controls(){};
 
-	void Update(SDL_Event* event, Camera* camera, const long deltaTime);
+	void Update(SDL_Event* event, Display* display, Camera* camera, const long deltaTime);
 
 	inline void SetMovementSpeed(const float speed) { this->mSpeed = speed;}
 	inline void SetSensitivity(const float sensitivity) { this->mSensitivity = sensitivity;}

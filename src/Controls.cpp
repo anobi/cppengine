@@ -1,17 +1,29 @@
+#include <iostream>
 #include <SDL2/SDL.h>
 #include "Controls.hpp"
 
-void Controls::Update(SDL_Event* event, Camera* camera, const long deltaTime){
-	
+
+
+void Controls::Update(SDL_Event* event, Display* display, Camera* camera, const long deltaTime){
+
 	glm::vec3& cPos = *camera->mTransform->GetPosition();
 	glm::vec3& cRot = *camera->mTransform->GetRotation();
 
 	//handle mouse movements
 	int x, y;
-	SDL_GetRelativeMouseState(&x, &y);
+	SDL_GetMouseState(&x, &y);
+	SDL_WarpMouseInWindow(display->GetWindow(),
+							display->GetWidth() / 2,
+							display->GetHeight() / 2);
 
-	cRot.x -= x * mSensitivity * deltaTime;
-	cRot.y -= y * mSensitivity * deltaTime;
+	if(event->motion.state){
+		float yLimit = glm::radians(90.0f);
+		float dx = (display->GetWidth() / 2 - x) * mSensitivity * deltaTime;
+		float dy = (display->GetHeight() / 2 - y) * mSensitivity * deltaTime;
+
+		cRot.x += dx;
+		cRot.y = glm::clamp(cRot.y + dy, -yLimit, yLimit);
+	}
 
 	//handle keyboard
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);

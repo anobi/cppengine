@@ -17,8 +17,6 @@ Game::Game(){
     gameState = GAMESTATE_STOPPED; 
 }
 
-SDL_bool captureMouse = SDL_TRUE;
-
 bool Game::Init(){
     std::cout << "Initializing game...\n" ;
 
@@ -53,14 +51,13 @@ bool Game::Init(){
     } else std::cout << "done\n";
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-	SDL_SetRelativeMouseMode(captureMouse);
+	SDL_SetRelativeMouseMode(SDL_FALSE);
 	
     return true;
 }
 
 void Game::Start(){
     if(Init()){
-
         gameState = GAMESTATE_RUNNING;
         Loop();
     } else {
@@ -133,17 +130,9 @@ void Game::Loop(){
 					case SDLK_ESCAPE:
 						Quit();
 						break;
-					case SDLK_RALT:
-						if(captureMouse == SDL_FALSE) {
-							captureMouse = SDL_TRUE;
-						} else {
-							captureMouse = SDL_FALSE;
-						}
-						SDL_SetRelativeMouseMode(captureMouse);
-						break;
 				}
 			}
-			if(event.type == SDL_WINDOWEVENT && !mDisplay.IsResizing()){
+			if(event.type == SDL_WINDOWEVENT){
 				switch(event.window.event){
 					case SDL_WINDOWEVENT_RESIZED:
 						mDisplay.SetResolution(event.window.data1, event.window.data2, true);
@@ -152,8 +141,9 @@ void Game::Loop(){
 				}
 			}
 		}
-		mControls.Update(&event, &camera, delay);
 
+		//skip controls if we don't have focus
+		mControls.Update(&event, &mDisplay, &camera, delay);
         //update world
 
         //update entities & render
