@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/trigonometric.hpp>
 
 #include "Transform.hpp"
 
@@ -14,20 +15,29 @@ public:
 		this->mTransform = transform;
 		this->mProjection = projection;
 		this->mUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		this->mForward = glm::vec3(0.0f, 0.0f, 1.0f);
+		this->mDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 	}
 
 	glm::mat4 GetViewProjection() const {
 		return mProjection * glm::lookAt(*mTransform->GetPosition(),
-										 *mTransform->GetPosition() + *mTransform->GetRotation(),
+										 *mTransform->GetPosition() + GetDirection(),
 										 mUp);
 	}
+
+	inline const glm::vec3 GetDirection() const {
+		return glm::vec3(
+			cos(mTransform->GetRotation()->y) * sin(mTransform->GetRotation()->x),
+			sin(mTransform->GetRotation()->y),
+			cos(mTransform->GetRotation()->y) * cos(mTransform->GetRotation()->x));
+	}
+
 	Transform* mTransform;
-	
+
 private:
 	glm::mat4 mProjection;
 	glm::vec3 mUp;
-	glm::vec3 mForward;
+	glm::vec3 mDirection;
+
 };
 
 #endif

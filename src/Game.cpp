@@ -103,10 +103,9 @@ void Game::Loop(){
 
     SDL_Event event;
 	float counter = 0.0f;
-	float velX = 0.0f;
-	float velY = 0.0f;
-	float velZ = 0.0f;
+
 	float speed = 0.02f;
+	float rotSpeed = 0.005f;
 
     while(gameState == GAMESTATE_RUNNING) {
         auto loop_start = high_resolution_clock::now();
@@ -121,6 +120,9 @@ void Game::Loop(){
 		//
 		// CONTROLS, WHOA
 		//
+		glm::vec3& cPos = *camera.mTransform->GetPosition();
+		glm::vec3& cRot = *camera.mTransform->GetRotation();
+
 		SDL_PollEvent(&event);
 
 		if (event.type == SDL_QUIT) {
@@ -132,32 +134,14 @@ void Game::Loop(){
 				case SDLK_ESCAPE:
 					Quit();
 					break;
-				case SDLK_LEFT: velX++; break;
-				case SDLK_RIGHT: velX--; break;
-				case SDLK_UP: velZ++; break;
-				case SDLK_DOWN: velZ--; break;
-				case SDLK_LCTRL: velY--; break;
-				case SDLK_SPACE: velY++; break;
+				case SDLK_LEFT: cRot.x += rotSpeed * delay; break;
+				case SDLK_RIGHT: cRot.x -= rotSpeed * delay; break;
+				case SDLK_UP: cPos += camera.GetDirection() * speed * (float)delay; break;
+				case SDLK_DOWN: cPos -= camera.GetDirection() * speed * (float)delay; break;
+				case SDLK_LCTRL: cPos.y -= speed * delay; break;
+				case SDLK_SPACE: cPos.y += speed * delay; break;
 			}
 		}
-
-		if (event.type == SDL_KEYUP) {
-			switch (event.key.keysym.sym) {
-				case SDLK_LEFT: velX = 0; break;
-				case SDLK_RIGHT: velX = 0; break;
-				case SDLK_UP: velZ = 0; break;
-				case SDLK_DOWN: velZ = 0; break;
-				case SDLK_LCTRL: velY = 0; break;
-				case SDLK_SPACE: velY= 0; break;
-			}
-		}
-
-		glm::vec3 cPos = *camera.mTransform->GetPosition();
-		glm::vec3 movPos = glm::vec3(glm::clamp(velX, -speed, speed) * delay, glm::clamp(velY, -speed, speed) * delay, glm::clamp(velZ, -speed, speed) * delay);
-		glm::vec3 movement = cPos + movPos;
-
-		camera.mTransform->SetPosition(movement);
-		//camera.mTransform->SetRotation();
 
 		//end of controls, whoa
 

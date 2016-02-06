@@ -30,6 +30,8 @@ public:
 	}
 
 	inline glm::vec3 *GetPosition() { return &this->position; }
+	inline const glm::vec3 &GetPosition() const { return this->position; }
+
 	inline glm::vec3 *GetRotation() { return &this->rotation; }
 	inline glm::vec3 *GetScale() { return &this->scale; }
 
