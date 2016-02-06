@@ -18,10 +18,15 @@ public:
 		this->mDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 	}
 
+	inline void SetAspectRatio(float fov, float aspectRatio) {
+		this->mProjection = glm::perspective(
+			fov, aspectRatio, 0.1f, 100.0f);
+	}
+
 	glm::mat4 GetViewProjection() const {
 		return mProjection * glm::lookAt(*mTransform->GetPosition(),
 										 *mTransform->GetPosition() + GetDirection(),
-										 mUp);
+										 GetUp());
 	}
 
 	inline const glm::vec3 GetDirection() const {

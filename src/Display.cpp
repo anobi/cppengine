@@ -10,10 +10,11 @@
 
 #include "lib/OpenGL.hpp"
 
-Display::Display() {
-}
+bool Display::Init(const int w, const int h) {
 
-bool Display::Init() {
+	this->width = w;
+	this->height = h;
+	
     SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); 
@@ -21,7 +22,8 @@ bool Display::Init() {
 
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	_window = SDL_CreateWindow("cppengine", 32, 32, 800, 600, SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height,
+							   SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	_context = SDL_GL_CreateContext(_window);
 
 	std::cout << glGetString(GL_VERSION) << " : ";
@@ -34,6 +36,27 @@ bool Display::Init() {
 void Display::Update() {
 
 	SDL_GL_SwapWindow(_window);
+}
+
+void Display::SetResolution(const int w, const int h, bool fullScreen){
+
+	SDL_DisplayMode displayMode;
+	int getMode = SDL_GetCurrentDisplayMode(0, &displayMode);
+
+	if(getMode != 0){
+		std::cerr << "failed to get display mode" << std::endl;
+	}
+
+	this->width = w;
+	this->height = h;
+	
+	SDL_SetWindowSize(_window, this->width, this->height);
+	displayMode.w = w;
+	displayMode.h = h;
+	SDL_SetWindowDisplayMode(_window, &displayMode);
+	SDL_GL_MakeCurrent(_window, _context);
+
+	glViewport(0.0f, 0.0f, this->width, this->height);
 }
 
 void Display::Shutdown() {
@@ -49,6 +72,7 @@ void Display::InitGL() {
     glewExperimental = GL_TRUE;
 	glewInit();
     
+	glViewport(0.0f, 0.0f, this->width, this->height);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
 

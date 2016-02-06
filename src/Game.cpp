@@ -17,6 +17,8 @@ Game::Game(){
     gameState = GAMESTATE_STOPPED; 
 }
 
+SDL_bool captureMouse = SDL_TRUE;
+
 bool Game::Init(){
     std::cout << "Initializing game...\n" ;
 
@@ -29,7 +31,7 @@ bool Game::Init(){
 
 	//Display
 	std::cout << "* Display: ";
-	if (!mDisplay.Init()) {
+	if (!mDisplay.Init(320, 240)) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -51,7 +53,7 @@ bool Game::Init(){
     } else std::cout << "done\n";
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_SetRelativeMouseMode(captureMouse);
 	
     return true;
 }
@@ -72,8 +74,12 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Camera camera = Camera(new Transform(),
-						   glm::perspective(45.0f, (float)800 / (float)600, 0.1f, 100.0f));
+	Camera camera = Camera(new Transform(), glm::perspective(
+							   45.0f, //FOV
+							   mDisplay.GetAspectRatio(), //duh
+							   0.1f, //depth aka znear
+							   100.0f)); //zFar
+
 	camera.mTransform->SetPosition(glm::vec3(0.0f, 0.0f, -3.0f));
 	camera.mTransform->SetRotation(glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -126,6 +132,22 @@ void Game::Loop(){
 			switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
 					Quit();
+					break;
+				case SDLK_RALT:
+					if(captureMouse == SDL_FALSE) {
+						captureMouse = SDL_TRUE;
+					} else {
+						captureMouse = SDL_FALSE;
+					}
+					SDL_SetRelativeMouseMode(captureMouse);
+					break;
+			}
+		}
+		if(event.type == SDL_WINDOWEVENT){
+			switch(event.window.event){
+				case SDL_WINDOWEVENT_SIZE_CHANGED:
+					mDisplay.SetResolution(event.window.data1, event.window.data2, true);
+					camera.SetAspectRatio(45.0f, mDisplay.GetAspectRatio());
 					break;
 			}
 		}
