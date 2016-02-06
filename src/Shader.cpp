@@ -1,5 +1,3 @@
-
-
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -61,9 +59,9 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
-void Shader::UpdateUniforms(const Transform& transform, const Camera& camera) const {
+void Shader::UpdateUniforms(const Transform& transform, const glm::mat4 viewProjection) const {
 
-	glm::mat4 modelViewProjection = transform.GetModelViewProjection(camera);
+	glm::mat4 modelViewProjection = transform.GetModelViewProjection(viewProjection);
 	glm::mat4 normal = transform.GetModel();
 
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);

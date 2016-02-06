@@ -12,8 +12,6 @@
 #include "Mesh.hpp"
 #include "Texture.hpp"
 
-std::vector<SDL_Keycode> move_keys_down;
-
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
 }
@@ -70,7 +68,11 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Camera camera = Camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)800 / (float)600, 0.1f, 100.0f);
+	Camera camera = Camera(new Transform(),
+						   glm::perspective(45.0f, (float)800 / (float)600, 0.1f, 100.0f));
+	camera.mTransform->SetPosition(glm::vec3(0.0f, 0.0f, -3.0f));
+	camera.mTransform->SetRotation(glm::vec3(0.0f, 0.0f, 1.0f));
+
 	mRenderer.SetCamera(camera);
 
 	std::vector<Entity*> entities;
@@ -116,7 +118,6 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
 
-
 		//
 		// CONTROLS, WHOA
 		//
@@ -151,11 +152,12 @@ void Game::Loop(){
 			}
 		}
 
-		glm::vec3 cPos = camera.GetPosition();
+		glm::vec3 cPos = *camera.mTransform->GetPosition();
 		glm::vec3 movPos = glm::vec3(glm::clamp(velX, -speed, speed) * delay, glm::clamp(velY, -speed, speed) * delay, glm::clamp(velZ, -speed, speed) * delay);
 		glm::vec3 movement = cPos + movPos;
 
-		camera.SetPosition(movement);
+		camera.mTransform->SetPosition(movement);
+		//camera.mTransform->SetRotation();
 
 		//end of controls, whoa
 

@@ -10,7 +10,7 @@ public:
 	virtual ~EntityComponent() {}
 
 	virtual void Update() {}
-	virtual void Render(Shader& shader, Camera& camera){}
+	virtual void Render(Shader& shader, const glm::mat4 viewProjection){}
 	virtual void AddToParent(Entity* parent) { mParent = parent; }
 
 	inline Transform* GetTransform() { return mParent->GetTransform(); }

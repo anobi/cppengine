@@ -16,5 +16,5 @@ bool Renderer::Init(Display* display) {
 
 
 void Renderer::Render(Entity& entity) {
-	entity.Render(mShader, *mMainCamera);
+	entity.Render(mShader, mMainCamera->GetViewProjection());
 }

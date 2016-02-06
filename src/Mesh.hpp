@@ -51,9 +51,9 @@ public:
 	Mesh();
 	~Mesh();
 
-	void Render(Shader& shader, Camera& camera) {
+	void Render(Shader& shader, glm::mat4 viewProjection) {
 		shader.Bind();
-		shader.UpdateUniforms(*GetTransform(), camera);
+		shader.UpdateUniforms(*GetTransform(), viewProjection);
 		Draw();
 	}
 

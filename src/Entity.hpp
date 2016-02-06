@@ -22,8 +22,7 @@ public:
     ~Entity();
 
 	void Update();
-	void Render(Shader& shader, Camera& camera);
-
+	void Render(Shader& shader, const glm::mat4 viewProjection);
 	void AddComponent(EntityComponent* component);
 
 	inline Transform* GetTransform() { return &mTransform; }

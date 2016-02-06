@@ -5,8 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "Camera.hpp"
-
 class Transform {
 public:
 	Transform() {
@@ -26,10 +24,8 @@ public:
 		return positionMatrix * rotationMatrix * scaleMatrix;
 	}
 
-	inline glm::mat4 GetModelViewProjection(const Camera& camera) const {
-		glm::mat4 viewProjection = camera.GetViewProjection();
+	inline glm::mat4 GetModelViewProjection(const glm::mat4 viewProjection) const {
 		glm::mat4 model = GetModel();
-
 		return viewProjection * model;
 	}
 
