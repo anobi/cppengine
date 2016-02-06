@@ -30,6 +30,7 @@ bool Display::Init(const int w, const int h) {
 
 	InitGL();
 
+	resizing = false;
     return true;
 }
 
@@ -39,7 +40,7 @@ void Display::Update() {
 }
 
 void Display::SetResolution(const int w, const int h, bool fullScreen){
-
+	resizing = true;
 	SDL_DisplayMode displayMode;
 	int getMode = SDL_GetCurrentDisplayMode(0, &displayMode);
 
@@ -57,6 +58,7 @@ void Display::SetResolution(const int w, const int h, bool fullScreen){
 	SDL_GL_MakeCurrent(_window, _context);
 
 	glViewport(0.0f, 0.0f, this->width, this->height);
+	resizing = false;
 }
 
 void Display::Shutdown() {

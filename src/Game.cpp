@@ -31,7 +31,7 @@ bool Game::Init(){
 
 	//Display
 	std::cout << "* Display: ";
-	if (!mDisplay.Init(320, 240)) {
+	if (!mDisplay.Init(1024, 700)) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -124,31 +124,32 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
 
-		SDL_PollEvent(&event);
-		if (event.type == SDL_QUIT) {
-			Quit();
-		}
-		if (event.type == SDL_KEYDOWN) {
-			switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
-					Quit();
-					break;
-				case SDLK_RALT:
-					if(captureMouse == SDL_FALSE) {
-						captureMouse = SDL_TRUE;
-					} else {
-						captureMouse = SDL_FALSE;
-					}
-					SDL_SetRelativeMouseMode(captureMouse);
-					break;
+		while(SDL_PollEvent(&event)){
+			if (event.type == SDL_QUIT) {
+				Quit();
 			}
-		}
-		if(event.type == SDL_WINDOWEVENT){
-			switch(event.window.event){
-				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					mDisplay.SetResolution(event.window.data1, event.window.data2, true);
-					camera.SetAspectRatio(45.0f, mDisplay.GetAspectRatio());
-					break;
+			if (event.type == SDL_KEYDOWN) {
+				switch (event.key.keysym.sym) {
+					case SDLK_ESCAPE:
+						Quit();
+						break;
+					case SDLK_RALT:
+						if(captureMouse == SDL_FALSE) {
+							captureMouse = SDL_TRUE;
+						} else {
+							captureMouse = SDL_FALSE;
+						}
+						SDL_SetRelativeMouseMode(captureMouse);
+						break;
+				}
+			}
+			if(event.type == SDL_WINDOWEVENT && !mDisplay.IsResizing()){
+				switch(event.window.event){
+					case SDL_WINDOWEVENT_RESIZED:
+						mDisplay.SetResolution(event.window.data1, event.window.data2, true);
+						camera.SetAspectRatio(45.0f, mDisplay.GetAspectRatio());
+						break;
+				}
 			}
 		}
 		mControls.Update(&event, &camera, delay);
