@@ -5,6 +5,7 @@
 #include <vector>
 #include "Display.hpp"
 #include "Input.hpp"
+#include "Controls.hpp"
 #include "Entity.hpp"
 #include "Renderer.hpp"
 
@@ -17,6 +18,7 @@ class Game {
 
 private:
 	Input mInput;
+	Controls mControls;
     Display mDisplay;
 	Renderer mRenderer;
 

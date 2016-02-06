@@ -1,0 +1,42 @@
+#include <SDL2/SDL.h>
+#include "Controls.hpp"
+
+void Controls::Update(SDL_Event* event, Camera* camera, const long deltaTime){
+	
+	glm::vec3& cPos = *camera->mTransform->GetPosition();
+	glm::vec3& cRot = *camera->mTransform->GetRotation();
+
+	//handle mouse movements
+	int x, y;
+	SDL_GetRelativeMouseState(&x, &y);
+
+	cRot.x -= x * mSensitivity * deltaTime;
+	cRot.y -= y * mSensitivity * deltaTime;
+
+	//handle keyboard
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
+
+	if(keystate[SDL_SCANCODE_A]){
+		cPos -= camera->GetRight() * mSpeed * (float)deltaTime;
+	}
+
+	if(keystate[SDL_SCANCODE_D]){
+		cPos += camera->GetRight() * mSpeed * (float)deltaTime;
+	}
+
+	if(keystate[SDL_SCANCODE_W]){
+		cPos += camera->GetDirection() * mSpeed * (float)deltaTime;
+	}
+
+	if(keystate[SDL_SCANCODE_S]){
+		cPos -= camera->GetDirection() * mSpeed * (float)deltaTime;
+	}
+
+	if(keystate[SDL_SCANCODE_SPACE]){
+		cPos += camera->GetUp() * mSpeed * (float)deltaTime;
+	}
+
+	if(keystate[SDL_SCANCODE_LCTRL]){
+		cPos -= camera->GetUp() * mSpeed * (float)deltaTime;
+	}
+}

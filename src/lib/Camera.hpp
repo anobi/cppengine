@@ -39,6 +39,10 @@ public:
 			);
 	}
 
+	inline const glm::vec3 GetUp() const {
+		return glm::cross(GetRight(), GetDirection());
+	}
+
 	Transform* mTransform;
 
 private:

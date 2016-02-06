@@ -5,6 +5,7 @@
 #else
 #include <SDL2/SDL.h>
 #endif
+
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"
@@ -51,6 +52,7 @@ bool Game::Init(){
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	
     return true;
 }
 
@@ -103,11 +105,8 @@ void Game::Loop(){
 	monkey.AddComponent(new Mesh("res/monkey3.obj"));
 	entities.push_back(&monkey);
 
-    SDL_Event event;
 	float counter = 0.0f;
-
-	float speed = 0.02f;
-	float rotSpeed = 0.001f;
+	SDL_Event event;
 
     while(gameState == GAMESTATE_RUNNING) {
         auto loop_start = high_resolution_clock::now();
@@ -119,49 +118,10 @@ void Game::Loop(){
             SDL_Delay(delay);
         }
 
-		//
-		// CONTROLS, WHOA
-		//
-		glm::vec3& cPos = *camera.mTransform->GetPosition();
-		glm::vec3& cRot = *camera.mTransform->GetRotation();
-
-		int x, y;
-		SDL_GetRelativeMouseState(&x, &y);
-		const Uint8* keystate = SDL_GetKeyboardState(NULL);
-
 		SDL_PollEvent(&event);
 		if (event.type == SDL_QUIT) {
 			Quit();
 		}
-		if(event.type == SDL_MOUSEMOTION){
-			cRot.x -= x * rotSpeed * delay;
-			cRot.y -= y * rotSpeed * delay;
-		}
-
-		if(keystate[SDL_SCANCODE_A]){
-			cPos -= camera.GetRight() * speed * (float)delay;
-		}
-
-		if(keystate[SDL_SCANCODE_D]){
-			cPos += camera.GetRight() * speed * (float)delay;
-		}
-
-		if(keystate[SDL_SCANCODE_W]){
-			cPos += camera.GetDirection() * speed * (float)delay;
-		}
-
-		if(keystate[SDL_SCANCODE_S]){
-			cPos -= camera.GetDirection() * speed * (float)delay;
-		}
-
-		if(keystate[SDL_SCANCODE_SPACE]){
-			cPos.y += speed * delay;
-		}
-
-		if(keystate[SDL_SCANCODE_LCTRL]){
-			cPos.y -= speed * delay;
-		}
-
 		if (event.type == SDL_KEYDOWN) {
 			switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
@@ -169,8 +129,7 @@ void Game::Loop(){
 					break;
 			}
 		}
-
-		//end of controls, whoa
+		mControls.Update(&event, &camera, delay);
 
         //update world
 
