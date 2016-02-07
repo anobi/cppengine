@@ -137,6 +137,7 @@
     <None Include="..\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Controls.cpp" />
     <ClCompile Include="..\src\Display.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\Light.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="..\src\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Controls.hpp" />
     <ClInclude Include="..\src\EntityComponent.hpp" />
     <ClInclude Include="..\src\Light.hpp" />
     <ClInclude Include="..\src\Mesh.hpp" />
