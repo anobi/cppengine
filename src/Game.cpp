@@ -47,7 +47,9 @@ bool Game::Init(){
     } else std::cout << "done\n";
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
+	mControls.SetSensitivity(0.00025f);
 	
     return true;
 }
@@ -139,7 +141,7 @@ void Game::Loop(){
 		}
 
 		//skip controls if we don't have focus
-		mControls.Update(&event, &mDisplay, &camera, delay);
+		mControls.Update(&event, &camera, delay);
         //update world
 
         //update entities & render
