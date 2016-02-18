@@ -8,6 +8,7 @@
 #include "lib/OpenGL.hpp"
 #include "EntityComponent.hpp"
 #include "Shader.hpp"
+#include "Renderer.hpp"
 
 struct Vertex {
 
@@ -51,19 +52,15 @@ public:
 	Mesh();
 	~Mesh();
 
-	void Render(Shader& shader, glm::mat4 viewProjection) {
-		shader.Bind();
-		shader.UpdateUniforms(*GetTransform(), viewProjection);
-		Draw();
-	}
-
+	void LoadShader(const std::string name);
+	void Render(const glm::mat4 viewProjection);
 
 private:
 
-	Mesh(const Mesh& other);
 	static const unsigned int NUM_BUFFERS = 4;
 	unsigned int mNumIndices;
 
+	Shader mShader;
 	GLuint mVAO;
 	GLuint mVBOs[NUM_BUFFERS];
 

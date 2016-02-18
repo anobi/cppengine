@@ -4,9 +4,15 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
-Mesh::Mesh(){}
+Mesh::Mesh(){
+	this->SetName("Mesh");
+	this->mShader = Shader("default");
+}
 
 Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) {
+
+	this->SetName("Mesh");
+	this->mShader = Shader("default");
 
 	Model model;
 
@@ -24,6 +30,10 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 }
 
 Mesh::Mesh(const std::string fileName) {
+
+	this->SetName("Mesh");
+	this->mShader = Shader("default");
+
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs |aiProcess_FixInfacingNormals);
@@ -80,6 +90,16 @@ Mesh::Mesh(const std::string fileName) {
 Mesh::~Mesh() {
 	glDeleteBuffers(NUM_BUFFERS, mVBOs);
 	glDeleteVertexArrays(1, &mVAO);
+}
+
+void Mesh::LoadShader(const std::string name) {
+	this->mShader = Shader(name);
+}
+
+void Mesh::Render(const glm::mat4 viewProjection) {
+	mShader.Bind();
+	mShader.UpdateUniforms(*GetTransform(), viewProjection);
+	Draw();
 }
 
 void Mesh::SetupMesh(Model &model) {

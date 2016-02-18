@@ -11,7 +11,7 @@ public:
 	Texture();
 	~Texture();
 
-	void Render(Shader& shader, const glm::mat4 viewProjection){
+	void Render(const glm::mat4 viewProjection){
         glBindTexture(GL_TEXTURE_2D, mTexture);
     }
 

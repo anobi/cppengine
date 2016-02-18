@@ -17,7 +17,7 @@ public:
 
 	void Bind();
 	void UpdateUniforms(const Transform& transform, const glm::mat4 viewProjection) const;
-	void Render(Shader& shader, const glm::mat4 viewProjection){}
+	void Render(const glm::mat4 viewProjection){}
 
 private:
 	static const unsigned int NUM_SHADERS = 2;

@@ -5,18 +5,30 @@
 
 #include "EntityComponent.hpp"
 
-class Light : EntityComponent{
+class Light : EntityComponent {
 public:
 
-	Light();
-	~Light();
+	Light(const glm::vec3& position, const glm::vec3& color, float intensity) 
+	{
+		this->position = position;
+		this->color = color;
+		this->intensity = intensity;
+	};
+	virtual ~Light();
 
 	float intensity;
 	float maxDistance;
-	glm::fvec3 position;
-	glm::fvec3 color;
+	glm::vec3 position;
+	glm::vec3 color;
 
 private:
+};
+
+class DirectionalLight : Light {
+	DirectionalLight();
+	~DirectionalLight();
+
+	glm::vec3 direction;
 };
 
 class SpotLight : Light {

@@ -22,12 +22,14 @@ public:
     ~Entity();
 
 	void Update();
-	void Render(Shader& shader, const glm::mat4 viewProjection);
-	void AddComponent(EntityComponent* component);
+	void Render(const glm::mat4 viewProjection);
 
+	void AddComponent(EntityComponent* component);
+	EntityComponent* GetComponent(const std::string componentName);
 	inline Transform* GetTransform() { return &mTransform; }
 
 private:
+	std::string mEntityName;
 	std::vector<EntityComponent*> mComponents;
 	Transform mTransform;
 };

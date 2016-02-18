@@ -140,7 +140,6 @@
     <ClCompile Include="..\src\Controls.cpp" />
     <ClCompile Include="..\src\Display.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
-    <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\Mesh.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />

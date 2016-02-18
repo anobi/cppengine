@@ -7,9 +7,6 @@
 #include "Entity.hpp"
 #include "lib/Camera.hpp"
 #include "Light.hpp"
-#include "Shader.hpp"
-
-class Entity;
 
 class Renderer {
 public:
@@ -21,14 +18,14 @@ public:
 	void Render(Entity &entity);
 
 	inline void AddLight(Light &light) { this->mLights.push_back(&light); }
+
+	inline const Camera& GetCamera() const { return *this->mMainCamera; }
 	inline void SetCamera(Camera &camera) { this->mMainCamera = &camera; }
 
 private:
 	Display* mDisplay;
 	Camera* mMainCamera;
 	std::vector<const Light*> mLights;
-
-	Shader mShader;
 };
 
 #endif
