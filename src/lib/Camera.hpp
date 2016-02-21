@@ -23,11 +23,21 @@ public:
 			fov, aspectRatio, 0.1f, 100.0f);
 	}
 
-	glm::mat4 GetViewProjection() const {
-		return mProjection * glm::lookAt(*mTransform->GetPosition(),
-										 *mTransform->GetPosition() + GetDirection(),
-										 GetUp());
+	glm::fmat4 GetView() const {
+		return glm::lookAt(*mTransform->GetPosition(),
+						   *mTransform->GetPosition() + GetDirection(),
+						   GetUp());
 	}
+
+	glm::fmat4 GetProjection() const{
+		return mProjection;
+	}
+
+	glm::fmat4 GetViewProjection() const {
+		return mProjection * GetView();
+	}
+
+	inline const glm::fvec3 GetPosition() const { return *mTransform->GetPosition(); }
 
 	inline const glm::fvec3 GetDirection() const {
 		return glm::fvec3(

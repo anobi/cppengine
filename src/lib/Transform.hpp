@@ -16,9 +16,9 @@ public:
 	inline glm::fmat4 GetModel() const {
 		glm::fmat4 positionMatrix	= glm::translate(position);
 		glm::fmat4 scaleMatrix		= glm::scale(scale);
-		glm::fmat4 rotationX			= glm::rotate(rotation.x, glm::fvec3(1.0, 0.0, 0.0));
-		glm::fmat4 rotationY			= glm::rotate(rotation.y, glm::fvec3(0.0, 1.0, 0.0));
-		glm::fmat4 rotationZ			= glm::rotate(rotation.z, glm::fvec3(0.0, 0.0, 1.0));
+		glm::fmat4 rotationX		= glm::rotate(rotation.x, glm::fvec3(1.0, 0.0, 0.0));
+		glm::fmat4 rotationY		= glm::rotate(rotation.y, glm::fvec3(0.0, 1.0, 0.0));
+		glm::fmat4 rotationZ		= glm::rotate(rotation.z, glm::fvec3(0.0, 0.0, 1.0));
 		glm::fmat4 rotationMatrix	= rotationX * rotationY * rotationZ;
 
 		return positionMatrix * rotationMatrix * scaleMatrix;

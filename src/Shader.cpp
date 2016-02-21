@@ -27,13 +27,16 @@ Shader::Shader(const std::string &fileName) {
 	glValidateProgram(program);
 	std::string vError = GetShaderStatus(program);
 
-	uniforms[0] = glGetUniformLocation(program, "Normal");
-	uniforms[1] = glGetUniformLocation(program, "ModelViewProjection");
-	uniforms[2] = glGetUniformLocation(program, "LightDirection");
-	uniforms[3] = glGetUniformLocation(program, "LightPosition");
-	uniforms[4] = glGetUniformLocation(program, "LightColor");
-	uniforms[5] = glGetUniformLocation(program, "LightIntensity");
-	uniforms[6] = glGetUniformLocation(program, "LightMaxDistance");
+	uniforms[0] = glGetUniformLocation(program, "ModelMatrix");
+	uniforms[1] = glGetUniformLocation(program, "ViewMatrix");
+	uniforms[2] = glGetUniformLocation(program, "ProjectionMatrix");
+	uniforms[3] = glGetUniformLocation(program, "CameraPosition");
+
+	uniforms[4] = glGetUniformLocation(program, "LightDirection");
+	uniforms[5] = glGetUniformLocation(program, "LightPosition");
+	uniforms[6] = glGetUniformLocation(program, "LightColor");
+	uniforms[7] = glGetUniformLocation(program, "LightIntensity");
+	uniforms[8] = glGetUniformLocation(program, "LightMaxDistance");
 }
 
 Shader::~Shader() {
@@ -63,24 +66,30 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
-void Shader::UpdateUniforms(const Transform& transform, Renderer& renderer) const {
+void Shader::UpdateUniforms(Transform& transform, Renderer& renderer) const {
 
-	glm::mat4 modelViewProjection = transform.GetModelViewProjection(renderer.GetCamera().GetViewProjection());
-	glm::mat4 normal = transform.GetModel();
+	//need to get modelview without projection
+	glm::fmat4 model = transform.GetModel();
+	glm::fmat4 view = renderer.GetCamera().GetView();
+	glm::fmat4 projection = renderer.GetCamera().GetProjection();
+	glm::fvec3 eyePos = renderer.GetCamera().GetPosition();
 
-	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);
-	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &modelViewProjection[0][0]);
-	glUniform3f(uniforms[2], 0.5f, 1.0f, -1.0f);
+	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(uniforms[2], 1, GL_FALSE, &projection[0][0]);
+
+	glUniform3fv(uniforms[3], 1, &eyePos[0]);
+	glUniform3f(uniforms[4], 0.5f, 1.0f, -1.0f);
 
 	if (renderer.GetLights().size() > 0) {
 		Light* light = renderer.GetLights()[0];
 
 		if (light != NULL) {
 			glm::fvec3* lPos = light->GetTransform()->GetPosition();
-			glUniform3f(uniforms[3], lPos->x, lPos->y, lPos->z);
-			glUniform3f(uniforms[4], light->color.r, light->color.g, light->color.b);
-			glUniform1f(uniforms[5], light->intensity);
-			glUniform1f(uniforms[6], light->maxDistance);
+			glUniform3f(uniforms[5], lPos->x, lPos->y, lPos->z);
+			glUniform3f(uniforms[6], light->color.r, light->color.g, light->color.b);
+			glUniform1f(uniforms[7], light->intensity);
+			glUniform1f(uniforms[8], light->maxDistance);
 		}
 	}
 }

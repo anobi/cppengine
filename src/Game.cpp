@@ -109,7 +109,7 @@ void Game::Loop(){
 	entities.push_back(&monkey);
 
 	Entity light;
-	light.GetTransform()->SetPosition(glm::fvec3(0.0f, 0.0f, -1.0f));
+	light.GetTransform()->SetPosition(glm::fvec3(0.0f, 3.0f, -3.0f));
 	light.AddComponent(new PointLight(glm::fvec3(1.0f, 1.0f, 1.0f), 1.0f, 2.0f));
 	entities.push_back(&light);
 

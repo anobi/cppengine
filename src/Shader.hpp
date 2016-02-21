@@ -17,12 +17,12 @@ public:
 	~Shader();
 
 	void Bind();
-	void UpdateUniforms(const Transform& transform, Renderer& renderer) const;
+	void UpdateUniforms(Transform& transform, Renderer& renderer) const;
 	void Render(Renderer& renrerer){}
 
 private:
 	static const unsigned int NUM_SHADERS = 2;
-	static const unsigned int NUM_UNIFORMS = 7;
+	static const unsigned int NUM_UNIFORMS = 9;
 
 	GLuint CreateShader(const std::string &source, unsigned int type);
 	std::string ReadFile(const std::string &filename);
