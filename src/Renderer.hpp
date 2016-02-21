@@ -18,6 +18,7 @@ public:
 	void Render(Entity& entity, Renderer& renderer);
 
 	inline void AddLight(Light &light) { this->mLights.push_back(&light); }
+	inline std::vector<Light*> GetLights() { return this->mLights; }
 
 	inline const Camera& GetCamera() const { return *this->mMainCamera; }
 	inline void SetCamera(Camera &camera) { this->mMainCamera = &camera; }
@@ -25,7 +26,7 @@ public:
 private:
 	Display* mDisplay;
 	Camera* mMainCamera;
-	std::vector<const Light*> mLights;
+	std::vector<Light*> mLights;
 };
 
 #endif

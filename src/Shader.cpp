@@ -30,11 +30,10 @@ Shader::Shader(const std::string &fileName) {
 	uniforms[0] = glGetUniformLocation(program, "Normal");
 	uniforms[1] = glGetUniformLocation(program, "ModelViewProjection");
 	uniforms[2] = glGetUniformLocation(program, "LightDirection");
-
-	uniforms[3] = glGetUniformLocation(program, "LightColor");
-	uniforms[4] = glGetUniformLocation(program, "LightPosition");
-	uniforms[5] = glGetUniformLocation(program, "LightPosition");
-	uniforms[6] = glGetUniformLocation(program, "LightDecay");
+	uniforms[3] = glGetUniformLocation(program, "LightPosition");
+	uniforms[4] = glGetUniformLocation(program, "LightColor");
+	uniforms[5] = glGetUniformLocation(program, "LightIntensity");
+	uniforms[6] = glGetUniformLocation(program, "LightMaxDistance");
 }
 
 Shader::~Shader() {
@@ -72,6 +71,18 @@ void Shader::UpdateUniforms(const Transform& transform, Renderer& renderer) cons
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);
 	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &modelViewProjection[0][0]);
 	glUniform3f(uniforms[2], 0.5f, 1.0f, -1.0f);
+
+	if (renderer.GetLights().size() > 0) {
+		Light* light = renderer.GetLights()[0];
+
+		if (light != NULL) {
+			glm::fvec3* lPos = light->GetTransform()->GetPosition();
+			glUniform3f(uniforms[3], lPos->x, lPos->y, lPos->z);
+			glUniform3f(uniforms[4], light->color.r, light->color.g, light->color.b);
+			glUniform1f(uniforms[5], light->intensity);
+			glUniform1f(uniforms[6], light->maxDistance);
+		}
+	}
 }
 
 /*

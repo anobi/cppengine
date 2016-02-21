@@ -5,36 +5,60 @@
 
 #include "EntityComponent.hpp"
 
-class Light : EntityComponent {
+class Light : public EntityComponent {
 public:
 
-	Light(const glm::fvec3& position, const glm::fvec3& color, float intensity) 
+	Light(const glm::fvec3& color, float intensity, float maxDistance) 
 	{
-		this->position = position;
+		this->SetName("Light");
 		this->color = color;
 		this->intensity = intensity;
+		this->maxDistance = maxDistance;
 	};
-	virtual ~Light();
+	virtual ~Light() { }
 
 	float intensity;
 	float maxDistance;
-	glm::fvec3 position;
 	glm::fvec3 color;
 
 private:
 };
 
-class DirectionalLight : Light {
-	DirectionalLight();
+class DirectionalLight : public Light {
+	DirectionalLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	{
+		this->SetName("DirectionalLight");
+		this->color = color;
+		this->intensity = intensity;
+		this->maxDistance = maxDistance;
+	};
 	~DirectionalLight();
 
 	glm::fvec3 direction;
 };
 
-class SpotLight : Light {
+class PointLight : public Light {
+public:
+	PointLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	{
+		this->SetName("PointLight");
+		this->color = color;
+		this->intensity = intensity;
+		this->maxDistance = maxDistance;
+	};
+	virtual ~PointLight() {};
+};
+
+class SpotLight : public Light {
 public:
 
-	SpotLight();
+	SpotLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	{
+		this->SetName("SpotLight");
+		this->color = color;
+		this->intensity = intensity;
+		this->maxDistance = maxDistance;
+	};
 	~SpotLight();
 
 	float angle;

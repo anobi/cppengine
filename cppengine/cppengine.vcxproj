@@ -134,8 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
-    <None Include="..\shaders\default.frag" />
-    <None Include="..\shaders\default.vert" />
+    <None Include="..\bin\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Controls.cpp" />

@@ -108,6 +108,14 @@ void Game::Loop(){
 	monkey.AddComponent(new Mesh("res/monkey3.obj"));
 	entities.push_back(&monkey);
 
+	Entity light;
+	light.GetTransform()->SetPosition(glm::fvec3(0.0f, 3.0f, -3.0f));
+	light.AddComponent(new PointLight(glm::fvec3(1.0f, 0.2f, 0.2f), 1.0f, 2.0f));
+	entities.push_back(&light);
+
+	Light* lightRef = static_cast<Light*>(light.GetComponent("PointLight"));
+	mRenderer.AddLight(*lightRef);
+
 	float counter = 0.0f;
 	SDL_Event event;
 
