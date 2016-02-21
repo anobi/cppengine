@@ -22,7 +22,7 @@ public:
     ~Entity();
 
 	void Update();
-	void Render(const glm::mat4 viewProjection);
+	void Render(Renderer& renderer);
 
 	void AddComponent(EntityComponent* component);
 	EntityComponent* GetComponent(const std::string componentName);

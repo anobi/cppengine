@@ -6,8 +6,8 @@
 
 void Controls::Update(SDL_Event* event, Camera* camera, const long deltaTime){
 
-	glm::vec3& cPos = *camera->mTransform->GetPosition();
-	glm::vec3& cRot = *camera->mTransform->GetRotation();
+	glm::fvec3& cPos = *camera->mTransform->GetPosition();
+	glm::fvec3& cRot = *camera->mTransform->GetRotation();
 
 	//handle mouse movements
 	int x, y;

@@ -7,6 +7,7 @@
 #include "lib/OpenGL.hpp"
 
 #include "EntityComponent.hpp"
+#include "Renderer.hpp"
 
 class Shader : public EntityComponent {
 
@@ -16,12 +17,12 @@ public:
 	~Shader();
 
 	void Bind();
-	void UpdateUniforms(const Transform& transform, const glm::mat4 viewProjection) const;
-	void Render(const glm::mat4 viewProjection){}
+	void UpdateUniforms(const Transform& transform, Renderer& renderer) const;
+	void Render(Renderer& renrerer){}
 
 private:
 	static const unsigned int NUM_SHADERS = 2;
-	static const unsigned int NUM_UNIFORMS = 3;
+	static const unsigned int NUM_UNIFORMS = 7;
 
 	GLuint CreateShader(const std::string &source, unsigned int type);
 	std::string ReadFile(const std::string &filename);

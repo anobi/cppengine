@@ -11,11 +11,11 @@
 
 class Camera {
 public:
-	Camera(Transform* transform, glm::mat4 projection){
+	Camera(Transform* transform, glm::fmat4 projection){
 		this->mTransform = transform;
 		this->mProjection = projection;
-		this->mUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		this->mDirection = glm::vec3(0.0f, 0.0f, 1.0f);
+		this->mUp = glm::fvec3(0.0f, 1.0f, 0.0f);
+		this->mDirection = glm::fvec3(0.0f, 0.0f, 1.0f);
 	}
 
 	inline void SetAspectRatio(float fov, float aspectRatio) {
@@ -29,31 +29,31 @@ public:
 										 GetUp());
 	}
 
-	inline const glm::vec3 GetDirection() const {
-		return glm::vec3(
+	inline const glm::fvec3 GetDirection() const {
+		return glm::fvec3(
 			cos(mTransform->GetRotation()->y) * sin(mTransform->GetRotation()->x),
 			sin(mTransform->GetRotation()->y),
 			cos(mTransform->GetRotation()->y) * cos(mTransform->GetRotation()->x));
 	}
 
-	inline const glm::vec3 GetRight() const {
-		return glm::vec3(
+	inline const glm::fvec3 GetRight() const {
+		return glm::fvec3(
 			sin(mTransform->GetRotation()->x - 3.14f / 2.0f),
 			0,
 			cos(mTransform->GetRotation()->x - 3.14f / 2.0f)
 			);
 	}
 
-	inline const glm::vec3 GetUp() const {
+	inline const glm::fvec3 GetUp() const {
 		return glm::cross(GetRight(), GetDirection());
 	}
 
 	Transform* mTransform;
 
 private:
-	glm::mat4 mProjection;
-	glm::vec3 mUp;
-	glm::vec3 mDirection;
+	glm::fmat4 mProjection;
+	glm::fvec3 mUp;
+	glm::fvec3 mDirection;
 
 };
 

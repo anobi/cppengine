@@ -74,8 +74,9 @@
     <LibraryPath>C:\lib;Z:\Projektit\Code\Libraries\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>Z:\Projektit\Code\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>Z:\Projektit\Code\Libraries\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>Z:\Projektit\Code\Libraries\include;C:\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib;Z:\Projektit\Code\Libraries\lib\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>..\bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,8 +114,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>assimp-vc140-mt.lib;opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

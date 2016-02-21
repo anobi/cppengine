@@ -30,6 +30,11 @@ Shader::Shader(const std::string &fileName) {
 	uniforms[0] = glGetUniformLocation(program, "Normal");
 	uniforms[1] = glGetUniformLocation(program, "ModelViewProjection");
 	uniforms[2] = glGetUniformLocation(program, "LightDirection");
+
+	uniforms[3] = glGetUniformLocation(program, "LightColor");
+	uniforms[4] = glGetUniformLocation(program, "LightPosition");
+	uniforms[5] = glGetUniformLocation(program, "LightPosition");
+	uniforms[6] = glGetUniformLocation(program, "LightDecay");
 }
 
 Shader::~Shader() {
@@ -59,9 +64,9 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
-void Shader::UpdateUniforms(const Transform& transform, const glm::mat4 viewProjection) const {
+void Shader::UpdateUniforms(const Transform& transform, Renderer& renderer) const {
 
-	glm::mat4 modelViewProjection = transform.GetModelViewProjection(viewProjection);
+	glm::mat4 modelViewProjection = transform.GetModelViewProjection(renderer.GetCamera().GetViewProjection());
 	glm::mat4 normal = transform.GetModel();
 
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &normal[0][0]);

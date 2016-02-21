@@ -53,22 +53,22 @@ Mesh::Mesh(const std::string fileName) {
 				//positions
 				if (mesh->HasPositions()) {
 					aiVector3D vert = scene->mMeshes[i]->mVertices[v];
-					model.positions.push_back(glm::vec3(vert.x, vert.y, vert.z));
+					model.positions.push_back(glm::fvec3(vert.x, vert.y, vert.z));
 				}
 
 				//normals
 				if (mesh->HasNormals()) {
 					aiVector3D norm = mesh->mNormals[v];
-					model.normals.push_back(glm::vec3(norm.x, norm.y, norm.z));
+					model.normals.push_back(glm::fvec3(norm.x, norm.y, norm.z));
 				}
 
 				if (mesh->mTextureCoords[0]) {
 					//texture coordinates
 					auto uv = mesh->mTextureCoords[0][v];
-					model.texCoords.push_back(glm::vec2(uv.x, uv.y));
+					model.texCoords.push_back(glm::fvec2(uv.x, uv.y));
 				}
 				else {
-					model.texCoords.push_back(glm::vec2(0.0f, 0.0f));
+					model.texCoords.push_back(glm::fvec2(0.0f, 0.0f));
 				}
 			}
 
@@ -96,9 +96,9 @@ void Mesh::LoadShader(const std::string name) {
 	this->mShader = Shader(name);
 }
 
-void Mesh::Render(const glm::mat4 viewProjection) {
+void Mesh::Render(Renderer& renderer) {
 	mShader.Bind();
-	mShader.UpdateUniforms(*GetTransform(), viewProjection);
+	mShader.UpdateUniforms(*GetTransform(), renderer);
 	Draw();
 }
 

@@ -10,21 +10,18 @@ public:
 	virtual ~EntityComponent() {}
 
 	virtual void Update() {}
-	virtual void Render(const glm::mat4 viewProjection){}
+	virtual void Render(Renderer& renderer){}
 	virtual void AddToParent(Entity* parent) { mParent = parent; }
 
 	inline std::string GetName() { return this->mComponentName; }
 	inline void SetName(const std::string name) { this->mComponentName = name; }
 
 	inline Transform* GetTransform() { return mParent->GetTransform(); }
-	inline const Transform& GetTransform() const { return *mParent->GetTransform(); }
 
 	Entity* GetParent() { return this->mParent; }
 
-protected:
-	std::string mComponentName;
-
 private:
+	std::string mComponentName;
 	Entity* mParent;
 };
 

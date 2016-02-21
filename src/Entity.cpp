@@ -3,9 +3,9 @@
 
 Entity::~Entity() {}
 
-void Entity::Render(const glm::mat4 viewProjection){
+void Entity::Render(Renderer& renderer){
 	for (unsigned int i = 0; i < mComponents.size(); i++) {
-		this->mComponents[i]->Render(viewProjection);
+		this->mComponents[i]->Render(renderer);
 	}
 }
 

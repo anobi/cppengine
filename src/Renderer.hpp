@@ -15,7 +15,7 @@ public:
 
 	bool Init(Display* display);
 
-	void Render(Entity &entity);
+	void Render(Entity& entity, Renderer& renderer);
 
 	inline void AddLight(Light &light) { this->mLights.push_back(&light); }
 

@@ -57,7 +57,7 @@ void Display::SetResolution(const int w, const int h, bool fullScreen){
 	SDL_SetWindowDisplayMode(_window, &displayMode);
 	SDL_GL_MakeCurrent(_window, _context);
 
-	glViewport(0.0f, 0.0f, this->width, this->height);
+	glViewport(0, 0, this->width, this->height);
 	resizing = false;
 }
 
@@ -74,7 +74,7 @@ void Display::InitGL() {
     glewExperimental = GL_TRUE;
 	glewInit();
     
-	glViewport(0.0f, 0.0f, this->width, this->height);
+	glViewport(0, 0, this->width, this->height);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
 

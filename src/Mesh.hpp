@@ -14,32 +14,32 @@ struct Vertex {
 
 public:
 	Vertex() {
-		this->position = glm::vec3();
-		this->normal = glm::vec3();
-		this->texCoords = glm::vec2();
+		this->position = glm::fvec3();
+		this->normal = glm::fvec3();
+		this->texCoords = glm::fvec2();
 	}
 
-	Vertex(const glm::vec3 position, const glm::vec3 normal, const glm::vec2 texCoords) {
+	Vertex(const glm::fvec3 position, const glm::fvec3 normal, const glm::fvec2 texCoords) {
 		this->position = position;
 		this->normal = normal;
 		this->texCoords = texCoords;
 	}
 
-	inline glm::vec3 *Position() { return &this->position; }
-	inline glm::vec3 *Normal() { return &this->normal; }
-	inline glm::vec2 *TexCoords() { return &this->texCoords; }
+	inline glm::fvec3 *Position() { return &this->position; }
+	inline glm::fvec3 *Normal() { return &this->normal; }
+	inline glm::fvec2 *TexCoords() { return &this->texCoords; }
 
 private:
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 texCoords;
+	glm::fvec3 position;
+	glm::fvec3 normal;
+	glm::fvec2 texCoords;
 };
 
 class Model {
 public:
-	std::vector<glm::vec3> positions;
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> texCoords;
+	std::vector<glm::fvec3> positions;
+	std::vector<glm::fvec3> normals;
+	std::vector<glm::fvec2> texCoords;
 	std::vector<unsigned int> indices;
 
 	//void CalculateNormals();
@@ -53,7 +53,7 @@ public:
 	~Mesh();
 
 	void LoadShader(const std::string name);
-	void Render(const glm::mat4 viewProjection);
+	void Render(Renderer& renderer);
 
 private:
 

@@ -25,7 +25,7 @@ bool Game::Init(){
 
 	//Display
 	std::cout << "* Display: ";
-	if (!mDisplay.Init(1024, 700)) {
+	if (!mDisplay.Init(1440, 900)) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -75,34 +75,35 @@ void Game::Loop(){
 							   0.1f, //depth aka znear
 							   100.0f)); //zFar
 
-	camera.mTransform->SetPosition(glm::vec3(0.0f, 0.0f, -3.0f));
-	camera.mTransform->SetRotation(glm::vec3(0.0f, 0.0f, 1.0f));
+	camera.mTransform->SetPosition(glm::fvec3(0.0f, 0.0f, -3.0f));
+	camera.mTransform->SetRotation(glm::fvec3(0.0f, 0.0f, 1.0f));
 
 	mRenderer.SetCamera(camera);
 
 	std::vector<Entity*> entities;
 
 	Entity barrel;
-	barrel.GetTransform()->SetScale(glm::vec3(0.5f));
-	barrel.GetTransform()->SetPosition(glm::vec3(-1.0f, -0.5f, 0.0f));
+	barrel.GetTransform()->SetScale(glm::fvec3(0.5f));
+	barrel.GetTransform()->SetPosition(glm::fvec3(-1.0f, -0.5f, 0.0f));
 	barrel.AddComponent(new Texture("res/Barrel.png"));
 	barrel.AddComponent(new Mesh("res/barrel.obj"));
 
+	//needs error checking or else this shit'll just crash if the name/cast is wrong
 	Mesh* barrelMesh = static_cast<Mesh*>(barrel.GetComponent("Mesh"));
 	barrelMesh->LoadShader("default");
 
 	entities.push_back(&barrel);
 
 	Entity box;
-	box.GetTransform()->SetScale(glm::vec3(0.5f));
-	box.GetTransform()->SetPosition(glm::vec3(1.0f, -0.5f, 0.0f));
+	box.GetTransform()->SetScale(glm::fvec3(0.5f));
+	box.GetTransform()->SetPosition(glm::fvec3(1.0f, -0.5f, 0.0f));
 	box.AddComponent(new Texture("res/Box.000.png"));
 	box.AddComponent(new Mesh("res/uvcube.obj"));
 	entities.push_back(&box);
 
 	Entity monkey;
-	monkey.GetTransform()->SetScale(glm::vec3(0.5f));
-	monkey.GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	monkey.GetTransform()->SetScale(glm::fvec3(0.5f));
+	monkey.GetTransform()->SetPosition(glm::fvec3(0.0f, 1.0f, 0.0f));
 	monkey.AddComponent(new Texture("res/Stone.Floor.001.png"));
 	monkey.AddComponent(new Mesh("res/monkey3.obj"));
 	entities.push_back(&monkey);
@@ -154,7 +155,7 @@ void Game::Loop(){
 		int numEntities = entities.size();
 		for (int i = 0; i < numEntities; i++) {
 			entities[i]->GetTransform()->GetRotation()->y = counter * 10;
-			mRenderer.Render(*entities[i]);
+			mRenderer.Render(*entities[i], mRenderer);
 		}
 
 		mDisplay.Update();

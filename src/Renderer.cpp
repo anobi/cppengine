@@ -8,6 +8,6 @@ bool Renderer::Init(Display* display) {
 	return true;
 }
 
-void Renderer::Render(Entity& entity) {
-	entity.Render(mMainCamera->GetViewProjection());
+void Renderer::Render(Entity& entity, Renderer& renderer) {
+	entity.Render(renderer);
 }
