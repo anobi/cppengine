@@ -23,6 +23,7 @@ public:
 private:
 	static const unsigned int NUM_SHADERS = 2;
 	static const unsigned int NUM_UNIFORMS = 9;
+	static const unsigned int MAX_LIGHTS = 128;
 
 	GLuint CreateShader(const std::string &source, unsigned int type);
 	std::string ReadFile(const std::string &filename);

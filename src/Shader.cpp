@@ -84,6 +84,10 @@ void Shader::UpdateUniforms(Transform& transform, Renderer& renderer) const {
 	if (renderer.GetLights().size() > 0) {
 		Light* light = renderer.GetLights()[0];
 
+		for (unsigned int i = 0; i < renderer.GetLights().size(); i++) {
+
+		}
+
 		if (light != NULL) {
 			glm::fvec3* lPos = light->GetTransform()->GetPosition();
 			glUniform3f(uniforms[5], lPos->x, lPos->y, lPos->z);
