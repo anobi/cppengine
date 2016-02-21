@@ -14,5 +14,5 @@ void main() {
     gl_Position = ModelViewProjection * vec4(position, 1.0f);
 	texCoord0 = texCoord;
 	normal0 = (Normal * vec4(normal, 0.0)).xyz;
-	position0 = position;
+	position0 = gl_Position.xyz;
 }

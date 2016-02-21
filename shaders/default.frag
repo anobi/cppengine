@@ -32,6 +32,7 @@ vec3 addSpecular(vec3 L, vec3 N) {
 		//blinn-phong, faster but not as good looking:
 		//vec3 H = normalize(lightDirection + L);
 		//float spec = pow(max(dot(vNormal, H), 0.0f), specular_hardness); //the last bit is the shininess
+
 		value = specularity * specular_intensity * spec;
 	}
 	return value;
