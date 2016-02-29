@@ -3,10 +3,9 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "lib/stb_image.h"
 
-Texture::Texture(){}
-
-Texture::Texture(const std::string& fileName)
+Texture::Texture(const std::string fileName) : EntityComponent()
 {
+	this->SetName("Texture");
 	int width, height, numComponents;
 	unsigned char* data = stbi_load((fileName).c_str(), &width, &height, &numComponents, 4);
 

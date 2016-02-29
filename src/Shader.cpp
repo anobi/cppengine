@@ -5,9 +5,7 @@
 
 #include "Shader.hpp"
 
-Shader::Shader(){}
-
-Shader::Shader(const std::string &fileName) {
+Shader::Shader(const std::string fileName) : EntityComponent() {
 	program = glCreateProgram();
 
 	shaders[0] = CreateShader(ReadFile(fileName + ".vert"), GL_VERTEX_SHADER);
@@ -48,7 +46,7 @@ Shader::~Shader() {
 }
 
 
-GLuint Shader::CreateShader(const std::string &source, unsigned int type) {
+GLuint Shader::CreateShader(const std::string source, unsigned int type) {
 	GLuint shader = glCreateShader(type);	
 	
 	const char* shaderSrc = source.c_str();
@@ -66,13 +64,13 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
-void Shader::UpdateUniforms(Transform& transform, Renderer& renderer) const {
+void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 
 	//need to get modelview without projection
 	glm::fmat4 model = transform.GetModel();
-	glm::fmat4 view = renderer.GetCamera().GetView();
-	glm::fmat4 projection = renderer.GetCamera().GetProjection();
-	glm::fvec3 eyePos = renderer.GetCamera().GetPosition();
+	glm::fmat4 view = renderer.GetCamera()->GetView();
+	glm::fmat4 projection = renderer.GetCamera()->GetProjection();
+	glm::fvec3 eyePos = renderer.GetCamera()->GetPosition();
 
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &view[0][0]);
@@ -82,19 +80,13 @@ void Shader::UpdateUniforms(Transform& transform, Renderer& renderer) const {
 	glUniform3f(uniforms[4], 0.5f, 1.0f, -1.0f);
 
 	if (renderer.GetLights().size() > 0) {
-		Light* light = renderer.GetLights()[0];
+		std::shared_ptr<Light> light = std::dynamic_pointer_cast<Light>(renderer.GetLights()[0]);
 
-		for (unsigned int i = 0; i < renderer.GetLights().size(); i++) {
-
-		}
-
-		if (light != NULL) {
-			glm::fvec3* lPos = light->GetTransform()->GetPosition();
-			glUniform3f(uniforms[5], lPos->x, lPos->y, lPos->z);
-			glUniform3f(uniforms[6], light->color.r, light->color.g, light->color.b);
-			glUniform1f(uniforms[7], light->intensity);
-			glUniform1f(uniforms[8], light->maxDistance);
-		}
+		glm::fvec3 lPos = light->GetTransform().GetPosition();
+		glUniform3f(uniforms[5], lPos.x, lPos.y, lPos.z);
+		glUniform3f(uniforms[6], light->color.r, light->color.g, light->color.b);
+		glUniform1f(uniforms[7], light->intensity);
+		glUniform1f(uniforms[8], light->maxDistance);
 	}
 }
 
@@ -102,7 +94,7 @@ void Shader::UpdateUniforms(Transform& transform, Renderer& renderer) const {
 ** Helpers
 **/
 
-std::string Shader::ReadFile(const std::string &fileName) {
+std::string Shader::ReadFile(const std::string fileName) {
 
 	std::string filePath;
 

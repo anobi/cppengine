@@ -8,7 +8,7 @@
 class Light : public EntityComponent {
 public:
 
-	Light(const glm::fvec3& color, float intensity, float maxDistance) 
+	Light(const glm::fvec3 color, float intensity, float maxDistance) : EntityComponent()
 	{
 		this->SetName("Light");
 		this->color = color;
@@ -25,7 +25,7 @@ private:
 };
 
 class DirectionalLight : public Light {
-	DirectionalLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	DirectionalLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
 	{
 		this->SetName("DirectionalLight");
 		this->color = color;
@@ -39,7 +39,7 @@ class DirectionalLight : public Light {
 
 class PointLight : public Light {
 public:
-	PointLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	PointLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
 	{
 		this->SetName("PointLight");
 		this->color = color;
@@ -52,7 +52,7 @@ public:
 class SpotLight : public Light {
 public:
 
-	SpotLight(const glm::fvec3& color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
+	SpotLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
 	{
 		this->SetName("SpotLight");
 		this->color = color;

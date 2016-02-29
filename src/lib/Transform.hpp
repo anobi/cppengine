@@ -13,7 +13,7 @@ public:
 		this->scale = glm::fvec3(1.0f, 1.0f, 1.0f);
 	}
 
-	inline glm::fmat4 GetModel() const {
+	glm::fmat4 GetModel() {
 		glm::fmat4 positionMatrix	= glm::translate(position);
 		glm::fmat4 scaleMatrix		= glm::scale(scale);
 		glm::fmat4 rotationX		= glm::rotate(rotation.x, glm::fvec3(1.0, 0.0, 0.0));
@@ -24,16 +24,14 @@ public:
 		return positionMatrix * rotationMatrix * scaleMatrix;
 	}
 
-	inline glm::fmat4 GetModelViewProjection(const glm::fmat4 viewProjection) const {
+	glm::fmat4 GetModelViewProjection(const glm::fmat4 &viewProjection) {
 		glm::fmat4 model = GetModel();
 		return viewProjection * model;
 	}
 
-	inline glm::fvec3 *GetPosition() { return &this->position; }
-	inline const glm::fvec3 &GetPosition() const { return this->position; }
-
-	inline glm::fvec3 *GetRotation() { return &this->rotation; }
-	inline glm::fvec3 *GetScale() { return &this->scale; }
+	inline glm::fvec3& GetPosition() { return this->position; }
+	inline glm::fvec3& GetRotation() { return this->rotation; }
+	inline glm::fvec3& GetScale() { return this->scale; }
 
 	inline void SetPosition(const glm::fvec3 &position) { this->position = position; }
 	inline void SetRotation(const glm::fvec3 &rotation) { this->rotation = rotation; }

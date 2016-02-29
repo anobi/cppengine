@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="..\bin\shaders\default.frag" />
     <None Include="..\bin\shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>

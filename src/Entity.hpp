@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "lib/Transform.hpp"
@@ -10,27 +11,38 @@
 // E N T I T Y //
 /////////////////
 
-class EntityComponent;
 class Shader;
 class Texture;
 class Renderer;
 class Camera;
+class EntityComponent;
+class Entity;
+
+typedef std::shared_ptr<EntityComponent> EntityComponentRef;
+typedef std::shared_ptr<Entity> EntityRef;
 
 class Entity {
 public:
-	Entity() : mTransform() {}
+	Entity() {}
+	Entity(const std::string name){
+		this->mEntityName = name;
+	}
     ~Entity();
 
 	void Update();
-	void Render(Renderer& renderer);
+	void Render(Renderer &renderer);
 
-	void AddComponent(EntityComponent* component);
-	EntityComponent* GetComponent(const std::string componentName);
-	inline Transform* GetTransform() { return &mTransform; }
+	void SetName(const std::string name) { this->mEntityName = name; };
+	const std::string& GetName() const { return this->mEntityName; }
+
+	EntityComponentRef AddComponent(EntityComponentRef component);
+	EntityComponentRef GetComponent(const std::string componentName);
+
+	Transform& GetTransform() { return mTransform; }
 
 private:
 	std::string mEntityName;
-	std::vector<EntityComponent*> mComponents;
+	std::vector<EntityComponentRef> mComponents;
 	Transform mTransform;
 };
 

@@ -13,20 +13,20 @@ public:
 	Renderer();
 	~Renderer();
 
-	bool Init(Display* display);
+	bool Init(Display &display);
 
-	void Render(Entity& entity, Renderer& renderer);
+	void Render(EntityRef entity);
 
-	inline void AddLight(Light &light) { this->mLights.push_back(&light); }
-	inline std::vector<Light*> GetLights() { return this->mLights; }
+	inline void AddLight(EntityComponentRef light) { this->mLights.push_back(light); }
+	inline std::vector<EntityComponentRef> GetLights() { return this->mLights; }
 
-	inline const Camera& GetCamera() const { return *this->mMainCamera; }
+	inline Camera* GetCamera() { return this->mMainCamera; }
 	inline void SetCamera(Camera &camera) { this->mMainCamera = &camera; }
 
 private:
 	Display* mDisplay;
 	Camera* mMainCamera;
-	std::vector<Light*> mLights;
+	std::vector<EntityComponentRef> mLights;
 };
 
 #endif

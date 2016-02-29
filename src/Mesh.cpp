@@ -4,12 +4,12 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
-Mesh::Mesh(){
+Mesh::Mesh() : EntityComponent() {
 	this->SetName("Mesh");
 	this->mShader = Shader("default");
 }
 
-Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) {
+Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) : EntityComponent() {
 
 	this->SetName("Mesh");
 	this->mShader = Shader("default");
@@ -29,7 +29,7 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 	SetupMesh(model);
 }
 
-Mesh::Mesh(const std::string fileName) {
+Mesh::Mesh(const std::string fileName) : EntityComponent() {
 
 	this->SetName("Mesh");
 	this->mShader = Shader("default");
@@ -96,9 +96,9 @@ void Mesh::LoadShader(const std::string name) {
 	this->mShader = Shader(name);
 }
 
-void Mesh::Render(Renderer& renderer) {
+void Mesh::Render(Renderer &renderer) {
 	mShader.Bind();
-	mShader.UpdateUniforms(*GetTransform(), renderer);
+	mShader.UpdateUniforms(GetTransform(), renderer);
 	Draw();
 }
 
@@ -140,7 +140,7 @@ void Mesh::Draw() {
 
 	glBindVertexArray(this->mVAO);
 
-	glDrawElementsBaseVertex(GL_TRIANGLES, this->mNumIndices, GL_UNSIGNED_INT, 0, 0);
+	glDrawElements(GL_TRIANGLES, this->mNumIndices, GL_UNSIGNED_INT, (void*)0);
 
 	glBindVertexArray(0);
 }

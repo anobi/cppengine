@@ -11,8 +11,15 @@
 
 class Camera {
 public:
-	Camera(Transform* transform, glm::fmat4 projection){
-		this->mTransform = transform;
+	Camera() {
+		mTransform = Transform();
+		this->mProjection = glm::mat4();
+		this->mUp = glm::fvec3(0.0f, 1.0f, 0.0f);
+		this->mDirection = glm::fvec3(0.0f, 0.0f, 1.0f);
+	}
+
+	Camera(glm::fmat4 projection){
+		mTransform = Transform();
 		this->mProjection = projection;
 		this->mUp = glm::fvec3(0.0f, 1.0f, 0.0f);
 		this->mDirection = glm::fvec3(0.0f, 0.0f, 1.0f);
@@ -23,42 +30,41 @@ public:
 			fov, aspectRatio, 0.1f, 100.0f);
 	}
 
-	glm::fmat4 GetView() const {
-		return glm::lookAt(*mTransform->GetPosition(),
-						   *mTransform->GetPosition() + GetDirection(),
+	inline glm::fmat4 GetView() {
+		return glm::lookAt(mTransform.GetPosition(),
+						   mTransform.GetPosition() + GetDirection(),
 						   GetUp());
 	}
 
-	glm::fmat4 GetProjection() const{
+	inline glm::fmat4 GetProjection(){
 		return mProjection;
 	}
 
-	glm::fmat4 GetViewProjection() const {
+	inline glm::fmat4 GetViewProjection() {
 		return mProjection * GetView();
 	}
 
-	inline const glm::fvec3 GetPosition() const { return *mTransform->GetPosition(); }
+	inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
 
-	inline const glm::fvec3 GetDirection() const {
+	inline glm::fvec3 GetDirection() {
 		return glm::fvec3(
-			cos(mTransform->GetRotation()->y) * sin(mTransform->GetRotation()->x),
-			sin(mTransform->GetRotation()->y),
-			cos(mTransform->GetRotation()->y) * cos(mTransform->GetRotation()->x));
+			cos(mTransform.GetRotation().y) * sin(mTransform.GetRotation().x),
+			sin(mTransform.GetRotation().y),
+			cos(mTransform.GetRotation().y) * cos(mTransform.GetRotation().x));
 	}
 
-	inline const glm::fvec3 GetRight() const {
+	inline glm::fvec3 GetRight() {
 		return glm::fvec3(
-			sin(mTransform->GetRotation()->x - 3.14f / 2.0f),
+			sin(mTransform.GetRotation().x - 3.14f / 2.0f),
 			0,
-			cos(mTransform->GetRotation()->x - 3.14f / 2.0f)
-			);
+			cos(mTransform.GetRotation().x - 3.14f / 2.0f));
 	}
 
-	inline const glm::fvec3 GetUp() const {
+	inline glm::fvec3 GetUp() {
 		return glm::cross(GetRight(), GetDirection());
 	}
 
-	Transform* mTransform;
+	Transform mTransform;
 
 private:
 	glm::fmat4 mProjection;

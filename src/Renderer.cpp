@@ -1,13 +1,17 @@
 #include "Renderer.hpp"
 
-Renderer::Renderer(){}
-Renderer::~Renderer(){}
+Renderer::Renderer(){
 
-bool Renderer::Init(Display* display) {
-	this->mDisplay = display;
+}
+Renderer::~Renderer(){
+	mMainCamera = NULL;
+}
+
+bool Renderer::Init(Display &display) {
+	this->mDisplay = &display;
 	return true;
 }
 
-void Renderer::Render(Entity& entity, Renderer& renderer) {
-	entity.Render(renderer);
+void Renderer::Render(EntityRef entity) {
+	entity->Render(*this);
 }

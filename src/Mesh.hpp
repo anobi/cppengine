@@ -25,9 +25,9 @@ public:
 		this->texCoords = texCoords;
 	}
 
-	inline glm::fvec3 *Position() { return &this->position; }
-	inline glm::fvec3 *Normal() { return &this->normal; }
-	inline glm::fvec2 *TexCoords() { return &this->texCoords; }
+	inline glm::fvec3* Position() { return &this->position; }
+	inline glm::fvec3* Normal() { return &this->normal; }
+	inline glm::fvec2* TexCoords() { return &this->texCoords; }
 
 private:
 	glm::fvec3 position;

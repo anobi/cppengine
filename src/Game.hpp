@@ -1,6 +1,7 @@
 #ifndef G_GAME_H
 #define G_GAME_H
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include "Display.hpp"
@@ -21,20 +22,23 @@ private:
 	Controls mControls;
     Display mDisplay;
 	Renderer mRenderer;
+    std::vector<EntityRef> entities;
 
 public:
 	Game();
 
 	gameState_t gameState;
-    std::vector<Entity> entities;
+
+	EntityRef AddEntity(EntityRef entity);
+	EntityRef GetEntity(const std::string name);
+
+    std::vector<EntityRef> GetEntities();
 
 	bool Init();
 	void Start();
 	void Shutdown();
 	void Loop();
 	void Quit();
-
-    std::vector<Entity>* GetEntities();
 };
 
 #endif

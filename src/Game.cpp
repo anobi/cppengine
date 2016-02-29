@@ -33,7 +33,7 @@ bool Game::Init(){
 
 	//Renderer
 	std::cout << "* Remderer: ";
-	if (!mRenderer.Init(&mDisplay)) {
+	if (!mRenderer.Init(mDisplay)) {
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -69,52 +69,41 @@ void Game::Loop(){
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
-	Camera camera = Camera(new Transform(), glm::perspective(
+	Camera camera = Camera(glm::perspective(
 							   45.0f, //FOV
 							   mDisplay.GetAspectRatio(), //duh
 							   0.1f, //depth aka znear
 							   100.0f)); //zFar
 
-	camera.mTransform->SetPosition(glm::fvec3(0.0f, 0.0f, -3.0f));
-	camera.mTransform->SetRotation(glm::fvec3(0.0f, 0.0f, 1.0f));
-
+	camera.mTransform.SetPosition(glm::fvec3(0.0f, 0.0f, -3.0f));
+	camera.mTransform.SetRotation(glm::fvec3(0.0f, 0.0f, 1.0f));
 	mRenderer.SetCamera(camera);
 
-	std::vector<Entity*> entities;
+	EntityRef barrel = AddEntity(std::make_shared<Entity>(Entity("Barrel")));
+	barrel->GetTransform().SetScale(glm::fvec3(0.5f));
+	barrel->GetTransform().SetPosition(glm::fvec3(-1.0f, -0.5f, 0.0f));
+	barrel->AddComponent(std::make_shared<Texture>("res/Barrel.png"));
+	barrel->AddComponent(std::make_shared<Mesh>("res/barrel.obj"));
 
-	Entity barrel;
-	barrel.GetTransform()->SetScale(glm::fvec3(0.5f));
-	barrel.GetTransform()->SetPosition(glm::fvec3(-1.0f, -0.5f, 0.0f));
-	barrel.AddComponent(new Texture("res/Barrel.png"));
-	barrel.AddComponent(new Mesh("res/barrel.obj"));
+	EntityRef box = AddEntity(std::make_shared<Entity>("Box"));
+	box->GetTransform().SetScale(glm::fvec3(0.5f));
+	box->GetTransform().SetPosition(glm::fvec3(1.0f, -0.5f, 0.0f));
+	box->AddComponent(std::make_shared<Texture>("res/Box.000.png"));
+	box->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
-	//needs error checking or else this shit'll just crash if the name/cast is wrong
-	Mesh* barrelMesh = static_cast<Mesh*>(barrel.GetComponent("Mesh"));
-	barrelMesh->LoadShader("default");
 
-	entities.push_back(&barrel);
+	EntityRef monkey = AddEntity(std::make_shared<Entity>("Monkey"));
+	monkey->GetTransform().SetScale(glm::fvec3(0.5f));
+	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, 1.0f, 0.0f));
+	monkey->AddComponent(std::make_shared<Texture>("res/Stone.Floor.001.png"));
+	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
 
-	Entity box;
-	box.GetTransform()->SetScale(glm::fvec3(0.5f));
-	box.GetTransform()->SetPosition(glm::fvec3(1.0f, -0.5f, 0.0f));
-	box.AddComponent(new Texture("res/Box.000.png"));
-	box.AddComponent(new Mesh("res/uvcube.obj"));
-	entities.push_back(&box);
+	EntityRef light = AddEntity(std::make_shared<Entity>("Light"));
+	light->GetTransform().SetPosition(glm::fvec3(0.0f, 3.0f, -3.0f));
+	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 1.0f, 1.0f), 1.0f, 2.0f));
 
-	Entity monkey;
-	monkey.GetTransform()->SetScale(glm::fvec3(0.5f));
-	monkey.GetTransform()->SetPosition(glm::fvec3(0.0f, 1.0f, 0.0f));
-	monkey.AddComponent(new Texture("res/Stone.Floor.001.png"));
-	monkey.AddComponent(new Mesh("res/monkey3.obj"));
-	entities.push_back(&monkey);
-
-	Entity light;
-	light.GetTransform()->SetPosition(glm::fvec3(0.0f, 3.0f, -3.0f));
-	light.AddComponent(new PointLight(glm::fvec3(1.0f, 1.0f, 1.0f), 1.0f, 2.0f));
-	entities.push_back(&light);
-
-	Light* lightRef = static_cast<Light*>(light.GetComponent("PointLight"));
-	mRenderer.AddLight(*lightRef);
+	//TODO: need to figure out how to automate adding lights to renderer
+	mRenderer.AddLight(light->GetComponent("PointLight"));
 
 	float counter = 0.0f;
 	SDL_Event event;
@@ -151,7 +140,7 @@ void Game::Loop(){
 		}
 
 		//skip controls if we don't have focus
-		mControls.Update(&event, &camera, delay);
+		mControls.Update(event, camera, delay);
         //update world
 
         //update entities & render
@@ -162,13 +151,14 @@ void Game::Loop(){
 
 		int numEntities = entities.size();
 		for (int i = 0; i < numEntities; i++) {
-			entities[i]->GetTransform()->GetRotation()->y = counter * 10;
-			mRenderer.Render(*entities[i], mRenderer);
+			entities[i]->GetTransform().GetRotation().y = counter * 10;
+			mRenderer.Render(entities[i]);
 		}
 
 		mDisplay.Update();
 		counter += 0.001f;
     }
+
     Shutdown();
 }
 
@@ -186,6 +176,22 @@ void Game::Quit(){
     gameState = GAMESTATE_STOPPED;
 }
 
-std::vector<Entity>* Game::GetEntities(){
-    return &entities;
+std::vector<EntityRef> Game::GetEntities(){
+    return entities;
 };
+
+EntityRef Game::AddEntity(EntityRef entity) {
+	this->entities.push_back(entity);
+	return entities.back();
+}
+
+EntityRef Game::GetEntity(const std::string name) {
+	EntityRef entity = NULL;
+	for (unsigned int i = 0; i < entities.size(); i++) {
+		if (entities[i]->GetName() == name) {
+			entity = entities[i];
+			break;
+		}
+	}
+	return entity;
+}

@@ -7,8 +7,8 @@
 
 class Texture : public EntityComponent {
 public:
-	Texture(const std::string &fileName);
-	Texture();
+	Texture(const std::string fileName);
+	Texture() : EntityComponent() {};
 	~Texture();
 
 	void Render(Renderer& renderer){
