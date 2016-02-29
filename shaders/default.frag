@@ -15,11 +15,16 @@ uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 uniform vec3 CameraPosition;
 
-uniform vec3 LightDirection;
-uniform vec3 LightPosition;
-uniform vec3 LightColor;
-uniform float LightIntensity;
-uniform float LightMaxDistance;
+struct Light {
+	vec3 direction;
+	vec3 position;
+	vec3 color;
+	float intensity;
+	float maxDistance;
+};
+
+const int numLights = 5;
+uniform Light Lights[numLights];
 
 out vec4 fragColor;
 
@@ -72,8 +77,10 @@ void main(void) {
 	vec4 light = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//light position translated to camera space
-	vec3 lPos = (ViewMatrix * vec4(LightPosition, 1.0f)).xyz;
-	light += vec4(pointLight(lPos, LightColor), 1.0f);
+	for(int i = 0; i < numLights; i++){
+		vec3 lPos = (ViewMatrix * vec4(Lights[i].position, 1.0f)).xyz;
+		light += vec4(pointLight(lPos, Lights[i].color), 1.0f);
+	}
 
 	fragColor = texture(texture_diffuse, texCoord0) * light;
 }

@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <iostream>
 #include <vector>
@@ -30,11 +31,21 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	uniforms[2] = glGetUniformLocation(program, "ProjectionMatrix");
 	uniforms[3] = glGetUniformLocation(program, "CameraPosition");
 
-	uniforms[4] = glGetUniformLocation(program, "LightDirection");
-	uniforms[5] = glGetUniformLocation(program, "LightPosition");
-	uniforms[6] = glGetUniformLocation(program, "LightColor");
-	uniforms[7] = glGetUniformLocation(program, "LightIntensity");
-	uniforms[8] = glGetUniformLocation(program, "LightMaxDistance");
+	unsigned int loc = LIGHT_UNIFORM_OFFSET;
+	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
+
+		std::stringstream light;
+		light << "Lights[" << i << "]";
+
+		//LOOKS BETTER ALIGNED LOL
+		uniforms[loc + 0] = glGetUniformLocation(program, (light.str() + ".direction").c_str());
+		uniforms[loc + 1] = glGetUniformLocation(program, (light.str() + ".position").c_str());
+		uniforms[loc + 2] = glGetUniformLocation(program, (light.str() + ".color").c_str());
+		uniforms[loc + 3] = glGetUniformLocation(program, (light.str() + ".intensity").c_str());
+		uniforms[loc + 4] = glGetUniformLocation(program, (light.str() + ".maxDistance").c_str());
+
+		loc += 5;
+	}
 }
 
 Shader::~Shader() {
@@ -77,16 +88,21 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 	glUniformMatrix4fv(uniforms[2], 1, GL_FALSE, &projection[0][0]);
 
 	glUniform3fv(uniforms[3], 1, &eyePos[0]);
-	glUniform3f(uniforms[4], 0.5f, 1.0f, -1.0f);
 
-	if (renderer.GetLights().size() > 0) {
-		std::shared_ptr<Light> light = std::dynamic_pointer_cast<Light>(renderer.GetLights()[0]);
+	auto lights = renderer.GetLights();
+	unsigned int loc = LIGHT_UNIFORM_OFFSET;
+	for (unsigned int i = 0; i < lights.size() && i < MAX_LIGHTS; i++) {
 
+		std::shared_ptr<Light> light = std::dynamic_pointer_cast<Light>(lights[i]);
 		glm::fvec3 lPos = light->GetTransform().GetPosition();
-		glUniform3f(uniforms[5], lPos.x, lPos.y, lPos.z);
-		glUniform3f(uniforms[6], light->color.r, light->color.g, light->color.b);
-		glUniform1f(uniforms[7], light->intensity);
-		glUniform1f(uniforms[8], light->maxDistance);
+
+		glUniform3f(uniforms[loc + 0], 0.5f, 1.0f, -1.0f);
+		glUniform3f(uniforms[loc + 1], lPos.x, lPos.y, lPos.z);
+		glUniform3f(uniforms[loc + 2], light->color.r, light->color.g, light->color.b);
+		glUniform1f(uniforms[loc + 3], light->intensity);
+		glUniform1f(uniforms[loc + 4], light->maxDistance);
+
+		loc += 5;
 	}
 }
 

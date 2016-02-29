@@ -99,11 +99,22 @@ void Game::Loop(){
 	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
 
 	EntityRef light = AddEntity(std::make_shared<Entity>("Light"));
-	light->GetTransform().SetPosition(glm::fvec3(0.0f, 3.0f, -3.0f));
+	light->GetTransform().SetPosition(glm::fvec3(0.0f, 6.0f, 0.0f));
 	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 1.0f, 1.0f), 1.0f, 2.0f));
 
 	//TODO: need to figure out how to automate adding lights to renderer
 	mRenderer.AddLight(light->GetComponent("PointLight"));
+
+
+	EntityRef light2 = AddEntity(std::make_shared<Entity>("LightR"));
+	light2->GetTransform().SetPosition(glm::fvec3(6.0f, -6.0f, 0.0f));
+	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.3f, 0.0f, 0.0f), 1.0f, 2.0f));
+	mRenderer.AddLight(light2->GetComponent("PointLight"));
+
+	EntityRef light3 = AddEntity(std::make_shared<Entity>("LightB"));
+	light3->GetTransform().SetPosition(glm::fvec3(-6.0f, -6.0f, 0.0f));
+	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.0f, 0.0f, 0.3f), 1.0f, 2.0f));
+	mRenderer.AddLight(light3->GetComponent("PointLight"));
 
 	float counter = 0.0f;
 	SDL_Event event;
