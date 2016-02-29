@@ -59,7 +59,7 @@ float attenuation(float distance){
 	return clamp(1.0f / distance * distance, 0.0f, 1.0f);
 }
 
-vec3 pointLight(vec3 position, vec3 color) {
+vec3 pointLight(vec3 position, vec3 color, float falloff) {
 	vec3 value;
 	float r = 69.0f;
 	float d = distance(position, position0);
@@ -79,7 +79,7 @@ void main(void) {
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
 		vec3 lPos = (ViewMatrix * vec4(Lights[i].position, 1.0f)).xyz;
-		light += vec4(pointLight(lPos, Lights[i].color), 1.0f);
+		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].maxDistance), 1.0f) * Lights[i].intensity;
 	}
 
 	fragColor = texture(texture_diffuse, texCoord0) * light;

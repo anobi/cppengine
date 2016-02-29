@@ -96,9 +96,9 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 		std::shared_ptr<Light> light = std::dynamic_pointer_cast<Light>(lights[i]);
 		glm::fvec3 lPos = light->GetTransform().GetPosition();
 
-		glUniform3f(uniforms[loc + 0], 0.5f, 1.0f, -1.0f);
-		glUniform3f(uniforms[loc + 1], lPos.x, lPos.y, lPos.z);
-		glUniform3f(uniforms[loc + 2], light->color.r, light->color.g, light->color.b);
+		glUniform3fv(uniforms[loc + 0], 1, &glm::fvec3(0.5f, 1.0f, -1.0f)[0]);
+		glUniform3fv(uniforms[loc + 1], 1, &lPos[0]);
+		glUniform3fv(uniforms[loc + 2], 1, &light->color[0]);
 		glUniform1f(uniforms[loc + 3], light->intensity);
 		glUniform1f(uniforms[loc + 4], light->maxDistance);
 
