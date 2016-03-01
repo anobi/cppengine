@@ -42,9 +42,10 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 		uniforms[loc + 1] = glGetUniformLocation(program, (light.str() + ".position").c_str());
 		uniforms[loc + 2] = glGetUniformLocation(program, (light.str() + ".color").c_str());
 		uniforms[loc + 3] = glGetUniformLocation(program, (light.str() + ".intensity").c_str());
-		uniforms[loc + 4] = glGetUniformLocation(program, (light.str() + ".maxDistance").c_str());
+		uniforms[loc + 4] = glGetUniformLocation(program, (light.str() + ".radius").c_str());
+		uniforms[loc + 5] = glGetUniformLocation(program, (light.str() + ".cutoff").c_str());
 
-		loc += 5;
+		loc += 6;
 	}
 }
 
@@ -93,16 +94,17 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < lights.size() && i < MAX_LIGHTS; i++) {
 
-		std::shared_ptr<Light> light = std::dynamic_pointer_cast<Light>(lights[i]);
+		std::shared_ptr<PointLight> light = std::dynamic_pointer_cast<PointLight>(lights[i]);
 		glm::fvec3 lPos = light->GetTransform().GetPosition();
 
 		glUniform3fv(uniforms[loc + 0], 1, &glm::fvec3(0.5f, 1.0f, -1.0f)[0]);
 		glUniform3fv(uniforms[loc + 1], 1, &lPos[0]);
-		glUniform3fv(uniforms[loc + 2], 1, &light->color[0]);
-		glUniform1f(uniforms[loc + 3], light->intensity);
-		glUniform1f(uniforms[loc + 4], light->maxDistance);
+		glUniform3fv(uniforms[loc + 2], 1, &light->GetColor()[0]);
+		glUniform1f(uniforms[loc + 3], light->GetIntensity());
+		glUniform1f(uniforms[loc + 4], light->GetRadius());
+		glUniform1f(uniforms[loc + 5], light->GetCutoff());
 
-		loc += 5;
+		loc += 6;
 	}
 }
 

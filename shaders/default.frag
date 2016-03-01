@@ -20,7 +20,8 @@ struct Light {
 	vec3 position;
 	vec3 color;
 	float intensity;
-	float maxDistance;
+	float radius;
+	float cutoff;
 };
 
 const int numLights = 5;
@@ -38,16 +39,13 @@ vec3 specular(vec3 L, vec3 N) {
 	if(dot(L, N) > 0.0f){
 
 		//phong:
-
 		vec3 specularity = vec3(1.0f, 1.0f, 1.0f);
 		float specular_hardness = 60.0f;
 		float specular_intensity = 0.5f;
 
 		//E = direction vector from vertex to eye
 		vec3 E = normalize(eyeDir); 
-
 		vec3 R = reflect(-L, N);
-
 		float spec = pow(max(dot(R, E), 0.0f), specular_hardness);
 
 		value = specularity * specular_intensity * spec;
@@ -59,17 +57,20 @@ float attenuation(float distance){
 	return clamp(1.0f / distance * distance, 0.0f, 1.0f);
 }
 
-vec3 pointLight(vec3 position, vec3 color, float falloff) {
+vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 	vec3 value;
-	float r = 69.0f;
 	float d = distance(position, position0);
-
+	float dr = d / radius + 1;
 	vec3 L = normalize(position + eyeDir);	//L = direction from fragment to camera
 	vec3 N = normalize(normal0);			//N = vertex normal in camera space
 
-	value += color * lambert(N, L);
-	value += color * specular(L, N);
-	return value * attenuation(d);
+	//attenuation
+	float attenuation = 1 / (dr * dr);
+	//attenuation = max((attenuation - cutoff) / (1 - cutoff), 0);
+
+	value += color * lambert(N, L) * attenuation;
+	value += color * specular(L, N) * attenuation;
+	return value;
 }
 
 void main(void) {
@@ -79,7 +80,7 @@ void main(void) {
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
 		vec3 lPos = (ViewMatrix * vec4(Lights[i].position, 1.0f)).xyz;
-		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].maxDistance), 1.0f) * Lights[i].intensity;
+		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f);
 	}
 
 	fragColor = texture(texture_diffuse, texCoord0) * light;
