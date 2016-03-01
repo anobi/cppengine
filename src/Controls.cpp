@@ -3,11 +3,10 @@
 #include "Controls.hpp"
 
 
+void Controls::Update(SDL_Event &sdlEvent, std::shared_ptr<Camera> camera, const long deltaTime){
 
-void Controls::Update(SDL_Event &sdlEvent, Camera &camera, const long deltaTime){
-
-	glm::fvec3& cPos = camera.mTransform.GetPosition();
-	glm::fvec3& cRot = camera.mTransform.GetRotation();
+	glm::fvec3& cPos = camera->mTransform.GetPosition();
+	glm::fvec3& cRot = camera->mTransform.GetRotation();
 
 	//handle mouse movements
 	int x, y;
@@ -24,26 +23,26 @@ void Controls::Update(SDL_Event &sdlEvent, Camera &camera, const long deltaTime)
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 	if(keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]){
-		cPos -= camera.GetRight() * mSpeed * (float)deltaTime;
+		cPos -= camera->GetRight() * mSpeed * (float)deltaTime;
 	}
 
 	if(keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]){
-		cPos += camera.GetRight() * mSpeed * (float)deltaTime;
+		cPos += camera->GetRight() * mSpeed * (float)deltaTime;
 	}
 
 	if(keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]){
-		cPos += camera.GetDirection() * mSpeed * (float)deltaTime;
+		cPos += camera->GetDirection() * mSpeed * (float)deltaTime;
 	}
 
 	if(keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]){
-		cPos -= camera.GetDirection() * mSpeed * (float)deltaTime;
+		cPos -= camera->GetDirection() * mSpeed * (float)deltaTime;
 	}
 
 	if(keystate[SDL_SCANCODE_SPACE]){
-		cPos += camera.GetUp() * mSpeed * (float)deltaTime;
+		cPos += camera->GetUp() * mSpeed * (float)deltaTime;
 	}
 
 	if(keystate[SDL_SCANCODE_LCTRL]){
-		cPos -= camera.GetUp() * mSpeed * (float)deltaTime;
+		cPos -= camera->GetUp() * mSpeed * (float)deltaTime;
 	}
 }

@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
+#include <memory>
 
 #include "Display.hpp"
 #include "Entity.hpp"
@@ -13,19 +14,18 @@ public:
 	Renderer();
 	~Renderer();
 
-	bool Init(Display &display);
+	bool Init();
 
 	void Render(EntityRef entity);
 
 	inline void AddLight(EntityComponentRef light) { this->mLights.push_back(light); }
 	inline std::vector<EntityComponentRef> GetLights() { return this->mLights; }
 
-	inline Camera* GetCamera() { return this->mMainCamera; }
-	inline void SetCamera(Camera &camera) { this->mMainCamera = &camera; }
+	std::shared_ptr<Camera> GetCamera() { return this->mMainCamera; }
+	void SetCamera(std::shared_ptr<Camera> camera) { this->mMainCamera = camera; }
 
 private:
-	Display* mDisplay;
-	Camera* mMainCamera;
+	std::shared_ptr<Camera> mMainCamera;
 	std::vector<EntityComponentRef> mLights;
 };
 

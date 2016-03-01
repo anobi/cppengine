@@ -1,6 +1,7 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
+#include <memory>
 #include <SDL2/SDL.h>
 #include "lib/Camera.hpp"
 
@@ -12,7 +13,7 @@ public:
 	};
 	~Controls(){};
 
-	void Update(SDL_Event &sdlEvent, Camera &camera, const long deltaTime);
+	void Update(SDL_Event &sdlEvent, std::shared_ptr<Camera> camera, const long deltaTime);
 
 	inline void SetMovementSpeed(const float speed) { this->mSpeed = speed;}
 	inline void SetSensitivity(const float sensitivity) { this->mSensitivity = sensitivity;}

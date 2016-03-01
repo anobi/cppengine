@@ -7,8 +7,7 @@ Renderer::~Renderer(){
 	mMainCamera = NULL;
 }
 
-bool Renderer::Init(Display &display) {
-	this->mDisplay = &display;
+bool Renderer::Init() {
 	return true;
 }
 

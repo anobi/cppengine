@@ -24,6 +24,8 @@ private:
 	Renderer mRenderer;
     std::vector<EntityRef> entities;
 
+	void ConstructScene();
+
 public:
 	Game();
 
