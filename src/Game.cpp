@@ -75,33 +75,33 @@ void Game::Loop(){
 							   0.1f, //depth aka znear
 							   100.0f)); //zFar
 
-	camera.mTransform.SetPosition(glm::fvec3(0.0f, 2.0f, 10.0f));
+	camera.mTransform.SetPosition(glm::fvec3(0.0f, 5.0f, 12.0f));
 	camera.mTransform.SetRotation(glm::fvec3(glm::radians(180.0f), glm::radians(-20.0f), 0.0f));
 	mRenderer.SetCamera(camera);
 
 	EntityRef room = AddEntity(std::make_shared<Entity>(Entity("Room")));
 	room->GetTransform().SetScale(glm::fvec3(1.0f));
-	room->GetTransform().SetPosition(glm::fvec3(-0.0f, -2.0f, 0.0f));
+	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->AddComponent(std::make_shared<Texture>("res/Rock.Wall.000.png"));
 	room->AddComponent(std::make_shared<Mesh>("res/room.obj"));
 
 	EntityRef barrel = AddEntity(std::make_shared<Entity>(Entity("Barrel")));
 	barrel->GetTransform().SetScale(glm::fvec3(1.0f));
-	barrel->GetTransform().SetPosition(glm::fvec3(-3.0f, 0.0f, 0.0f));
+	barrel->GetTransform().SetPosition(glm::fvec3(-3.0f, 1.5f, 0.0f));
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
 	barrel->AddComponent(std::make_shared<Texture>("res/Barrel.png"));
 	barrel->AddComponent(std::make_shared<Mesh>("res/barrel.obj"));
 
 	EntityRef box = AddEntity(std::make_shared<Entity>("Box"));
 	box->GetTransform().SetScale(glm::fvec3(1.0f));
-	box->GetTransform().SetPosition(glm::fvec3(3.0f, -0.5f, -2.0f));
+	box->GetTransform().SetPosition(glm::fvec3(3.0f, 1.0f, -2.0f));
 	box->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(30.0f), 0.0f));
 	box->AddComponent(std::make_shared<Texture>("res/Box.000.png"));
 	box->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	EntityRef monkey = AddEntity(std::make_shared<Entity>("Monkey"));
 	monkey->GetTransform().SetScale(glm::fvec3(1.0f));
-	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, -1.0f, 2.0f));
+	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, 0.4f, 2.0f));
 	monkey->GetTransform().SetRotation(glm::fvec3(glm::radians(-38.0f), 0.0f, 0.0f));
 	monkey->AddComponent(std::make_shared<Texture>("res/Stone.Floor.001.png"));
 	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
@@ -114,9 +114,9 @@ void Game::Loop(){
 
 	//warm foreground light
 	EntityRef light = AddEntity(std::make_shared<Entity>("LightY"));
-	light->GetTransform().SetPosition(glm::fvec3(-8.0f, 5.0f, 8.0f));
+	light->GetTransform().SetPosition(glm::fvec3(-8.0f, 8.0f, 8.0f));
 	light->GetTransform().SetScale(glm::fvec3(0.2f));
-	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 0.8f, 0.25f, 20.0f));
+	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 0.5f, 10.0f));
 	light->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	//TODO: need to figure out how to automate adding lights to renderer
@@ -124,9 +124,9 @@ void Game::Loop(){
 
 	//cool background light
 	EntityRef light2 = AddEntity(std::make_shared<Entity>("LightB"));
-	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 5.0f, -8.0f));
+	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 8.0f, -8.0f));
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
-	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 0.3f, 0.5f, 10.0f));
+	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.5f, 10.0f));
 	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
 
