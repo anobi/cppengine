@@ -45,7 +45,7 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 		uniforms[loc + 4] = glGetUniformLocation(program, (light.str() + ".radius").c_str());
 		uniforms[loc + 5] = glGetUniformLocation(program, (light.str() + ".cutoff").c_str());
 
-		loc += 6;
+		loc += NUM_LIGHT_UNIFORMS;
 	}
 }
 
@@ -104,7 +104,7 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 		glUniform1f(uniforms[loc + 4], light->GetRadius());
 		glUniform1f(uniforms[loc + 5], light->GetCutoff());
 
-		loc += 6;
+		loc += NUM_LIGHT_UNIFORMS;
 	}
 }
 

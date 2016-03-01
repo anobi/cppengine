@@ -116,7 +116,7 @@ void Game::Loop(){
 	EntityRef light = AddEntity(std::make_shared<Entity>("LightY"));
 	light->GetTransform().SetPosition(glm::fvec3(-8.0f, 5.0f, 8.0f));
 	light->GetTransform().SetScale(glm::fvec3(0.2f));
-	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 10.0f, 15.0f));
+	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 0.8f, 0.25f, 20.0f));
 	light->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	//TODO: need to figure out how to automate adding lights to renderer
@@ -126,9 +126,17 @@ void Game::Loop(){
 	EntityRef light2 = AddEntity(std::make_shared<Entity>("LightB"));
 	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 5.0f, -8.0f));
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
-	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 10.0f, 8.0f));
+	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 0.3f, 0.5f, 10.0f));
 	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
+
+	//awesome spinning FIRE BALL LIGHT YEAH
+	EntityRef light3 = AddEntity(std::make_shared<Entity>("LightO"));
+	light3->GetTransform().SetPosition(glm::fvec3(0.0f, 3.0f, 0.0f));
+	light3->GetTransform().SetScale(glm::fvec3(0.2f));
+	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.0f, 4.0f));
+	light3->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
+	mRenderer.AddLight(light3->GetComponent("PointLight"));
 
 	float counter = 0.0f;
 	SDL_Event event;
@@ -173,6 +181,8 @@ void Game::Loop(){
 		//TODO: figure out where to put this shit
 		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		light3->GetTransform().SetPosition(glm::fvec3(glm::sin(counter * 50) * 5, 3.0f, glm::cos(counter * 50) * 5));
 
 		int numEntities = entities.size();
 		for (int i = 0; i < numEntities; i++) {

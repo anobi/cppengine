@@ -60,17 +60,19 @@ float attenuation(float distance){
 vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 	vec3 value;
 	float d = distance(position, position0);
-	float dr = d / radius + 1;
+	float dr = (max(d - radius, 0.0f) / radius) + 1.0f;
 	vec3 L = normalize(position + eyeDir);	//L = direction from fragment to camera
 	vec3 N = normalize(normal0);			//N = vertex normal in camera space
 
 	//attenuation
-	float attenuation = 1 / (dr * dr);
-	//attenuation = max((attenuation - cutoff) / (1 - cutoff), 0);
 
-	value += color * lambert(N, L) * attenuation;
-	value += color * specular(L, N) * attenuation;
-	return value;
+	float attenuation = 1.0f / (dr * dr);
+	attenuation = (attenuation - cutoff) / (1.0f - cutoff);
+	attenuation = max(attenuation, 0.0f);
+
+	value += color * lambert(N, L);
+	value += color * specular(L, N);
+	return value * attenuation;
 }
 
 void main(void) {
@@ -80,7 +82,7 @@ void main(void) {
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
 		vec3 lPos = (ViewMatrix * vec4(Lights[i].position, 1.0f)).xyz;
-		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f);
+		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f) * Lights[i].intensity;
 	}
 
 	fragColor = texture(texture_diffuse, texCoord0) * light;
