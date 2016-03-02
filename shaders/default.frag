@@ -58,7 +58,7 @@ float attenuation(float distance){
 }
 
 vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
-	vec3 value;
+	vec3 value = vec3(0.0f);
 	float d = distance(position, position0);
 	float dr = (max(d - radius, 0.0f) / radius) + 1.0f;
 	vec3 L = normalize(position + eyeDir);	//L = direction from fragment to camera
@@ -77,7 +77,7 @@ vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 
 void main(void) {
 
-	vec4 light = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	vec4 light = vec4(0.0f);
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
