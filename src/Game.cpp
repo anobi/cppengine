@@ -7,7 +7,7 @@
 #include "Input.hpp"
 #include "Entity.hpp"
 #include "Mesh.hpp"
-#include "Texture.hpp"
+#include "Material.hpp"
 
 Game::Game(){
     gameState = GAMESTATE_STOPPED; 
@@ -186,32 +186,61 @@ void Game::ConstructScene() {
 	camera->mTransform.SetRotation(glm::fvec3(glm::radians(180.0f), glm::radians(-20.0f), 0.0f));
 	mRenderer.SetCamera(camera);
 
+	/*
+	Meshes
+	*/
+
+	//Room
 	EntityRef room = AddEntity(std::make_shared<Entity>(Entity("Room")));
+	std::shared_ptr<Material> roomMat = std::make_shared<Material>();
+
 	room->GetTransform().SetScale(glm::fvec3(1.0f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
-	room->AddComponent(std::make_shared<Texture>("res/Rock.Wall.000.png"));
+	roomMat->SetAlbedoMap("res/Rock.Wall.000.png");
+	roomMat->SetAlbedo(glm::fvec3(1.0f));
+	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Mesh>("res/room.obj"));
 
+	//Barrel
 	EntityRef barrel = AddEntity(std::make_shared<Entity>(Entity("Barrel")));
+	std::shared_ptr<Material> barrelMat = std::make_shared<Material>();
+
 	barrel->GetTransform().SetScale(glm::fvec3(1.0f));
 	barrel->GetTransform().SetPosition(glm::fvec3(-3.0f, 1.5f, 0.0f));
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
-	barrel->AddComponent(std::make_shared<Texture>("res/Barrel.png"));
+	barrelMat->SetAlbedoMap("res/Barrel.png");
+	barrelMat->SetAlbedo(glm::fvec3(1.0f));
+	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Mesh>("res/barrel.obj"));
 
+	//Box
 	EntityRef box = AddEntity(std::make_shared<Entity>("Box"));
+	std::shared_ptr<Material> boxMat = std::make_shared<Material>();
+
 	box->GetTransform().SetScale(glm::fvec3(1.0f));
 	box->GetTransform().SetPosition(glm::fvec3(3.0f, 1.0f, -2.0f));
 	box->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(30.0f), 0.0f));
-	box->AddComponent(std::make_shared<Texture>("res/Box.000.png"));
+	boxMat->SetAlbedoMap("res/Box.000.png");
+	boxMat->SetAlbedo(glm::fvec3(1.0f));
+	box->AddComponent(boxMat);
 	box->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
+	//Suzanne
 	EntityRef monkey = AddEntity(std::make_shared<Entity>("Monkey"));
+	std::shared_ptr<Material> monkeyMat = std::make_shared<Material>();
+
 	monkey->GetTransform().SetScale(glm::fvec3(1.0f));
 	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, 0.4f, 2.0f));
 	monkey->GetTransform().SetRotation(glm::fvec3(glm::radians(-38.0f), 0.0f, 0.0f));
-	monkey->AddComponent(std::make_shared<Texture>("res/Stone.Floor.001.png"));
+	monkeyMat->SetAlbedoMap("res/Stone.Floor.001.png");
+	monkeyMat->SetAlbedo(glm::fvec3(1.0f));
+	monkey->AddComponent(monkeyMat);
 	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
+
+
+	/*
+	Lights
+	*/
 
 	//warm foreground light
 	EntityRef light = AddEntity(std::make_shared<Entity>("LightY"));
@@ -227,7 +256,7 @@ void Game::ConstructScene() {
 	EntityRef light2 = AddEntity(std::make_shared<Entity>("LightB"));
 	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 8.0f, -8.0f));
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
-	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.5f, 10.0f));
+	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.5f, 10.0));
 	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
 

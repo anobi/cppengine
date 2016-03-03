@@ -8,7 +8,9 @@ in vec3 eyePos;
 in vec3 eyeDir;
 in vec3 worldPos;
 
-uniform sampler2D texture_diffuse;
+uniform sampler2D AlbedoMap;
+uniform sampler2D MetallicMap;
+uniform sampler2D NormalMap;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -85,5 +87,5 @@ void main(void) {
 		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f) * Lights[i].intensity;
 	}
 
-	fragColor = texture(texture_diffuse, texCoord0) * light;
+	fragColor = texture(AlbedoMap, texCoord0) * light;
 }

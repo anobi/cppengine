@@ -31,6 +31,11 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	uniforms[2] = glGetUniformLocation(program, "ProjectionMatrix");
 	uniforms[3] = glGetUniformLocation(program, "CameraPosition");
 
+	//Texture maps
+	uniforms[4] = glGetUniformLocation(program, "AlbedoMap");
+	uniforms[5] = glGetUniformLocation(program, "MetallicMap");
+	uniforms[6] = glGetUniformLocation(program, "NormalMap");
+
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
 

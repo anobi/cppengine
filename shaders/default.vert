@@ -23,7 +23,7 @@ void main() {
 
 	texCoord0 = texCoord;
 	normal0 = (ViewMatrix * ModelMatrix * vec4(normal, 0.0f)).xyz;
-	position0 = (ViewMatrix * ModelMatrix* vec4(position, 1.0f)).xyz;
+	position0 = (ViewMatrix * ModelMatrix * vec4(position, 1.0f)).xyz;
 
 	worldPos = (ModelMatrix * vec4(position, 1.0f)).xyz;
 	eyePos = CameraPosition;

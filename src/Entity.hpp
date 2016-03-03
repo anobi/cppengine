@@ -12,7 +12,7 @@
 /////////////////
 
 class Shader;
-class Texture;
+class Material;
 class Renderer;
 class Camera;
 class EntityComponent;
