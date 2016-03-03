@@ -7,7 +7,7 @@ Material::Material() : EntityComponent() {
 	mAlbedo = glm::fvec3(1.0f);
 	mMetallic = glm::fvec3(0.0f);
 	mEmission = glm::fvec3(0.0f);
-	mSubsurface = glm::vec3();
+	mSubsurface = glm::vec3(0.0f);
 }
 
 Material::~Material() {
@@ -22,13 +22,8 @@ void Material::Render(Renderer & renderer) {
 		glBindTexture(GL_TEXTURE_2D, mAlbedoMap);
 	}
 
-	if(mUseMetallicMap) {
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mMetallicMap);
-	}
-	
 	if (mUseNormalMap) {
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, mNormalMap);
 	}
 }

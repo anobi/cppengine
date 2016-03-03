@@ -64,7 +64,7 @@ vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 	float d = distance(position, position0);
 	float dr = (max(d - radius, 0.0f) / radius) + 1.0f;
 	vec3 L = normalize(position + eyeDir);	//L = direction from fragment to camera
-	vec3 N = normalize(normal0);			//N = vertex normal in camera space
+	vec3 N = normalize(2.0f * texture(NormalMap, texCoord0).rgb - 1.0f);			//N = vertex normal in camera space
 
 	//attenuation
 
