@@ -1,12 +1,26 @@
 #version 330 core
 
+struct Light {
+	vec3 direction;
+	vec3 position;
+	vec3 color;
+	float intensity;
+	float radius;
+	float cutoff;
+};
+
+const int numLights = 5;
+
 in vec2 texCoord0;
 in vec3 normal0;
 in vec3 position0;
+in vec3 tangent0;
 
 in vec3 eyePos;
 in vec3 eyeDir;
 in vec3 worldPos;
+
+in Light lights0[numLights];
 
 uniform sampler2D AlbedoMap;
 uniform sampler2D MetallicMap;
@@ -17,14 +31,7 @@ uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 uniform vec3 CameraPosition;
 
-struct Light {
-	vec3 direction;
-	vec3 position;
-	vec3 color;
-	float intensity;
-	float radius;
-	float cutoff;
-};
+
 
 const int numLights = 5;
 uniform Light Lights[numLights];
@@ -63,7 +70,7 @@ vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 	vec3 value = vec3(0.0f);
 	float d = distance(position, position0);
 	float dr = (max(d - radius, 0.0f) / radius) + 1.0f;
-	vec3 L = normalize(position + eyeDir);	//L = direction from fragment to camera
+	
 	vec3 N = normalize(2.0f * texture(NormalMap, texCoord0).rgb - 1.0f);			//N = vertex normal in camera space
 
 	//attenuation
@@ -83,8 +90,7 @@ void main(void) {
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
-		vec3 lPos = (ViewMatrix * vec4(Lights[i].position, 1.0f)).xyz;
-		light += vec4(pointLight(lPos, Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f) * Lights[i].intensity;
+		light += vec4(pointLight(lights0[i].position, lights0[i].color, lights0[i].radius, lights0[i].cutoff), 1.0f) * lights0[i].intensity;
 	}
 
 	fragColor = texture(AlbedoMap, texCoord0) * light;

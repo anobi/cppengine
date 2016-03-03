@@ -36,7 +36,12 @@ Mesh::Mesh(const std::string fileName) : EntityComponent() {
 
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
-		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs |aiProcess_FixInfacingNormals);
+		aiProcess_Triangulate 
+		| aiProcess_GenSmoothNormals 
+		| aiProcess_JoinIdenticalVertices 
+		| aiProcess_FlipUVs 
+		| aiProcess_FixInfacingNormals
+		| aiProcess_CalcTangentSpace);
 
 	if (scene == NULL) return;
 
@@ -60,6 +65,12 @@ Mesh::Mesh(const std::string fileName) : EntityComponent() {
 				if (mesh->HasNormals()) {
 					aiVector3D norm = mesh->mNormals[v];
 					model.normals.push_back(glm::fvec3(norm.x, norm.y, norm.z));
+				}
+
+				//tangents
+				if (mesh->HasTangentsAndBitangents()) {
+					aiVector3D tangent = mesh->mTangents[v];
+					model.tangents.push_back(glm::fvec3(tangent.x, tangent.y, tangent.z));
 				}
 
 				if (mesh->mTextureCoords[0]) {
@@ -123,14 +134,20 @@ void Mesh::SetupMesh(Model &model) {
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//texture coordinates, rename to uv mayhaps?
+	//tangents
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.tangents[0]) * model.tangents.size(), &model.tangents[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//texture coordinates, rename to uv mayhaps?
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[3]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[3]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[4]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model.indices[0]) * model.indices.size(), &model.indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);

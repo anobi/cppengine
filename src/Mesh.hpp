@@ -39,6 +39,7 @@ class Model {
 public:
 	std::vector<glm::fvec3> positions;
 	std::vector<glm::fvec3> normals;
+	std::vector<glm::fvec3> tangents;
 	std::vector<glm::fvec2> texCoords;
 	std::vector<unsigned int> indices;
 
@@ -57,7 +58,7 @@ public:
 
 private:
 
-	static const unsigned int NUM_BUFFERS = 4;
+	static const unsigned int NUM_BUFFERS = 5;
 	unsigned int mNumIndices;
 
 	Shader mShader;
