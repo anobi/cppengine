@@ -70,7 +70,9 @@ Mesh::Mesh(const std::string fileName) : EntityComponent() {
 				//tangents
 				if (mesh->HasTangentsAndBitangents()) {
 					aiVector3D tangent = mesh->mTangents[v];
+					aiVector3D bitangent = mesh->mBitangents[v];
 					model.tangents.push_back(glm::fvec3(tangent.x, tangent.y, tangent.z));
+					model.bitangents.push_back(glm::fvec3(bitangent.x, bitangent.y, bitangent.z));
 				}
 
 				if (mesh->mTextureCoords[0]) {
@@ -140,14 +142,20 @@ void Mesh::SetupMesh(Model &model) {
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//texture coordinates, rename to uv mayhaps?
+	//bitangents
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[3]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.bitangents[0]) * model.bitangents.size(), &model.bitangents[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//texture coordinates, rename to uv mayhaps?
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOs[4]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(model.texCoords[0]) * model.texCoords.size(), &model.texCoords[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[4]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mVBOs[5]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model.indices[0]) * model.indices.size(), &model.indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);

@@ -1,5 +1,19 @@
 #version 330 core
 
+const int numLights = 5;
+
+in VertexOut {
+
+	vec2 texCoords;
+	
+	vec3 fragPos;
+	vec3 tFragPos;
+	vec3 viewPos;
+	vec3 viewDir;
+
+	mat3 tbn;
+} vs_in;
+
 struct Light {
 	vec3 direction;
 	vec3 position;
@@ -9,18 +23,9 @@ struct Light {
 	float cutoff;
 };
 
-const int numLights = 5;
-
-in vec2 texCoord0;
-in vec3 normal0;
-in vec3 position0;
-in vec3 tangent0;
-
-in vec3 eyePos;
-in vec3 eyeDir;
-in vec3 worldPos;
-
-in Light lights0[numLights];
+uniform Light Lights[numLights];
+in vec3 LightPos[numLights];
+in vec3 LightDir[numLights];
 
 uniform sampler2D AlbedoMap;
 uniform sampler2D MetallicMap;
@@ -31,15 +36,10 @@ uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 uniform vec3 CameraPosition;
 
-
-
-const int numLights = 5;
-uniform Light Lights[numLights];
-
 out vec4 fragColor;
 
-float lambert(vec3 N, vec3 L) {
-	return clamp(dot(N, L), 0.0f, 1.0f);
+float lambert(vec3 L, vec3 N) {
+	return clamp(dot(L, N), 0.0f, 1.0f);
 }
 
 vec3 specular(vec3 L, vec3 N) {
@@ -49,11 +49,11 @@ vec3 specular(vec3 L, vec3 N) {
 
 		//phong:
 		vec3 specularity = vec3(1.0f, 1.0f, 1.0f);
-		float specular_hardness = 60.0f;
+		float specular_hardness = 32.0f;
 		float specular_intensity = 0.5f;
 
 		//E = direction vector from vertex to eye
-		vec3 E = normalize(eyeDir); 
+		vec3 E = normalize(L + vs_in.viewDir); 
 		vec3 R = reflect(-L, N);
 		float spec = pow(max(dot(R, E), 0.0f), specular_hardness);
 
@@ -66,12 +66,14 @@ float attenuation(float distance){
 	return clamp(1.0f / distance * distance, 0.0f, 1.0f);
 }
 
-vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
+vec3 pointLight(vec3 position, vec3 direction, vec3 color, float radius, float cutoff) {
 	vec3 value = vec3(0.0f);
-	float d = distance(position, position0);
+	float d = distance(position, vs_in.fragPos);
 	float dr = (max(d - radius, 0.0f) / radius) + 1.0f;
 	
-	vec3 N = normalize(2.0f * texture(NormalMap, texCoord0).rgb - 1.0f);			//N = vertex normal in camera space
+	vec3 L = direction;
+	vec3 N = normalize(2.0f * texture(NormalMap, vs_in.texCoords).rgb - 1.0f);			//N = vertex normal in camera space
+	//N = normalize(vs_in.tbn * N);
 
 	//attenuation
 
@@ -79,7 +81,7 @@ vec3 pointLight(vec3 position, vec3 color, float radius, float cutoff) {
 	attenuation = (attenuation - cutoff) / (1.0f - cutoff);
 	attenuation = max(attenuation, 0.0f);
 
-	value += color * lambert(N, L);
+	value += color * lambert(L, N);
 	value += color * specular(L, N);
 	return value * attenuation;
 }
@@ -90,8 +92,8 @@ void main(void) {
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){
-		light += vec4(pointLight(lights0[i].position, lights0[i].color, lights0[i].radius, lights0[i].cutoff), 1.0f) * lights0[i].intensity;
+		light += vec4(pointLight(LightPos[i], LightDir[i], Lights[i].color, Lights[i].radius, Lights[i].cutoff), 1.0f) * Lights[i].intensity;
 	}
 
-	fragColor = texture(AlbedoMap, texCoord0) * light;
+	fragColor = texture(AlbedoMap, vs_in.texCoords) * light;
 }

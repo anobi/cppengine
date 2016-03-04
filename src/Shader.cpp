@@ -19,7 +19,8 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	glBindAttribLocation(program, 1, "position");
 	glBindAttribLocation(program, 2, "normal");
 	glBindAttribLocation(program, 3, "tangent");
-	glBindAttribLocation(program, 4, "texCoord");
+	glBindAttribLocation(program, 4, "bitangent");
+	glBindAttribLocation(program, 5, "texCoord");
 
 	glLinkProgram(program);
 	std::string lError = GetShaderStatus(program);
@@ -95,8 +96,8 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 
 	glUniform3fv(uniforms[3], 1, &eyePos[0]);
 
-	glUniform1i(uniforms[4], 0);
-	glUniform1i(uniforms[5], 1);
+	glUniform1i(uniforms[4], 0); //colormap
+	glUniform1i(uniforms[5], 1); //normal map
 
 	auto lights = renderer.GetLights();
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
