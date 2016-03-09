@@ -8,8 +8,12 @@ out VertexOut {
 	
 	vec3 fragPos;
 	vec3 tFragPos;
+
 	vec3 viewPos;
 	vec3 viewDir;
+
+	vec3 tViewPos;
+	vec3 tViewDir;
 
 	mat3 tbn;
 } vs_out;
@@ -36,10 +40,8 @@ uniform mat4 ProjectionMatrix;
 uniform vec3 CameraPosition;
 uniform Light Lights[numLights];
 
-
-
-out vec3 LightPos[numLights];
-out vec3 LightDir[numLights];
+out vec3 tLightPos[numLights];
+out vec3 tLightDir[numLights];
 
 void main() {
 
@@ -53,14 +55,18 @@ void main() {
 
 	vs_out.tbn			= TBN;
 	vs_out.texCoords	= texCoord;
+
 	vs_out.fragPos		= vec3(ModelMatrix * vec4(position, 1.0f));
 	vs_out.tFragPos		= TBN * vs_out.fragPos;
-	vs_out.viewPos		= TBN * CameraPosition;
-	vs_out.viewDir		= normalize((TBN * CameraPosition) - (TBN * position));
+
+	vs_out.viewPos		= CameraPosition;
+	vs_out.tViewPos		= TBN * CameraPosition;
+	vs_out.viewDir		= normalize(CameraPosition - position);
+	vs_out.tViewDir		= normalize(TBN * (CameraPosition - position));
 
 	for(int i = 0; i < numLights; i++){
-		LightPos[i] = TBN * Lights[i].position;
-		LightDir[i] = normalize(LightPos[i] - vs_out.tFragPos);
+		tLightPos[i] = TBN * Lights[i].position;
+		tLightDir[i] = normalize(tLightPos[i] - vs_out.tFragPos);
 	}
 
 }
