@@ -65,10 +65,6 @@ vec3 specular(vec3 L, vec3 N) {
 	return value;
 }
 
-float attenuation(float distance){
-	return clamp(1.0f / distance * distance, 0.0f, 1.0f);
-}
-
 vec3 pointLight(int index) {
 
 	Light light = Lights[index];
@@ -77,7 +73,7 @@ vec3 pointLight(int index) {
 	float d = distance(tLightPos[index], vs_in.tFragPos);
 	float dr = (max(d - light.radius, 0.0f) / light.radius) + 1.0f;
 	
-	vec3 L = tLightDir[index];
+	vec3 L = normalize(tLightDir[index]);
 	vec3 N = texture(NormalMap, vs_in.texCoords).xyz;
 	N = normalize(N * 2.0f - 1.0f);
 

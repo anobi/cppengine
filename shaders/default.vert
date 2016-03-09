@@ -62,11 +62,11 @@ void main() {
 	vs_out.viewPos		= CameraPosition;
 	vs_out.tViewPos		= TBN * CameraPosition;
 	vs_out.viewDir		= normalize(CameraPosition - position);
-	vs_out.tViewDir		= normalize(TBN * (CameraPosition - position));
+	vs_out.tViewDir		= normalize(vs_out.tViewPos - vs_out.tFragPos);
 
 	for(int i = 0; i < numLights; i++){
 		tLightPos[i] = TBN * Lights[i].position;
-		tLightDir[i] = normalize(tLightPos[i] - vs_out.tFragPos);
+		tLightDir[i] = TBN * (Lights[i].position - vs_out.fragPos);
 	}
 
 }

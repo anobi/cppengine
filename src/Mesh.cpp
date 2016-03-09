@@ -37,6 +37,7 @@ Mesh::Mesh(const std::string fileName) : EntityComponent() {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
 		aiProcess_Triangulate 
+		| aiProcess_GenUVCoords
 		| aiProcess_GenSmoothNormals 
 		| aiProcess_JoinIdenticalVertices 
 		| aiProcess_FlipUVs 
