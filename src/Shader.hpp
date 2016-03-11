@@ -2,8 +2,11 @@
 #define SHADER_H
 
 #include <iostream>
+
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+
 #include "lib/OpenGL.hpp"
 
 #include "EntityComponent.hpp"
