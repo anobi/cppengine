@@ -82,6 +82,11 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
+void Shader::Render(Renderer & renderer) {
+	this->Bind();
+	this->UpdateUniforms(GetTransform(), renderer);
+}
+
 void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 
 	//need to get modelview without projection

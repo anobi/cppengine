@@ -21,7 +21,7 @@ public:
 
 	void Bind();
 	void UpdateUniforms(Transform &transform, Renderer &renderer);
-	void Render(Renderer &renderer){}
+	void Render(Renderer &renderer);
 
 private:
 	static const unsigned int NUM_SHADERS = 2;

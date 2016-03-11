@@ -7,7 +7,6 @@
 
 #include "lib/OpenGL.hpp"
 #include "EntityComponent.hpp"
-#include "Shader.hpp"
 #include "Renderer.hpp"
 
 struct Vertex {
@@ -54,7 +53,6 @@ public:
 	Mesh();
 	~Mesh();
 
-	void LoadShader(const std::string name);
 	void Render(Renderer& renderer);
 
 private:
@@ -62,7 +60,6 @@ private:
 	static const unsigned int NUM_BUFFERS = 6;
 	unsigned int mNumIndices;
 
-	Shader mShader;
 	GLuint mVAO;
 	GLuint mVBOs[NUM_BUFFERS];
 

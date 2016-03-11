@@ -200,6 +200,7 @@ void Game::ConstructScene() {
 	roomMat->SetNormalMap("res/Rock.Wall.Normal.png");
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
+	room->AddComponent(std::make_shared<Shader>("default"));
 	room->AddComponent(std::make_shared<Mesh>("res/room.obj"));
 
 	//Barrel
@@ -213,6 +214,7 @@ void Game::ConstructScene() {
 	barrelMat->SetNormalMap("res/Barrel.Normal.png");
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
+	barrel->AddComponent(std::make_shared<Shader>("default"));
 	barrel->AddComponent(std::make_shared<Mesh>("res/barrel.obj"));
 
 	//Box
@@ -226,6 +228,7 @@ void Game::ConstructScene() {
 	boxMat->SetNormalMap("res/Box.Normal.png");
 	boxMat->SetAlbedo(glm::fvec3(1.0f));
 	box->AddComponent(boxMat);
+	box->AddComponent(std::make_shared<Shader>("default"));
 	box->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	//Suzanne
@@ -239,6 +242,7 @@ void Game::ConstructScene() {
 	//monkeyMat->SetNormalMap("res/Stone.Floor.Normal.png");
 	monkeyMat->SetAlbedo(glm::fvec3(1.0f));
 	monkey->AddComponent(monkeyMat);
+	monkey->AddComponent(std::make_shared<Shader>("default"));
 	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
 
 
@@ -251,6 +255,7 @@ void Game::ConstructScene() {
 	light->GetTransform().SetPosition(glm::fvec3(-8.0f, 8.0f, 8.0f));
 	light->GetTransform().SetScale(glm::fvec3(0.2f));
 	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 0.5f, 10.0f));
+	light->AddComponent(std::make_shared<Shader>("default"));
 	light->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	//TODO: need to figure out how to automate adding lights to renderer
@@ -261,6 +266,7 @@ void Game::ConstructScene() {
 	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 8.0f, -8.0f));
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
 	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.5f, 10.0));
+	light2->AddComponent(std::make_shared<Shader>("default"));
 	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
 
@@ -269,6 +275,7 @@ void Game::ConstructScene() {
 	light3->GetTransform().SetPosition(glm::fvec3(0.0f, 3.0f, 0.0f));
 	light3->GetTransform().SetScale(glm::fvec3(0.2f));
 	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.0f, 4.0f));
+	light3->AddComponent(std::make_shared<Shader>("default"));
 	light3->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light3->GetComponent("PointLight"));
 
