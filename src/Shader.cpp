@@ -36,6 +36,12 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	//Texture maps
 	uniforms[4] = glGetUniformLocation(program, "AlbedoMap");
 	uniforms[5] = glGetUniformLocation(program, "NormalMap");
+	uniforms[6] = glGetUniformLocation(program, "HeightMap");
+	uniforms[7] = glGetUniformLocation(program, "RoughnessMap");
+	uniforms[8] = glGetUniformLocation(program, "OcclusionMap");
+	uniforms[9] = glGetUniformLocation(program, "MetallicMap");
+
+	uniforms[10] = glGetUniformLocation(program, "UseHeightMap");
 
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
@@ -98,6 +104,7 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 
 	glUniform1i(uniforms[4], 0); //colormap
 	glUniform1i(uniforms[5], 1); //normal map
+	glUniform1i(uniforms[6], 2); //height map
 
 	auto lights = renderer.GetLights();
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;

@@ -36,9 +36,15 @@ public:
 		mUseNormalMap = true;
 	}
 
+	void SetHeightMap(const std::string filename) { 
+		LoadMap(filename, mHeightMap);
+		mUseHeightMap = true;
+	}
+
 	void SetEmissionMap(const std::string filename) { LoadMap(filename, mEmissionMap); }
 	void SetSubsurfaceMap(const std::string filename) { LoadMap(filename, mSubsurfaceMap); }
 	void SetOcclusionMap(const std::string filename) { LoadMap(filename, mOcclusionMap); }
+	void SetRoughnessMap(const std::string filename) { LoadMap(filename, mRoughnessMap); }
 
 private:
 
@@ -49,6 +55,7 @@ private:
 	bool mUseAlbedoMap;
 	bool mUseMetallicMap;
 	bool mUseNormalMap;
+	bool mUseHeightMap;
 
 	float mRoughness;
 	
@@ -61,6 +68,8 @@ private:
 	GLuint mAlbedoMap;
 	GLuint mMetallicMap;
 	GLuint mNormalMap;
+	GLuint mHeightMap;
+	GLuint mRoughnessMap;
 	GLuint mEmissionMap;
 	GLuint mSubsurfaceMap;
 	GLuint mOcclusionMap;

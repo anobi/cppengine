@@ -26,6 +26,11 @@ void Material::Render(Renderer & renderer) {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, mNormalMap);
 	}
+
+	if (mUseHeightMap) {
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, mHeightMap);
+	}
 }
 
 void Material::LoadMap(const std::string filename, GLuint & texture) {

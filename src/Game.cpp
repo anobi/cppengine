@@ -196,8 +196,9 @@ void Game::ConstructScene() {
 
 	room->GetTransform().SetScale(glm::fvec3(1.0f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
-	roomMat->SetAlbedoMap("res/Rock.Wall.000.png");
-	roomMat->SetNormalMap("res/Rock.Wall.Normal.png");
+	roomMat->SetAlbedoMap("res/TexturesCom_Cobblestone_albedo_S.png");
+	roomMat->SetNormalMap("res/TexturesCom_Cobblestone_normalmap_S.png");
+	roomMat->SetHeightMap("res/TexturesCom_Cobblestone_heightmap_S.png");
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Mesh>("res/room.obj"));
@@ -250,7 +251,9 @@ void Game::ConstructScene() {
 	EntityRef light = AddEntity(std::make_shared<Entity>("LightY"));
 	light->GetTransform().SetPosition(glm::fvec3(-8.0f, 8.0f, 8.0f));
 	light->GetTransform().SetScale(glm::fvec3(0.2f));
-	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 0.5f, 10.0f));
+
+	//															color			   int    cut  radius
+	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 0.2f, 10.0f));
 	light->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 
 	//TODO: need to figure out how to automate adding lights to renderer
@@ -260,7 +263,7 @@ void Game::ConstructScene() {
 	EntityRef light2 = AddEntity(std::make_shared<Entity>("LightB"));
 	light2->GetTransform().SetPosition(glm::fvec3(8.0f, 8.0f, -8.0f));
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
-	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.5f, 10.0));
+	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.2f, 10.0));
 	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
 
@@ -268,7 +271,7 @@ void Game::ConstructScene() {
 	EntityRef light3 = AddEntity(std::make_shared<Entity>("LightO"));
 	light3->GetTransform().SetPosition(glm::fvec3(0.0f, 3.0f, 0.0f));
 	light3->GetTransform().SetScale(glm::fvec3(0.2f));
-	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.0f, 4.0f));
+	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 4.0f));
 	light3->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
 	mRenderer.AddLight(light3->GetComponent("PointLight"));
 

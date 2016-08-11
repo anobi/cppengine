@@ -27,6 +27,7 @@ public:
 private:
 	std::shared_ptr<Camera> mMainCamera;
 	std::vector<EntityComponentRef> mLights;
+	std::vector<glm::fmat4> mShadowMaps();
 };
 
 #endif
