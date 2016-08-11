@@ -2,17 +2,14 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include "Mesh.hpp"
-#include "Shader.hpp"
 
 Mesh::Mesh() : EntityComponent() {
 	this->SetName("Mesh");
-	this->mShader = Shader("default");
 }
 
 Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, unsigned int numIndices) : EntityComponent() {
 
 	this->SetName("Mesh");
-	this->mShader = Shader("default");
 
 	Model model;
 
@@ -32,7 +29,6 @@ Mesh::Mesh(Vertex *vertices, unsigned int numVertices, unsigned int *indices, un
 Mesh::Mesh(const std::string fileName) : EntityComponent() {
 
 	this->SetName("Mesh");
-	this->mShader = Shader("default");
 
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
@@ -106,13 +102,7 @@ Mesh::~Mesh() {
 	glDeleteVertexArrays(1, &mVAO);
 }
 
-void Mesh::LoadShader(const std::string name) {
-	this->mShader = Shader(name);
-}
-
 void Mesh::Render(Renderer &renderer) {
-	mShader.Bind();
-	mShader.UpdateUniforms(GetTransform(), renderer);
 	Draw();
 }
 

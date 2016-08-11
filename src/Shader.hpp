@@ -2,10 +2,13 @@
 #define SHADER_H
 
 #include <iostream>
+#include <vector>
+#include <string>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "lib/OpenGL.hpp"
 
+#include "lib/OpenGL.hpp"
 #include "EntityComponent.hpp"
 #include "Renderer.hpp"
 
@@ -13,12 +16,11 @@ class Shader : public EntityComponent {
 
 public:
 	Shader(const std::string filename);
-	Shader() : EntityComponent() {};
 	~Shader();
 
 	void Bind();
 	void UpdateUniforms(Transform &transform, Renderer &renderer);
-	void Render(Renderer &renderer){}
+	void Render(Renderer& renderer);
 
 private:
 	static const unsigned int NUM_SHADERS = 2;

@@ -11,8 +11,6 @@
 // E N T I T Y //
 /////////////////
 
-class Shader;
-class Material;
 class Renderer;
 class Camera;
 class EntityComponent;

@@ -1,12 +1,12 @@
 #include <fstream>
 #include <sstream>
-#include <string>
-#include <iostream>
-#include <vector>
 
 #include "Shader.hpp"
 
 Shader::Shader(const std::string fileName) : EntityComponent() {
+
+	this->SetName("Shader");
+
 	program = glCreateProgram();
 
 	shaders[0] = CreateShader(ReadFile(fileName + ".vert"), GL_VERTEX_SHADER);
@@ -88,6 +88,11 @@ void Shader::Bind() {
 	glUseProgram(this->program);
 }
 
+void Shader::Render(Renderer & renderer) {
+	this->Bind();
+	this->UpdateUniforms(GetTransform(), renderer);
+}
+
 void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 
 	//need to get modelview without projection
@@ -154,20 +159,40 @@ std::string Shader::ReadFile(const std::string fileName) {
 
 std::string Shader::GetShaderStatus(GLuint shader) {
 
-	int logLength = 0;
-	GLint result = GL_FALSE;
+	int shaderLogLength = 0;
+	int programLogLength = 0;
+
+	GLint shaderResult = GL_FALSE;
+	GLint programResult = GL_FALSE;
+
 	std::string errorMessage = "";
 
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-	std::vector<GLchar> shaderError((logLength > 1) ? logLength : 1);
-	glGetShaderInfoLog(shader, logLength, NULL, &shaderError[0]);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderResult);
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &shaderLogLength);
+
+	glGetProgramiv(shader, GL_COMPILE_STATUS, &programResult);
+	glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &programLogLength);
+
+	std::vector<GLchar> shaderError((shaderLogLength > 1) ? shaderLogLength : 1);
+	glGetShaderInfoLog(shader, shaderLogLength, NULL, &shaderError[0]);
+
+	std::vector<GLchar> programError((programLogLength > 1) ? programLogLength : 1);
+	glGetShaderInfoLog(shader, programLogLength, NULL, &programError[0]);
 
 	if (shaderError.size() > 1) {
 		for (auto c : shaderError) {
 			errorMessage += c;
 		}
         std::cerr << errorMessage << std::endl;
+        std::cerr << "Shader error: " << errorMessage << std::endl;
 	}
+
+	if (programError.size() > 1) {
+		for (auto c : programError) {
+			errorMessage += c;
+		}
+        std::cerr << "Program error: " << errorMessage << std::endl;
+	}
+
 	return errorMessage;
 }

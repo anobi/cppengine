@@ -18,7 +18,7 @@ public:
 	void SetName(const std::string name) { this->mComponentName = name; }
 
 	const std::string GetName() const { return this->mComponentName; }
-	Transform GetTransform() { return mParent->GetTransform(); }
+	Transform& GetTransform() { return mParent->GetTransform(); }
 
 
 private:
