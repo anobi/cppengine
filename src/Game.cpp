@@ -197,9 +197,9 @@ void Game::ConstructScene() {
 
 	room->GetTransform().SetScale(glm::fvec3(1.0f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
-	roomMat->SetAlbedoMap("res/TexturesCom_Cobblestone_albedo_S.png");
-	roomMat->SetNormalMap("res/TexturesCom_Cobblestone_normalmap_S.png");
-	roomMat->SetHeightMap("res/TexturesCom_Cobblestone_heightmap_S.png");
+	roomMat->SetAlbedoMap("res/bricks2.jpg");
+	roomMat->SetNormalMap("res/bricks2_normal.jpg");
+	roomMat->SetHeightMap("res/bricks2_disp.jpg");
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Shader>("default"));
@@ -214,6 +214,7 @@ void Game::ConstructScene() {
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
 	barrelMat->SetAlbedoMap("res/Barrel.png");
 	barrelMat->SetNormalMap("res/Barrel.Normal.png");
+	barrelMat->SetHeightMap("res/Barrel.Disp.png");
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));

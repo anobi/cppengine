@@ -43,25 +43,27 @@ uniform Light Lights[numLights];
 out vec3 tLightPos[numLights];
 out vec3 tLightDir[numLights];
 
+uniform sampler2D HeightMap;
+
 void main() {
 
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);
 
 	mat3 normalMatrix = transpose(inverse(mat3(ModelMatrix)));
-	vec3 T		= vec3(normalMatrix * tangent);
-	vec3 B		= vec3(normalMatrix * bitangent);
-	vec3 N		= vec3(normalMatrix * normal);
+	vec3 T		= normalize(vec3(normalMatrix * tangent));
+	vec3 B		= normalize(vec3(normalMatrix * bitangent));
+	vec3 N		= normalize(vec3(normalMatrix * normal));
 	mat3 TBN	= transpose(mat3(T, B, N));
 
 	vs_out.tbn			= TBN;
 	vs_out.texCoords	= texCoord;
 
 	vs_out.fragPos		= vec3(ModelMatrix * vec4(position, 1.0f));
-	vs_out.tFragPos		= TBN * vs_out.fragPos;
-
 	vs_out.viewPos		= CameraPosition;
-	vs_out.tViewPos		= TBN * CameraPosition;
 	vs_out.viewDir		= normalize(CameraPosition - position);
+
+	vs_out.tFragPos		= TBN * vs_out.fragPos;
+	vs_out.tViewPos		= TBN * CameraPosition;
 	vs_out.tViewDir		= normalize(vs_out.tViewPos - vs_out.tFragPos);
 
 	for(int i = 0; i < numLights; i++){
