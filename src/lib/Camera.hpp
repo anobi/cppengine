@@ -47,17 +47,19 @@ public:
 	inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
 
 	inline glm::fvec3 GetDirection() {
+		glm::fvec3 rotation = mTransform.GetRotation();
 		return glm::fvec3(
-			cos(mTransform.GetRotation().y) * sin(mTransform.GetRotation().x),
-			sin(mTransform.GetRotation().y),
-			cos(mTransform.GetRotation().y) * cos(mTransform.GetRotation().x));
+			cos(rotation.y) * sin(rotation.x),
+			sin(rotation.y),
+			cos(rotation.y) * cos(rotation.x));
 	}
 
 	inline glm::fvec3 GetRight() {
+		glm::fvec3 rotation = mTransform.GetRotation();
 		return glm::fvec3(
-			sin(mTransform.GetRotation().x - 3.14f / 2.0f),
+			sin(rotation.x - 3.14f / 2.0f),
 			0,
-			cos(mTransform.GetRotation().x - 3.14f / 2.0f));
+			cos(rotation.x - 3.14f / 2.0f));
 	}
 
 	inline glm::fvec3 GetUp() {
