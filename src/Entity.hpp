@@ -31,7 +31,7 @@ public:
 	void Render(Renderer &renderer);
 
 	void SetName(const std::string name) { this->mEntityName = name; };
-	const std::string& GetName() const { return this->mEntityName; }
+	const std::string GetName() const { return this->mEntityName; }
 
 	EntityComponentRef AddComponent(EntityComponentRef component);
 	EntityComponentRef GetComponent(const std::string componentName);

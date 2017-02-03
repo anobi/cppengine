@@ -45,6 +45,8 @@ private:
 	std::vector<EntityRef> entities;
 
 	void ConstructScene();
+
+	bool menu = false;
 };
 
 #endif

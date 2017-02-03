@@ -60,7 +60,6 @@ bool Game::Init()
 
 	ImGui_ImplSdlGL3_Init(mDisplay.GetWindow());
 
-	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	mControls.SetSensitivity(0.00025f);
@@ -130,6 +129,12 @@ void Game::Loop()
 					case SDLK_ESCAPE:
 						Quit();
 						break;
+
+					case SDLK_F1:
+						menu = !menu;
+						SDL_ShowCursor(menu);
+						SDL_SetRelativeMouseMode((SDL_bool)!menu);
+						break;
 				}
 			}
 
@@ -145,7 +150,9 @@ void Game::Loop()
 			}
 		}
 
-		mControls.Update(event, mRenderer.GetCamera(), delay);
+		if (!menu) {
+			mControls.Update(event, mRenderer.GetCamera(), delay);
+		}
 
 		/*****************************
 		* Update entities and render *
@@ -162,11 +169,52 @@ void Game::Loop()
 			mRenderer.Render(entities[i]);
 		}
 
+
+		// Debug info window
 		ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
-		ImGui::Begin("Whoa :o");
-		ImGui::Text("Imma window lol");
+
+		glm::fvec3 cPos = mRenderer.GetCamera()->GetPosition();
+
+		ImGui::Begin("Info");
+		ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+
+		// Entity debug window
+		ImGui::SetNextWindowPos(ImVec2(10, 100), ImGuiSetCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiSetCond_FirstUseEver);
+		ImGui::Begin("Entities");
+
+		ImGui::Columns(3);
+
+		ImGui::PushItemWidth(10);
+		ImGui::Text("Index");
+		ImGui::NextColumn();
+
+		ImGui::Text("Entity");
+		ImGui::NextColumn();
+
+		ImGui::Text("Position");
+		ImGui::Separator();
+		ImGui::NextColumn();
+
+		for (int i = 0; i < numEntities; i++) {
+			EntityRef e = entities[i];
+			glm::fvec3 pos = e->GetTransform().GetPosition();
+
+			ImGui::PushItemWidth(10);
+			ImGui::Text("%d", i);
+			ImGui::NextColumn();
+
+			ImGui::PushItemWidth(100);
+			ImGui::Text("%s", e->GetName().c_str());
+			ImGui::NextColumn();
+
+			ImGui::PushItemWidth(200);
+			ImGui::Text("x: %.2f y: %.2f z: %.2f)", pos.x, pos.y, pos.z);
+			ImGui::NextColumn();
+		}
 		ImGui::End();
 
 		//mDisplay.Update();
@@ -183,6 +231,7 @@ void Game::Shutdown()
 {
     std::cout << "Shutting down...\n";
 
+	ImGui::Shutdown();
     mInput.Shutdown();
 	mDisplay.Shutdown();
 
