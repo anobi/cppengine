@@ -4,27 +4,22 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+
 #include "Display.hpp"
 #include "Input.hpp"
 #include "Controls.hpp"
 #include "Entity.hpp"
 #include "Renderer.hpp"
 
-typedef enum {
+typedef enum gameState_t
+{
 	GAMESTATE_RUNNING,
 	GAMESTATE_STOPPED
-} gameState_t;
+};
 
-class Game {
+class Game 
+{
 
-private:
-	Input mInput;
-	Controls mControls;
-    Display mDisplay;
-	Renderer mRenderer;
-    std::vector<EntityRef> entities;
-
-	void ConstructScene();
 
 public:
 	Game();
@@ -34,13 +29,22 @@ public:
 	EntityRef AddEntity(EntityRef entity);
 	EntityRef GetEntity(const std::string name);
 
-    std::vector<EntityRef> GetEntities();
+	std::vector<EntityRef> GetEntities();
 
 	bool Init();
 	void Start();
 	void Shutdown();
 	void Loop();
-	void Quit();
+	void Quit();	
+
+private:
+	Input mInput;
+	Controls mControls;
+	Display mDisplay;
+	Renderer mRenderer;
+	std::vector<EntityRef> entities;
+
+	void ConstructScene();
 };
 
 #endif

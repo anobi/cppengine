@@ -2,6 +2,9 @@
 #include <chrono>
 #include <SDL2/SDL.h>
 
+#include "lib/imgui.h"
+#include "lib/imgui_impl_sdl_gl3.h"
+
 #include "Game.hpp"
 #include "Display.hpp"
 #include "Input.hpp"
@@ -10,23 +13,28 @@
 #include "Mesh.hpp"
 #include "Material.hpp"
 
-Game::Game(){
+Game::Game()
+{
     gameState = GAMESTATE_STOPPED; 
 }
 
-bool Game::Init(){
+bool Game::Init()
+{
     std::cout << "Initializing game...\n" ;
 
     //init stuff
     std::cout << "* SDL: ";
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
-    } else std::cout << "done\n";
+    } 
+	else std::cout << "done\n";
 
 	//Display
 	std::cout << "* Display: ";
-	if (!mDisplay.Init(1440, 900)) {
+	if (!mDisplay.Init(1440, 900)) 
+	{
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -34,7 +42,8 @@ bool Game::Init(){
 
 	//Renderer
 	std::cout << "* Renderer: ";
-	if (!mRenderer.Init()) {
+	if (!mRenderer.Init()) 
+	{
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
@@ -42,10 +51,14 @@ bool Game::Init(){
     
     //Input system
     std::cout << "* Input: ";
-    if(!mInput.Init()){
+    if(!mInput.Init())
+	{
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
-    } else std::cout << "done\n";
+    } 
+	else std::cout << "done\n";
+
+	ImGui_ImplSdlGL3_Init(mDisplay.GetWindow());
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -55,23 +68,28 @@ bool Game::Init(){
     return true;
 }
 
-void Game::Start(){
+void Game::Start()
+{
 
 	//Init everything
-    if(Init()){
+    if(Init())
+	{
 		//Build the scene, a temp solution
 		ConstructScene();
 
 		//Start the game loop
         gameState = GAMESTATE_RUNNING;
         Loop();
-    } else {
+    } 
+	else 
+	{
         std::cout << "Failed to initialize game \n";
         exit(EXIT_FAILURE);
     }
 }
 
-void Game::Loop(){
+void Game::Loop()
+{
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
@@ -79,7 +97,10 @@ void Game::Loop(){
 	float counter = 0.0f;
 	SDL_Event event;
 
-    while(gameState == GAMESTATE_RUNNING) {
+    while(gameState == GAMESTATE_RUNNING) 
+	{
+
+		ImGui_ImplSdlGL3_NewFrame(mDisplay.GetWindow());
 		
 		/*************************
 		* Update clock and so on *
@@ -89,27 +110,33 @@ void Game::Loop(){
         auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
         auto delay = ((milliseconds)1000 / 60 - elapsed).count();
 
-        if(delay >= 0){
-            SDL_Delay(delay);
-        }
+        if(delay >= 0) SDL_Delay(delay);
 
 		/*****************************
 		* Handle controls and events *
 		******************************/
 
-		while(SDL_PollEvent(&event)){
-			if (event.type == SDL_QUIT) {
+		while(SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_QUIT) 
+			{
 				Quit();
 			}
-			if (event.type == SDL_KEYDOWN) {
-				switch (event.key.keysym.sym) {
+
+			if (event.type == SDL_KEYDOWN) 
+			{
+				switch (event.key.keysym.sym) 
+				{
 					case SDLK_ESCAPE:
 						Quit();
 						break;
 				}
 			}
-			if(event.type == SDL_WINDOWEVENT){
-				switch(event.window.event){
+
+			if(event.type == SDL_WINDOWEVENT)
+			{
+				switch(event.window.event)
+				{
 					case SDL_WINDOWEVENT_RESIZED:
 						mDisplay.SetResolution(event.window.data1, event.window.data2, true);
 						mRenderer.GetCamera()->SetAspectRatio(45.0f, mDisplay.GetAspectRatio());
@@ -130,18 +157,30 @@ void Game::Loop(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int numEntities = entities.size();
-		for (int i = 0; i < numEntities; i++) {
+		for (int i = 0; i < numEntities; i++) 
+		{
 			mRenderer.Render(entities[i]);
 		}
 
-		mDisplay.Update();
+		ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
+		ImGui::Begin("Whoa :o");
+		ImGui::Text("Imma window lol");
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+
+		//mDisplay.Update();
+		ImGui::Render();
+		SDL_GL_SwapWindow(mDisplay.GetWindow());
+
 		counter += 0.001f;
     }
 
     Shutdown();
 }
 
-void Game::Shutdown(){
+void Game::Shutdown() 
+{
     std::cout << "Shutting down...\n";
 
     mInput.Shutdown();
@@ -150,24 +189,30 @@ void Game::Shutdown(){
 	SDL_Quit();
 }
 
-void Game::Quit(){
+void Game::Quit()
+{
     std::cout << "QUIT\n";
     gameState = GAMESTATE_STOPPED;
 }
 
-std::vector<EntityRef> Game::GetEntities(){
+std::vector<EntityRef> Game::GetEntities()
+{
     return entities;
 };
 
-EntityRef Game::AddEntity(EntityRef entity) {
+EntityRef Game::AddEntity(EntityRef entity) 
+{
 	this->entities.push_back(entity);
 	return entities.back();
 }
 
-EntityRef Game::GetEntity(const std::string name) {
+EntityRef Game::GetEntity(const std::string name) 
+{
 	EntityRef entity = NULL;
-	for (unsigned int i = 0; i < entities.size(); i++) {
-		if (entities[i]->GetName() == name) {
+	for (unsigned int i = 0; i < entities.size(); i++) 
+	{
+		if (entities[i]->GetName() == name) 
+		{
 			entity = entities[i];
 			break;
 		}
@@ -175,7 +220,8 @@ EntityRef Game::GetEntity(const std::string name) {
 	return entity;
 }
 
-void Game::ConstructScene() {
+void Game::ConstructScene() 
+{
 
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(Camera(glm::perspective(
 		45.0f, //FOV

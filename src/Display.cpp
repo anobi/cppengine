@@ -34,8 +34,8 @@ bool Display::Init(const int w, const int h) {
     return true;
 }
 
-void Display::Update() {
-
+void Display::Update() 
+{
 	SDL_GL_SwapWindow(_window);
 }
 

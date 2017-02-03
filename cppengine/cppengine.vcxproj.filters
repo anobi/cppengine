@@ -34,6 +34,15 @@
     <ClCompile Include="..\src\Shader.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\lib\imgui.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lib\imgui_draw.cpp">
+      <Filter>src\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BoxCollider.hpp">
@@ -85,6 +94,30 @@
       <Filter>src\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\Types.hpp">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\imgui\imconfig.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\imconfig.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\imgui.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\imgui_impl_sdl_gl3.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\imgui_internal.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\stb_rect_pack.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\stb_textedit.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lib\stb_truetype.h">
       <Filter>src\lib</Filter>
     </ClInclude>
   </ItemGroup>

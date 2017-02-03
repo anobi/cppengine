@@ -22,7 +22,7 @@ typedef std::shared_ptr<Entity> EntityRef;
 class Entity {
 public:
 	Entity() {}
-	Entity(const std::string name){
+	Entity(const std::string name) {
 		this->mEntityName = name;
 	}
     ~Entity();
