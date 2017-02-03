@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "lib/imgui.h"
+#include "lib/imgui_internal.h"
 #include "lib/imgui_impl_sdl_gl3.h"
 
 #include "Game.hpp"
@@ -17,6 +18,8 @@ Game::Game()
 {
     gameState = GAMESTATE_STOPPED; 
 }
+
+int selected_entity = 0;
 
 bool Game::Init()
 {
@@ -98,7 +101,6 @@ void Game::Loop()
 
     while(gameState == GAMESTATE_RUNNING) 
 	{
-
 		ImGui_ImplSdlGL3_NewFrame(mDisplay.GetWindow());
 		
 		/*************************
@@ -169,57 +171,11 @@ void Game::Loop()
 			mRenderer.Render(entities[i]);
 		}
 
-
-		// Debug info window
-		ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
-
-		glm::fvec3 cPos = mRenderer.GetCamera()->GetPosition();
-
-		ImGui::Begin("Info");
-		ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-
-		// Entity debug window
-		ImGui::SetNextWindowPos(ImVec2(10, 100), ImGuiSetCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiSetCond_FirstUseEver);
-		ImGui::Begin("Entities");
-
-		ImGui::Columns(3);
-
-		ImGui::PushItemWidth(10);
-		ImGui::Text("Index");
-		ImGui::NextColumn();
-
-		ImGui::Text("Entity");
-		ImGui::NextColumn();
-
-		ImGui::Text("Position");
-		ImGui::Separator();
-		ImGui::NextColumn();
-
-		for (int i = 0; i < numEntities; i++) {
-			EntityRef e = entities[i];
-			glm::fvec3 pos = e->GetTransform().GetPosition();
-
-			ImGui::PushItemWidth(10);
-			ImGui::Text("%d", i);
-			ImGui::NextColumn();
-
-			ImGui::PushItemWidth(100);
-			ImGui::Text("%s", e->GetName().c_str());
-			ImGui::NextColumn();
-
-			ImGui::PushItemWidth(200);
-			ImGui::Text("x: %.2f y: %.2f z: %.2f)", pos.x, pos.y, pos.z);
-			ImGui::NextColumn();
-		}
-		ImGui::End();
-
-		//mDisplay.Update();
+		UpdateUI();
 		ImGui::Render();
-		SDL_GL_SwapWindow(mDisplay.GetWindow());
+
+		mDisplay.Update();
+		//SDL_GL_SwapWindow(mDisplay.GetWindow());
 
 		counter += 0.001f;
     }
@@ -267,6 +223,59 @@ EntityRef Game::GetEntity(const std::string name)
 		}
 	}
 	return entity;
+}
+
+static auto vector_getter = [](void* vec, int idx, const char** out_text)
+{
+	auto& vector = *static_cast<std::vector<std::string>*>(vec);
+	if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+	*out_text = vector.at(idx).c_str();
+	return true;
+};
+
+void Game::UpdateUI()
+{
+	glm::fvec3 cPos = mRenderer.GetCamera()->GetPosition();
+
+	std::vector<std::string> entity_list;	
+	
+	for (int i = 0; i < entities.size(); i++) 
+	{
+		EntityRef e = entities[i];
+		glm::fvec3 pos = e->GetTransform().GetPosition();
+
+		char buf[256];
+		sprintf_s(buf, 256, "%s", e->GetName().c_str(), pos.x, pos.y, pos.z);
+		entity_list.push_back(buf);
+	}
+
+	// Debug info window
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Info");
+	ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();
+
+	// Entity debug window
+	ImGui::SetNextWindowPos(ImVec2(10, 100), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Entities");
+
+	ImGui::PushItemWidth(-1);
+	ImGui::ListBox("##entities", &selected_entity, vector_getter, static_cast<void*>(&entity_list), entity_list.size());
+	ImGui::PopItemWidth();
+
+	glm::fvec3 e_pos = entities[selected_entity]->GetTransform().GetPosition();
+	ImGui::Text("Location x: %.2f y: %.2f z:%.2f", e_pos.x, e_pos.y, e_pos.z);
+
+	ImGui::SliderFloat("X", &e_pos.x, -100, 100);
+	ImGui::SliderFloat("Y", &e_pos.y, -100, 100);
+	ImGui::SliderFloat("Z", &e_pos.z, -100, 100);
+
+	entities[selected_entity]->GetTransform().SetPosition(e_pos);
+
+	ImGui::End();
 }
 
 void Game::ConstructScene() 

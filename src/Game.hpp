@@ -44,6 +44,7 @@ private:
 	Renderer mRenderer;
 	std::vector<EntityRef> entities;
 
+	void UpdateUI();
 	void ConstructScene();
 
 	bool menu = false;
