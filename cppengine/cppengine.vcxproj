@@ -149,6 +149,8 @@
     <None Include="..\.gitignore" />
     <None Include="..\bin\shaders\default.frag" />
     <None Include="..\bin\shaders\default.vert" />
+    <None Include="..\shaders\noise.frag" />
+    <None Include="..\shaders\noise.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BoxCollider.cpp" />

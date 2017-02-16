@@ -76,6 +76,7 @@ void Game::Start()
 	//Init everything
     if(Init())
 	{
+		mRenderer.UpdateResolution(mDisplay.GetWidth(), mDisplay.GetHeight());
 		//Build the scene, a temp solution
 		ConstructScene();
 
@@ -96,6 +97,7 @@ void Game::Loop()
     using std::chrono::duration_cast;
     using std::chrono::milliseconds;
 
+	float ticks = 0;
 	float counter = 0.0f;
 	SDL_Event event;
 
@@ -106,6 +108,8 @@ void Game::Loop()
 		/*************************
 		* Update clock and so on *
 		**************************/
+		mRenderer.UpdateTick(ticks);
+
         auto loop_start = high_resolution_clock::now();
 		auto loop_end = high_resolution_clock::now();
         auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
@@ -146,6 +150,7 @@ void Game::Loop()
 				{
 					case SDL_WINDOWEVENT_RESIZED:
 						mDisplay.SetResolution(event.window.data1, event.window.data2, true);
+						mRenderer.UpdateResolution(mDisplay.GetWidth(), mDisplay.GetHeight());
 						mRenderer.GetCamera()->SetAspectRatio(45.0f, mDisplay.GetAspectRatio());
 						break;
 				}
@@ -178,6 +183,7 @@ void Game::Loop()
 		//SDL_GL_SwapWindow(mDisplay.GetWindow());
 
 		counter += 0.001f;
+		ticks += 1;
     }
 
     Shutdown();
@@ -301,9 +307,8 @@ void Game::ConstructScene()
 
 	room->GetTransform().SetScale(glm::fvec3(1.0f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
-	roomMat->SetAlbedoMap("res/bricks2.jpg");
-	roomMat->SetNormalMap("res/bricks2_normal.jpg");
-	roomMat->SetHeightMap("res/bricks2_disp.jpg");
+	roomMat->SetAlbedoMap("res/Rock.Wall.000.png");
+	roomMat->SetNormalMap("res/Rock.Wall.Normal.png");
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Shader>("default"));
@@ -318,7 +323,6 @@ void Game::ConstructScene()
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
 	barrelMat->SetAlbedoMap("res/Barrel.png");
 	barrelMat->SetNormalMap("res/Barrel.Normal.png");
-	barrelMat->SetHeightMap("res/Barrel.Disp.png");
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));
