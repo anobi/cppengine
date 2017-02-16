@@ -129,6 +129,12 @@
     <None Include="..\bin\shaders\default.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\shaders\noise.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\noise.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shaders">
