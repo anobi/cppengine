@@ -91,12 +91,12 @@ vec3 pointLight(int index, vec2 texCoords, vec3 viewDir) {
 
 vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parallaxHeight) {
 
-	const float minLayers = 10;
-	const float maxLayers = 15;
+	const float minLayers = 10f;
+	const float maxLayers = 15f;
 	float layers = mix(maxLayers, minLayers, abs(dot(vec3(0, 0, 1), viewDir)));
 
 	float layerHeight = 1.0f / layers;
-	float currentLayerHeight = 0;
+	float currentLayerHeight = 0f;
 	vec2 dTexCoords = scale * viewDir.xy / viewDir.z / layers;
 
 	vec2 currentTexCoords = texCoords;
@@ -134,9 +134,11 @@ void main(void) {
 	vec4 light = vec4(0.0f);
 	vec3 viewDir = vs_in.tViewDir;
 
-	float parallaxHeight;
+	vec2 texCoords = vs_in.texCoords;
+
+	//float parallaxHeight = 1.0f;
     //vec2 texCoords = parallaxMapping(vs_in.texCoords, viewDir, 0.1f, parallaxHeight);
-	vec2 texCoords = par(vs_in.texCoords, viewDir);
+	//vec2 texCoords = par(vs_in.texCoords, viewDir);
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){

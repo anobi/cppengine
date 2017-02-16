@@ -6,13 +6,13 @@
 #include "lib/imgui_internal.h"
 #include "lib/imgui_impl_sdl_gl3.h"
 
-#include "Game.hpp"
-#include "Display.hpp"
-#include "Input.hpp"
-#include "Entity.hpp"
-#include "Shader.hpp"
-#include "Mesh.hpp"
-#include "Material.hpp"
+#include "game.hpp"
+#include "display.hpp"
+#include "input.hpp"
+#include "entity.hpp"
+#include "shader.hpp"
+#include "mesh.hpp"
+#include "material.hpp"
 
 Game::Game()
 {
@@ -251,7 +251,7 @@ void Game::UpdateUI()
 		glm::fvec3 pos = e->GetTransform().GetPosition();
 
 		char buf[256];
-		sprintf_s(buf, 256, "%s", e->GetName().c_str(), pos.x, pos.y, pos.z);
+		snprintf(buf, 256, "%s", e->GetName().c_str(), pos.x, pos.y, pos.z);
 		entity_list.push_back(buf);
 	}
 
@@ -309,6 +309,7 @@ void Game::ConstructScene()
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	roomMat->SetAlbedoMap("res/Rock.Wall.000.png");
 	roomMat->SetNormalMap("res/Rock.Wall.Normal.png");
+	roomMat->SetHeightMap("res/Rock.Wall.Normal.png");
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Shader>("default"));
@@ -323,6 +324,7 @@ void Game::ConstructScene()
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
 	barrelMat->SetAlbedoMap("res/Barrel.png");
 	barrelMat->SetNormalMap("res/Barrel.Normal.png");
+	barrelMat->SetHeightMap("res/Barrel.Normal.png");
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));
@@ -337,6 +339,7 @@ void Game::ConstructScene()
 	box->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(30.0f), 0.0f));
 	boxMat->SetAlbedoMap("res/Box.000.png");
 	boxMat->SetNormalMap("res/Box.Normal.png");
+	boxMat->SetHeightMap("res/Box.Normal.png");
 	boxMat->SetAlbedo(glm::fvec3(1.0f));
 	box->AddComponent(boxMat);
 	box->AddComponent(std::make_shared<Shader>("default"));
@@ -344,16 +347,11 @@ void Game::ConstructScene()
 
 	//Suzanne
 	EntityRef monkey = AddEntity(std::make_shared<Entity>("Monkey"));
-	std::shared_ptr<Material> monkeyMat = std::make_shared<Material>();
 
 	monkey->GetTransform().SetScale(glm::fvec3(1.0f));
 	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, 0.4f, 2.0f));
 	monkey->GetTransform().SetRotation(glm::fvec3(glm::radians(-38.0f), 0.0f, 0.0f));
-	monkeyMat->SetAlbedoMap("res/Stone.Floor.001.png");
-	//monkeyMat->SetNormalMap("res/Stone.Floor.Normal.png");
-	monkeyMat->SetAlbedo(glm::fvec3(1.0f));
-	monkey->AddComponent(monkeyMat);
-	monkey->AddComponent(std::make_shared<Shader>("default"));
+	monkey->AddComponent(std::make_shared<Shader>("noise"));
 	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
 
 

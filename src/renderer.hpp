@@ -4,10 +4,10 @@
 #include <vector>
 #include <memory>
 
-#include "Display.hpp"
-#include "Entity.hpp"
-#include "lib/Camera.hpp"
-#include "Light.hpp"
+#include "display.hpp"
+#include "entity.hpp"
+#include "camera.hpp"
+#include "light.hpp"
 
 class Renderer {
 public:

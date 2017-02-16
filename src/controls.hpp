@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <SDL2/SDL.h>
-#include "lib/Camera.hpp"
+#include "camera.hpp"
 
 class Controls {
 public:

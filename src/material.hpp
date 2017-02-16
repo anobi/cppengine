@@ -2,8 +2,8 @@
 #define MATERIAL_H
 
 #include <glm/glm.hpp>
-#include "lib/OpenGL.hpp"
-#include "EntityComponent.hpp"
+#include "opengl.hpp"
+#include "entitycomponent.hpp"
 
 class Material : public EntityComponent {
 

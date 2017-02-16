@@ -1,5 +1,5 @@
-#include "Entity.hpp"
-#include "EntityComponent.hpp"
+#include "entity.hpp"
+#include "entitycomponent.hpp"
 
 Entity::~Entity() {
 	for (unsigned int i = 0; i < mComponents.size(); i++) {

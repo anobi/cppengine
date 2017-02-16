@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "OpenGL.hpp"
+#include "opengl.hpp"
 
 typedef struct {
 	GLuint id;

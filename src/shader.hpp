@@ -8,9 +8,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "lib/OpenGL.hpp"
-#include "EntityComponent.hpp"
-#include "Renderer.hpp"
+#include "opengl.hpp"
+#include "entitycomponent.hpp"
+#include "renderer.hpp"
 
 class Shader : public EntityComponent {
 

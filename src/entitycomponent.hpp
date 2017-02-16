@@ -1,8 +1,8 @@
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
 
-#include "lib/Transform.hpp"
-#include "Entity.hpp"
+#include "transform.hpp"
+#include "entity.hpp"
 
 class EntityComponent {
 public:

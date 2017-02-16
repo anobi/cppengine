@@ -57,9 +57,6 @@ void main() {
 	vec3 N		= normalize(vec3(normalMatrix * normal));
 	mat3 TBN	= transpose(mat3(T, B, N));
 
-	vs_out.time			= Time;
-	vs_out.resolution	= Resolution;
-
 	vs_out.tbn			= TBN;
 	vs_out.texCoords	= texCoord;
 

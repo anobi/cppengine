@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Game.hpp"
-#include "Input.hpp"
+#include "game.hpp"
+#include "input.hpp"
 
 Game game;
 

@@ -1,7 +1,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "Shader.hpp"
+#include "shader.hpp"
 
 Shader::Shader(const std::string fileName) : EntityComponent() {
 

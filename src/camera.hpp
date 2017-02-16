@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/trigonometric.hpp>
 
-#include "Transform.hpp"
+#include "transform.hpp"
 
 class Camera {
 public:

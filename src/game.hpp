@@ -5,11 +5,11 @@
 #include <memory>
 #include <vector>
 
-#include "Display.hpp"
-#include "Input.hpp"
-#include "Controls.hpp"
-#include "Entity.hpp"
-#include "Renderer.hpp"
+#include "display.hpp"
+#include "input.hpp"
+#include "controls.hpp"
+#include "entity.hpp"
+#include "renderer.hpp"
 
 typedef enum gameState_t
 {

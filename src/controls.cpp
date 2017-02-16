@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Controls.hpp"
+#include "controls.hpp"
 
 
 void Controls::Update(SDL_Event &sdlEvent, std::shared_ptr<Camera> camera, const long deltaTime){

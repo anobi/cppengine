@@ -1,7 +1,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#include "Mesh.hpp"
+#include "mesh.hpp"
 
 Mesh::Mesh() : EntityComponent() {
 	this->SetName("Mesh");

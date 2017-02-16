@@ -1,4 +1,4 @@
-#include "Display.hpp"
+#include "display.hpp"
 
 #include <iostream>
 #include <math.h>
@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "lib/OpenGL.hpp"
+#include "opengl.hpp"
 
 bool Display::Init(const int w, const int h) {
 
