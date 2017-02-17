@@ -26,7 +26,7 @@ private:
 	static const unsigned int NUM_SHADERS = 2;
 	static const unsigned int NUM_UNIFORMS = 128;
 	static const unsigned int MAX_LIGHTS = 5;
-	static const unsigned int LIGHT_UNIFORM_OFFSET = 8;
+	static const unsigned int LIGHT_UNIFORM_OFFSET = 10;
 	static const unsigned int NUM_LIGHT_UNIFORMS = 6;
 
 	GLuint CreateShader(const std::string source, unsigned int type);

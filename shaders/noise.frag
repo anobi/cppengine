@@ -49,7 +49,7 @@ out vec4 fragColor;
 
 void main(void) {
 
-	vec2 texCoords = (vs_in.texCoords / Resolution) * Time;
+	vec2 texCoords = vs_in.texCoords;
 
 	float rand = fract(sin(dot(texCoords, vec2(12.9898f, 4.1414f))) * 43758.5453f);
 	vec3 color = vec3(rand);

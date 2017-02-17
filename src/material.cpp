@@ -8,6 +8,10 @@ Material::Material() : EntityComponent() {
 	mMetallic = glm::fvec3(0.0f);
 	mEmission = glm::fvec3(0.0f);
 	mSubsurface = glm::vec3(0.0f);
+
+	// Set default texture maps so we don't get any funky looking effects
+	this->SetHeightMap("Default.Height.png");
+	this->SetNormalMap("Default.Normal.png");
 }
 
 Material::~Material() {

@@ -33,9 +33,13 @@ layout (location = 3) in vec3 tangent;
 layout (location = 4) in vec3 bitangent;
 layout (location = 5) in vec2 texCoord;
 
+uniform int Time;
+uniform vec2 Resolution;
+
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
+uniform mat3 NormalMatrix;
 
 uniform vec3 CameraPosition;
 uniform Light Lights[numLights];
@@ -48,20 +52,17 @@ uniform sampler2D HeightMap;
 void main() {
 
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);
-
-	mat3 normalMatrix = transpose(inverse(mat3(ModelMatrix)));
-	vec3 T		= normalize(vec3(normalMatrix * tangent));
-	vec3 B		= normalize(vec3(normalMatrix * bitangent));
-	vec3 N		= normalize(vec3(normalMatrix * normal));
+	vec3 T		= vec3(NormalMatrix * tangent);
+	vec3 B		= vec3(NormalMatrix * bitangent);
+	vec3 N		= vec3(NormalMatrix * normal);
 	mat3 TBN	= transpose(mat3(T, B, N));
 
-	vs_out.tbn			= TBN;
 	vs_out.texCoords	= texCoord;
-
 	vs_out.fragPos		= vec3(ModelMatrix * vec4(position, 1.0f));
 	vs_out.viewPos		= CameraPosition;
-	vs_out.viewDir		= normalize(CameraPosition - position);
+	vs_out.viewDir		= CameraPosition - position;
 
+	vs_out.tbn			= TBN;
 	vs_out.tFragPos		= TBN * vs_out.fragPos;
 	vs_out.tViewPos		= TBN * vs_out.viewPos;
 	vs_out.tViewDir		= TBN * vs_out.viewDir;
@@ -70,5 +71,4 @@ void main() {
 		tLightPos[i] = TBN * Lights[i].position;
 		tLightDir[i] = TBN * (Lights[i].position - vs_out.fragPos);
 	}
-
 }

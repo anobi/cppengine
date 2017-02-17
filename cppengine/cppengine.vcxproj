@@ -147,53 +147,151 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
-    <None Include="..\bin\shaders\default.frag" />
-    <None Include="..\bin\shaders\default.vert" />
-    <None Include="..\shaders\noise.frag" />
-    <None Include="..\shaders\noise.vert" />
+    <None Include="..\res\Barrel.blend">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\res\room.mtl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\shaders\default.frag">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\shaders\default.vert">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\shaders\noise.frag">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\shaders\noise.vert">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\BoxCollider.cpp" />
-    <ClCompile Include="..\src\Controls.cpp" />
-    <ClCompile Include="..\src\Display.cpp" />
-    <ClCompile Include="..\src\Entity.cpp" />
+    <ClCompile Include="..\src\boxcollider.cpp" />
+    <ClCompile Include="..\src\controls.cpp" />
+    <ClCompile Include="..\src\display.cpp" />
+    <ClCompile Include="..\src\entity.cpp" />
+    <ClCompile Include="..\src\game.cpp" />
+    <ClCompile Include="..\src\input.cpp" />
     <ClCompile Include="..\src\lib\imgui.cpp" />
     <ClCompile Include="..\src\lib\imgui_draw.cpp" />
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp" />
-    <ClCompile Include="..\src\Material.cpp" />
-    <ClCompile Include="..\src\Mesh.cpp" />
-    <ClCompile Include="..\src\Shader.cpp" />
-    <ClCompile Include="..\src\Game.cpp" />
-    <ClCompile Include="..\src\Input.cpp" />
-    <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\Renderer.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\material.cpp" />
+    <ClCompile Include="..\src\mesh.cpp" />
+    <ClCompile Include="..\src\renderer.cpp" />
+    <ClCompile Include="..\src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\BoxCollider.hpp" />
-    <ClInclude Include="..\src\Controls.hpp" />
-    <ClInclude Include="..\src\EntityComponent.hpp" />
+    <ClInclude Include="..\src\boxcollider.hpp" />
+    <ClInclude Include="..\src\camera.hpp" />
+    <ClInclude Include="..\src\controls.hpp" />
+    <ClInclude Include="..\src\display.hpp" />
+    <ClInclude Include="..\src\entity.hpp" />
+    <ClInclude Include="..\src\entitycomponent.hpp" />
+    <ClInclude Include="..\src\game.hpp" />
+    <ClInclude Include="..\src\input.hpp" />
     <ClInclude Include="..\src\lib\imconfig.h" />
     <ClInclude Include="..\src\lib\imgui.h" />
-    <ClInclude Include="..\src\lib\imgui\imconfig.h" />
     <ClInclude Include="..\src\lib\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="..\src\lib\imgui_internal.h" />
+    <ClInclude Include="..\src\lib\stb_image.h" />
     <ClInclude Include="..\src\lib\stb_rect_pack.h" />
     <ClInclude Include="..\src\lib\stb_textedit.h" />
     <ClInclude Include="..\src\lib\stb_truetype.h" />
-    <ClInclude Include="..\src\lib\Types.hpp" />
-    <ClInclude Include="..\src\Light.hpp" />
-    <ClInclude Include="..\src\Material.hpp" />
-    <ClInclude Include="..\src\Mesh.hpp" />
-    <ClInclude Include="..\src\Shader.hpp" />
-    <ClInclude Include="..\src\lib\Camera.hpp" />
-    <ClInclude Include="..\src\Display.hpp" />
-    <ClInclude Include="..\src\Entity.hpp" />
-    <ClInclude Include="..\src\Game.hpp" />
-    <ClInclude Include="..\src\Input.hpp" />
-    <ClInclude Include="..\src\lib\stb_image.h" />
-    <ClInclude Include="..\src\lib\Transform.hpp" />
-    <ClInclude Include="..\src\lib\OpenGL.hpp" />
-    <ClInclude Include="..\src\Renderer.hpp" />
+    <ClInclude Include="..\src\light.hpp" />
+    <ClInclude Include="..\src\material.hpp" />
+    <ClInclude Include="..\src\mesh.hpp" />
+    <ClInclude Include="..\src\opengl.hpp" />
+    <ClInclude Include="..\src\renderer.hpp" />
+    <ClInclude Include="..\src\shader.hpp" />
+    <ClInclude Include="..\src\transform.hpp" />
+    <ClInclude Include="..\src\types.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\Barrel.Height.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Barrel.Normal.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Barrel.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Box.000.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Box.Height.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Box.Normal.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Rock.Wall.000.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Rock.Wall.Height.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Rock.Wall.Normal.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Stone.Floor.001.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Wood.000.tile.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\res\Wood.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\barrel.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\res\cube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\res\monkey3.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\res\room.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\res\uvcube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

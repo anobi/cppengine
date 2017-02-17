@@ -1,103 +1,183 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\src\BoxCollider.cpp">
+    <None Include="..\.gitignore" />
+    <None Include="..\shaders\default.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\default.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\noise.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\noise.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\res\Barrel.blend">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\room.mtl">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Barrel.Height.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Barrel.Normal.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\barrel.obj">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Barrel.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Box.000.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Box.Height.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Box.Normal.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\cube.obj">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\monkey3.obj">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Rock.Wall.000.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Rock.Wall.Height.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Rock.Wall.Normal.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\room.obj">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Stone.Floor.001.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\uvcube.obj">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Wood.000.tile.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\Wood.png">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{cd5da8e1-42db-46ca-adec-14f2f9a7fe6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2f42490d-0658-4d7a-8a28-03db98b2baf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib">
+      <UniqueIdentifier>{d47da01a-4afc-4f0d-9ed9-43fd8e74d8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{b06c4c40-411a-4242-a2b4-d3c2549e9d58}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\boxcollider.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Controls.cpp">
+    <ClCompile Include="..\src\controls.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Display.cpp">
+    <ClCompile Include="..\src\display.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Entity.cpp">
+    <ClCompile Include="..\src\entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
+    <ClCompile Include="..\src\game.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Input.cpp">
+    <ClCompile Include="..\src\input.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Main.cpp">
+    <ClCompile Include="..\src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Material.cpp">
+    <ClCompile Include="..\src\material.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Mesh.cpp">
+    <ClCompile Include="..\src\mesh.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Renderer.cpp">
+    <ClCompile Include="..\src\renderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Shader.cpp">
+    <ClCompile Include="..\src\shader.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lib\imgui.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
+    <ClCompile Include="..\src\lib\imgui_draw.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\lib\imgui_draw.cpp">
+    <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\BoxCollider.hpp">
+    <ClInclude Include="..\src\boxcollider.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Controls.hpp">
+    <ClInclude Include="..\src\camera.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Display.hpp">
+    <ClInclude Include="..\src\controls.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Entity.hpp">
+    <ClInclude Include="..\src\display.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\EntityComponent.hpp">
+    <ClInclude Include="..\src\entity.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Game.hpp">
+    <ClInclude Include="..\src\entitycomponent.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Input.hpp">
+    <ClInclude Include="..\src\game.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Light.hpp">
+    <ClInclude Include="..\src\input.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Material.hpp">
+    <ClInclude Include="..\src\light.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Mesh.hpp">
+    <ClInclude Include="..\src\material.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Renderer.hpp">
+    <ClInclude Include="..\src\mesh.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Shader.hpp">
+    <ClInclude Include="..\src\opengl.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\lib\stb_image.h">
-      <Filter>src\lib</Filter>
+    <ClInclude Include="..\src\renderer.hpp">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\lib\Camera.hpp">
-      <Filter>src\lib</Filter>
+    <ClInclude Include="..\src\shader.hpp">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\lib\OpenGL.hpp">
-      <Filter>src\lib</Filter>
+    <ClInclude Include="..\src\transform.hpp">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\lib\Transform.hpp">
-      <Filter>src\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\lib\Types.hpp">
-      <Filter>src\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\lib\imgui\imconfig.h">
-      <Filter>src\lib</Filter>
+    <ClInclude Include="..\src\types.hpp">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\imconfig.h">
       <Filter>src\lib</Filter>
@@ -111,6 +191,9 @@
     <ClInclude Include="..\src\lib\imgui_internal.h">
       <Filter>src\lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\lib\stb_image.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\lib\stb_rect_pack.h">
       <Filter>src\lib</Filter>
     </ClInclude>
@@ -120,31 +203,5 @@
     <ClInclude Include="..\src\lib\stb_truetype.h">
       <Filter>src\lib</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.gitignore" />
-    <None Include="..\bin\shaders\default.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\bin\shaders\default.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\shaders\noise.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\shaders\noise.vert">
-      <Filter>shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{cd5da8e1-42db-46ca-adec-14f2f9a7fe6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{2f42490d-0658-4d7a-8a28-03db98b2baf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\lib">
-      <UniqueIdentifier>{d47da01a-4afc-4f0d-9ed9-43fd8e74d8c3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

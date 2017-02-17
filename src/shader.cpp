@@ -31,19 +31,20 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	uniforms[0] = glGetUniformLocation(program, "ModelMatrix");
 	uniforms[1] = glGetUniformLocation(program, "ViewMatrix");
 	uniforms[2] = glGetUniformLocation(program, "ProjectionMatrix");
-	uniforms[3] = glGetUniformLocation(program, "Resolution");
-	uniforms[4] = glGetUniformLocation(program, "CameraPosition");
-	uniforms[5] = glGetUniformLocation(program, "Time");
+	uniforms[3] = glGetUniformLocation(program, "NormalMatrix");
+	uniforms[4] = glGetUniformLocation(program, "Resolution");
+	uniforms[5] = glGetUniformLocation(program, "CameraPosition");
+	uniforms[6] = glGetUniformLocation(program, "Time");
 
 	//Texture maps
-	uniforms[6] = glGetUniformLocation(program, "AlbedoMap");
-	uniforms[7] = glGetUniformLocation(program, "NormalMap");
-	uniforms[8] = glGetUniformLocation(program, "HeightMap");
-	uniforms[9] = glGetUniformLocation(program, "RoughnessMap");
-	uniforms[10] = glGetUniformLocation(program, "OcclusionMap");
-	uniforms[11] = glGetUniformLocation(program, "MetallicMap");
+	uniforms[7] = glGetUniformLocation(program, "AlbedoMap");
+	uniforms[8] = glGetUniformLocation(program, "NormalMap");
+	uniforms[9] = glGetUniformLocation(program, "HeightMap");
+	uniforms[10] = glGetUniformLocation(program, "RoughnessMap");
+	uniforms[11] = glGetUniformLocation(program, "OcclusionMap");
+	uniforms[12] = glGetUniformLocation(program, "MetallicMap");
 
-	uniforms[12] = glGetUniformLocation(program, "UseHeightMap");
+	uniforms[13] = glGetUniformLocation(program, "UseHeightMap");
 
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
@@ -103,18 +104,20 @@ void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
 	glm::fmat4 projection = renderer.GetCamera()->GetProjection();
 	glm::fvec2 resolution = renderer.GetResolution();
 	glm::fvec3 eyePos = renderer.GetCamera()->GetPosition();
+	glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
 
 	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(uniforms[2], 1, GL_FALSE, &projection[0][0]);
+	glUniformMatrix3fv(uniforms[3], 1, GL_FALSE, &normalMatrix[0][0]);
 
-	glUniform2fv(uniforms[3], 1, &resolution[0]);
-	glUniform3fv(uniforms[4], 1, &eyePos[0]);
+	glUniform2fv(uniforms[4], 1, &resolution[0]);
+	glUniform3fv(uniforms[5], 1, &eyePos[0]);
 
-	glUniform1i(uniforms[5], renderer.GetTick());
-	glUniform1i(uniforms[6], 0); //colormap
-	glUniform1i(uniforms[7], 1); //normal map
-	glUniform1i(uniforms[8], 2); //height map
+	glUniform1i(uniforms[6], renderer.GetTick());
+	glUniform1i(uniforms[7], 0); //colormap
+	glUniform1i(uniforms[8], 1); //normal map
+	glUniform1i(uniforms[9], 2); //height map
 
 	auto lights = renderer.GetLights();
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
@@ -190,7 +193,6 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 		}
         std::cerr << errorMessage << std::endl;
         std::cerr << "Shader error: " << errorMessage << std::endl;
-		return 0;
 	}
 
 	if (programError.size() > 1) {
@@ -198,7 +200,6 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 			errorMessage += c;
 		}
         std::cerr << "Program error: " << errorMessage << std::endl;
-		return 0;
 	}
 
 	return errorMessage;

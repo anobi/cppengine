@@ -324,7 +324,6 @@ void Game::ConstructScene()
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
 	barrelMat->SetAlbedoMap("res/Barrel.png");
 	barrelMat->SetNormalMap("res/Barrel.Normal.png");
-	barrelMat->SetHeightMap("res/Barrel.Height.png");
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));
@@ -339,7 +338,6 @@ void Game::ConstructScene()
 	box->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(30.0f), 0.0f));
 	boxMat->SetAlbedoMap("res/Box.000.png");
 	boxMat->SetNormalMap("res/Box.Normal.png");
-	boxMat->SetHeightMap("res/Box.Height.png");
 	boxMat->SetAlbedo(glm::fvec3(1.0f));
 	box->AddComponent(boxMat);
 	box->AddComponent(std::make_shared<Shader>("default"));
