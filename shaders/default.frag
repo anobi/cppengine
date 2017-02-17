@@ -91,25 +91,28 @@ vec3 pointLight(int index, vec2 texCoords, vec3 viewDir) {
 
 vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parallaxHeight) {
 
-	const float minLayers = 10f;
-	const float maxLayers = 15f;
-	float layers = mix(maxLayers, minLayers, abs(dot(vec3(0, 0, 1), viewDir)));
+	const float minLayers = 10.0f;
+	const float maxLayers = 15.0f;
+	float layers = mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
 
 	float layerHeight = 1.0f / layers;
-	float currentLayerHeight = 0f;
+	float currentLayerHeight = 0.0f;
 	vec2 dTexCoords = scale * viewDir.xy / viewDir.z / layers;
 
 	vec2 currentTexCoords = texCoords;
 	float heightFromTexture = texture(HeightMap, currentTexCoords).r;
+	float prevHeightFromTexture = 0.0f;
 
-	while(heightFromTexture > currentLayerHeight) {
+	while(currentLayerHeight < heightFromTexture
+		  && prevHeightFromTexture != heightFromTexture)
+	{
 		currentLayerHeight += layerHeight;
 		currentTexCoords -= dTexCoords;
+		prevHeightFromTexture = heightFromTexture;
 		heightFromTexture = texture(HeightMap, currentTexCoords).r;
 	}
 
 	vec2 prevTexCoords = currentTexCoords + dTexCoords;
-
 	float nextHeight = heightFromTexture - currentLayerHeight;
 	float prevHeight = texture(HeightMap, prevTexCoords).r - currentLayerHeight + layerHeight;
 
@@ -129,16 +132,16 @@ vec2 par(vec2 texCoords, vec3 viewDir)
     return texCoords - p;    
 }
 
-void main(void) {
-
+void main(void)
+{
 	vec4 light = vec4(0.0f);
 	vec3 viewDir = vs_in.tViewDir;
-
 	vec2 texCoords = vs_in.texCoords;
+	float parallaxHeight = 1.0f;
 
-	//float parallaxHeight = 1.0f;
-    //vec2 texCoords = parallaxMapping(vs_in.texCoords, viewDir, 0.1f, parallaxHeight);
-	//vec2 texCoords = par(vs_in.texCoords, viewDir);
+	// Problem seems to be calculating shit from vertex center, not from camera POV
+	// so per pixel view dir or improve tesselation?
+	//texCoords = parallaxMapping(texCoords, viewDir, 0.2f, parallaxHeight);
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++){

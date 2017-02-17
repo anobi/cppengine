@@ -9,8 +9,6 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 
 	program = glCreateProgram();
 
-	std::string shader = ReadFile(fileName + ".glsl");
-
 	shaders[0] = CreateShader(ReadFile(fileName + ".vert"), GL_VERTEX_SHADER);
 	shaders[1] = CreateShader(ReadFile(fileName + ".frag"), GL_FRAGMENT_SHADER);
 
@@ -192,6 +190,7 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 		}
         std::cerr << errorMessage << std::endl;
         std::cerr << "Shader error: " << errorMessage << std::endl;
+		return 0;
 	}
 
 	if (programError.size() > 1) {
@@ -199,6 +198,7 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 			errorMessage += c;
 		}
         std::cerr << "Program error: " << errorMessage << std::endl;
+		return 0;
 	}
 
 	return errorMessage;
