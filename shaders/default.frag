@@ -97,41 +97,38 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 	const float minLayers = 10.0f;
 	const float maxLayers = 20.0f;
 	float layers = mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
-	float layerHeight = 1.0f / layers;
-	float currentLayerHeight = 0.0f;
 
-	vec2 dTexCoords = scale * viewDir.xy / viewDir.z / layers;
-	vec2 currentTexCoords = texCoords;
-	float heightFromTexture = texture(HeightMap, currentTexCoords).r;
-	float prevHeightFromTexture = 0.0f;
+	float depth = 1.0f / layers;
+	float currentDepth = 0.0f;
 
-	while(currentLayerHeight < layerHeight
-		  && prevHeightFromTexture != heightFromTexture)
+	vec2 offset = texCoords;
+	float heightValue = texture(HeightMap, offset).r;
+
+	vec2 delta = scale * viewDir.xy / -viewDir.z / layers;
+
+	while(currentDepth < heightValue)
 	{
-		currentLayerHeight += layerHeight;
-		currentTexCoords -= dTexCoords;
-		prevHeightFromTexture = heightFromTexture;
-		heightFromTexture = texture(HeightMap, currentTexCoords).r;
+		currentDepth += depth;
+		offset -= delta;
+		heightValue = texture(HeightMap, offset).r;
 	}
-
-	vec2 prevTexCoords = currentTexCoords + dTexCoords;
-
-	float nextHeight = heightFromTexture - currentLayerHeight;
-	float prevHeight = texture(HeightMap, prevTexCoords).r - currentLayerHeight + layerHeight;
+	
+	vec2 prevTexCoords = offset + delta;
+	float nextHeight = heightValue - currentDepth;
+	float prevHeight = texture(HeightMap, prevTexCoords).r - currentDepth + depth;
 	float weight = nextHeight / (nextHeight - prevHeight);
+	vec2 finalTexCoords = prevTexCoords * weight + offset * (1.0f - weight);
 
-	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0f - weight);
+	parallaxHeight = currentDepth + prevHeight * weight + nextHeight * (1.0f - weight);
 
-	parallaxHeight = currentLayerHeight + prevHeight * weight + nextHeight * (1.0f - weight);
-
-    return finalTexCoords;  
+    return finalTexCoords;
 }
 
 vec2 par(vec2 texCoords, vec3 viewDir)
 { 
-    float height = texture(HeightMap, texCoords).r;
+    float height = texture(HeightMap, vs_in.texCoords).r;
     float p = height * 0.04f;
-    return texCoords + (viewDir.xy * p);    
+    return texCoords + viewDir.xy * p;    
 }
 
 void main(void)
@@ -141,10 +138,12 @@ void main(void)
 	vec2 texCoords = vs_in.texCoords;
 	float parallaxHeight = 1.0f;
 
-	// Problem seems to be calculating shit from vertex center, not from camera POV
-	// so per pixel view dir or improve tesselation?
-	texCoords = par(texCoords, viewDir);
-	//texCoords = parallaxMapping(texCoords, viewDir, 0.1f, parallaxHeight);
+	texCoords = parallaxMapping(texCoords, viewDir, 0.05f, parallaxHeight);
+
+	if(texCoords.x > 1.0f || texCoords.y > 1.0f || texCoords.x < 0.0f || texCoords.y < 0.0f)
+	{
+		//discard;
+	}
 
 	//light position translated to camera space
 	for(int i = 0; i < numLights; i++)
