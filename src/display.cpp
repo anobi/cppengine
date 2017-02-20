@@ -21,6 +21,7 @@ bool Display::Init(const int w, const int h) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	_window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height,
 							   SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
@@ -63,6 +64,7 @@ void Display::SetResolution(const int w, const int h, bool fullScreen){
 
 void Display::Shutdown() {
 	std::cout << "* Display\n";
+	SDL_GL_DeleteContext(_context);
 	SDL_DestroyWindow(_window);
 
     _context = NULL;

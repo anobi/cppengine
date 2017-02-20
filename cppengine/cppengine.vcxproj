@@ -187,6 +187,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\material.cpp" />
     <ClCompile Include="..\src\mesh.cpp" />
+    <ClCompile Include="..\src\model.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
   </ItemGroup>
@@ -210,6 +211,7 @@
     <ClInclude Include="..\src\light.hpp" />
     <ClInclude Include="..\src\material.hpp" />
     <ClInclude Include="..\src\mesh.hpp" />
+    <ClInclude Include="..\src\model.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\renderer.hpp" />
     <ClInclude Include="..\src\shader.hpp" />

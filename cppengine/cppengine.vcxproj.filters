@@ -129,6 +129,9 @@
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
       <Filter>src\lib</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\model.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\boxcollider.hpp">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="..\src\lib\stb_truetype.h">
       <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\model.hpp">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

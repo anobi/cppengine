@@ -11,7 +11,7 @@
 #include "input.hpp"
 #include "entity.hpp"
 #include "shader.hpp"
-#include "mesh.hpp"
+#include "model.hpp"
 #include "material.hpp"
 
 Game::Game()
@@ -164,6 +164,7 @@ void Game::Loop()
 		/*****************************
 		* Update entities and render *
 		******************************/
+
 		GetEntity("LightO")->GetTransform().SetPosition(glm::fvec3(glm::sin(counter * 50) * 5, 3.0f, glm::cos(counter * 50) * 5));
 
 		//TODO: figure out where to put this shit
@@ -242,6 +243,7 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 void Game::UpdateUI()
 {
 	glm::fvec3 cPos = mRenderer.GetCamera()->GetPosition();
+	glm::fvec3 cRot = mRenderer.GetCamera()->mTransform.GetRotation();
 
 	std::vector<std::string> entity_list;	
 	
@@ -260,6 +262,7 @@ void Game::UpdateUI()
 	ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin("Info");
 	ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
+	ImGui::Text("Player rotation x: %.2f y: %.2f z: %.2f", cRot.x, cRot.y, cRot.z);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();
 
@@ -294,7 +297,7 @@ void Game::ConstructScene()
 		100.0f))); //zFar
 
 	camera->mTransform.SetPosition(glm::fvec3(0.0f, 5.0f, 12.0f));
-	camera->mTransform.SetRotation(glm::fvec3(glm::radians(180.0f), glm::radians(-20.0f), 0.0f));
+	camera->LookAt(glm::fvec3(0.0f));
 	mRenderer.SetCamera(camera);
 
 	/*
@@ -313,7 +316,7 @@ void Game::ConstructScene()
 	roomMat->SetAlbedo(glm::fvec3(1.0f));
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Shader>("default"));
-	room->AddComponent(std::make_shared<Mesh>("res/room.obj"));
+	room->AddComponent(std::make_shared<Model>("res/room.obj"));
 
 	//Barrel
 	EntityRef barrel = AddEntity(std::make_shared<Entity>(Entity("Barrel")));
@@ -327,7 +330,7 @@ void Game::ConstructScene()
 	barrelMat->SetAlbedo(glm::fvec3(1.0f));
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));
-	barrel->AddComponent(std::make_shared<Mesh>("res/barrel.obj"));
+	barrel->AddComponent(std::make_shared<Model>("res/barrel.obj"));
 
 	//Box
 	EntityRef box = AddEntity(std::make_shared<Entity>("Box"));
@@ -341,7 +344,7 @@ void Game::ConstructScene()
 	boxMat->SetAlbedo(glm::fvec3(1.0f));
 	box->AddComponent(boxMat);
 	box->AddComponent(std::make_shared<Shader>("default"));
-	box->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
+	box->AddComponent(std::make_shared<Model>("res/uvcube.obj"));
 
 	//Suzanne
 	EntityRef monkey = AddEntity(std::make_shared<Entity>("Monkey"));
@@ -350,7 +353,7 @@ void Game::ConstructScene()
 	monkey->GetTransform().SetPosition(glm::fvec3(0.0f, 0.4f, 2.0f));
 	monkey->GetTransform().SetRotation(glm::fvec3(glm::radians(-38.0f), 0.0f, 0.0f));
 	monkey->AddComponent(std::make_shared<Shader>("noise"));
-	monkey->AddComponent(std::make_shared<Mesh>("res/monkey3.obj"));
+	monkey->AddComponent(std::make_shared<Model>("res/monkey3.obj"));
 
 
 	/*
@@ -365,7 +368,7 @@ void Game::ConstructScene()
 	//															color			   int    cut  radius
 	light->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.9f, 0.8f), 1.0f, 0.2f, 10.0f));
 	light->AddComponent(std::make_shared<Shader>("default"));
-	light->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
+	light->AddComponent(std::make_shared<Model>("res/uvcube.obj"));
 
 	//TODO: need to figure out how to automate adding lights to renderer
 	mRenderer.AddLight(light->GetComponent("PointLight"));
@@ -376,7 +379,7 @@ void Game::ConstructScene()
 	light2->GetTransform().SetScale(glm::fvec3(0.2f));
 	light2->AddComponent(std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 1.0f, 0.2f, 10.0));
 	light2->AddComponent(std::make_shared<Shader>("default"));
-	light2->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
+	light2->AddComponent(std::make_shared<Model>("res/uvcube.obj"));
 	mRenderer.AddLight(light2->GetComponent("PointLight"));
 
 	//awesome spinning FIRE BALL LIGHT YEAH
@@ -385,7 +388,6 @@ void Game::ConstructScene()
 	light3->GetTransform().SetScale(glm::fvec3(0.2f));
 	light3->AddComponent(std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 4.0f));
 	light3->AddComponent(std::make_shared<Shader>("default"));
-	light3->AddComponent(std::make_shared<Mesh>("res/uvcube.obj"));
+	light3->AddComponent(std::make_shared<Model>("res/uvcube.obj"));
 	mRenderer.AddLight(light3->GetComponent("PointLight"));
-
 }

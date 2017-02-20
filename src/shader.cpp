@@ -16,11 +16,11 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 		glAttachShader(program, shaders[i]);
 	}
 
-	glBindAttribLocation(program, 1, "position");
-	glBindAttribLocation(program, 2, "normal");
-	glBindAttribLocation(program, 3, "tangent");
-	glBindAttribLocation(program, 4, "bitangent");
-	glBindAttribLocation(program, 5, "texCoord");
+	glBindAttribLocation(program, 0, "position");
+	glBindAttribLocation(program, 1, "normal");
+	glBindAttribLocation(program, 2, "tangent");
+	glBindAttribLocation(program, 3, "bitangent");
+	glBindAttribLocation(program, 4, "texCoord");
 
 	glLinkProgram(program);
 	std::string lError = GetShaderStatus(program);

@@ -10,6 +10,7 @@ Material::Material() : EntityComponent() {
 	mSubsurface = glm::vec3(0.0f);
 
 	// Set default texture maps so we don't get any funky looking effects
+	this->SetAlbedoMap("default.png");
 	this->SetHeightMap("Default.Height.png");
 	this->SetNormalMap("Default.Normal.png");
 }
