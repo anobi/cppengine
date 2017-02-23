@@ -10,10 +10,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices) {
 
 Mesh::~Mesh() 
 {
-	/*
-	glDeleteBuffers(1, &this->VBO);
-	glDeleteVertexArrays(1, &this->VAO);
-	*/
+	//glDeleteBuffers(1, &this->VBO);
+	//glDeleteVertexArrays(1, &this->VAO);
 }
 
 void Mesh::SetupMesh() 

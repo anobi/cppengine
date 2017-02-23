@@ -209,5 +209,8 @@
     <ClInclude Include="..\src\model.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\frustum.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

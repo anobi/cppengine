@@ -198,6 +198,7 @@
     <ClInclude Include="..\src\display.hpp" />
     <ClInclude Include="..\src\entity.hpp" />
     <ClInclude Include="..\src\entitycomponent.hpp" />
+    <ClInclude Include="..\src\frustum.hpp" />
     <ClInclude Include="..\src\game.hpp" />
     <ClInclude Include="..\src\input.hpp" />
     <ClInclude Include="..\src\lib\imconfig.h" />

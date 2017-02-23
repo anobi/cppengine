@@ -27,7 +27,7 @@ Model::~Model()
 void Model::Render(Renderer &renderer) 
 {
 	for (int i = 0; i < this->meshes.size(); i++) {
-		this->meshes[i].Draw();
+		this->meshes[i]->Draw();
 	}
 }
 
@@ -35,8 +35,9 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		this->meshes.push_back(this->ProcessMesh(mesh));
+		aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
+		auto mesh = this->ProcessMesh(aiMesh);
+		meshes.push_back(mesh);
 	}
 
 	for (int i = 0; i < node->mNumChildren; i++)
@@ -45,7 +46,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh)
+std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -93,16 +94,16 @@ Mesh Model::ProcessMesh(aiMesh* mesh)
 	//indices
 	if (mesh->HasFaces()) 
 	{
-		for (unsigned int j = 0; j < mesh->mNumFaces; j++) 
+		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
 			const aiFace &face = mesh->mFaces[j];
 
-			for (unsigned int k = 0; k < face.mNumIndices; k++) 
+			for (unsigned int k = 0; k < face.mNumIndices; k++)
 			{
 				indices.push_back(face.mIndices[k]);
 			}
 		}
 	}
-	Mesh m = Mesh(vertices, indices);
+	auto m = std::make_shared<Mesh>(Mesh(vertices, indices));
 	return m;
 }

@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
+#include <memory>
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
@@ -18,10 +19,10 @@ class Model : public EntityComponent
 public:
 	Model(const std::string fileName);
 	~Model();
-	std::vector<Mesh> meshes;
+	std::vector<std::shared_ptr<Mesh>> meshes;
 	void Render(Renderer& renderer);
 private:
-	Mesh ProcessMesh(aiMesh* mesh);
+	std::shared_ptr<Mesh> ProcessMesh(aiMesh* mesh);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 };
 
