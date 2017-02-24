@@ -307,14 +307,11 @@ void Game::ConstructScene()
 	//Room
 	EntityRef room = AddEntity(std::make_shared<Entity>(Entity("Room")));
 	std::shared_ptr<Material> roomMat = std::make_shared<Material>();
-
 	room->GetTransform().SetScale(glm::fvec3(1.5f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	roomMat->SetAlbedoMap("res/Rock.Wall.000.png");
-	roomMat->SetNormalMap("res/Rock.Wall.Normal.png");
-	roomMat->SetHeightMap("res/Rock.Wall.Height.png");
-	roomMat->SetAlbedo(glm::fvec3(1.0f));
+
+	roomMat->LoadMap("res/Rock.Wall.000.png", DIFFUSE_MAP);
 	room->AddComponent(roomMat);
 	room->AddComponent(std::make_shared<Shader>("default"));
 	room->AddComponent(std::make_shared<Model>("res/sponza/sponza.obj"));
@@ -326,9 +323,7 @@ void Game::ConstructScene()
 	barrel->GetTransform().SetScale(glm::fvec3(1.0f));
 	barrel->GetTransform().SetPosition(glm::fvec3(-3.0f, 1.5f, 0.0f));
 	barrel->GetTransform().SetRotation(glm::fvec3(glm::radians(90.0f), 0.0f, 0.0f));
-	barrelMat->SetAlbedoMap("res/Barrel.png");
-	barrelMat->SetNormalMap("res/Barrel.Normal.png");
-	barrelMat->SetAlbedo(glm::fvec3(1.0f));
+
 	barrel->AddComponent(barrelMat);
 	barrel->AddComponent(std::make_shared<Shader>("default"));
 	barrel->AddComponent(std::make_shared<Model>("res/barrel.obj"));
@@ -340,9 +335,7 @@ void Game::ConstructScene()
 	box->GetTransform().SetScale(glm::fvec3(1.0f));
 	box->GetTransform().SetPosition(glm::fvec3(3.0f, 1.0f, -2.0f));
 	box->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(30.0f), 0.0f));
-	boxMat->SetAlbedoMap("res/Box.000.png");
-	boxMat->SetNormalMap("res/Box.Normal.png");
-	boxMat->SetAlbedo(glm::fvec3(1.0f));
+
 	box->AddComponent(boxMat);
 	box->AddComponent(std::make_shared<Shader>("default"));
 	box->AddComponent(std::make_shared<Model>("res/uvcube.obj"));

@@ -13,16 +13,20 @@
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
 #include "mesh.hpp"
+#include "material.hpp"
 
 class Model : public EntityComponent
 {
 public:
 	Model(const std::string fileName);
 	~Model();
-	std::vector<std::shared_ptr<Mesh>> meshes;
 	void Render(Renderer& renderer);
 private:
-	std::shared_ptr<Mesh> ProcessMesh(aiMesh* mesh);
+
+	std::vector<std::shared_ptr<Mesh>> meshes;
+	std::vector<std::shared_ptr<Material>> materials;
+
+	std::shared_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 };
 

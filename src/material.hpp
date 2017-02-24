@@ -2,10 +2,31 @@
 #define MATERIAL_H
 
 #include <glm/glm.hpp>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
 
-class Material : public EntityComponent {
+enum TextureType 
+{
+	NONE = 0,
+	DIFFUSE_MAP = 1,
+	SPECULAR_MAP = 2,
+	EMISSIVE_MAP = 4,
+	HEIGHT_MAP = 5,
+	NORMAL_MAP = 6
+};
+
+struct Texture
+{
+	TextureType type;
+	std::string textureFile;
+	GLuint textureMap;
+};
+
+class Material : public EntityComponent 
+{
 
 public:
 
@@ -14,65 +35,26 @@ public:
 
 	void Render(Renderer& renderer);
 
-	void SetAlbedo(const glm::fvec3 color) { this->mAlbedo = color; }
-	void SetMetallic(const glm::fvec3 metallic) { this->mMetallic = metallic; }
-	void SetRoughness(const float smoothness) { this->mRoughness = smoothness; }
-	void SetEmission(const glm::fvec3 emission) { this->mEmission = emission; }
-	void SetSubsurface(const glm::fvec3 subsurface) { this->mSubsurface = subsurface; }
-	void SetOcclusion(const glm::fvec3 occlusion) { this->mOcclusion = occlusion; }
-
-	void SetAlbedoMap(const std::string filename) { 
-		LoadMap(filename, mAlbedoMap); 
-		mUseAlbedoMap = true; 
-	}
-
-	void SetMetallicMap(const std::string filename) { 
-		LoadMap(filename, mMetallicMap); 
-		mUseNormalMap = true;
-	}
-
-	void SetNormalMap(const std::string filename) { 
-		LoadMap(filename, mNormalMap); 
-		mUseNormalMap = true;
-	}
-
-	void SetHeightMap(const std::string filename) { 
-		LoadMap(filename, mHeightMap);
-		mUseHeightMap = true;
-	}
-
-	void SetEmissionMap(const std::string filename) { LoadMap(filename, mEmissionMap); }
-	void SetSubsurfaceMap(const std::string filename) { LoadMap(filename, mSubsurfaceMap); }
-	void SetOcclusionMap(const std::string filename) { LoadMap(filename, mOcclusionMap); }
-	void SetRoughnessMap(const std::string filename) { LoadMap(filename, mRoughnessMap); }
+	void LoadMaps(aiMaterial* aiMaterial);
+	void LoadMap(const std::string filename, TextureType type);
 
 private:
 
-	void LoadMap(const std::string filename, GLuint & texture);
+	std::vector<Texture> textures;
 
-	//might aswell put all the PBR stuff in right away
+	bool useDiffuseMap;
+	bool useSpecularMap;
+	bool useNormalMap;
+	bool useHeightMap;
+	bool useEmissiveMap;
 
-	bool mUseAlbedoMap;
-	bool mUseMetallicMap;
-	bool mUseNormalMap;
-	bool mUseHeightMap;
-
-	float mRoughness;
+	float specularStrength;
+	float emissiveStrength;
+	float heightStrength;
 	
-	glm::fvec3 mAlbedo;
-	glm::fvec3 mMetallic;
-	glm::fvec3 mEmission;
-	glm::fvec3 mSubsurface;
-	glm::fvec3 mOcclusion;
-
-	GLuint mAlbedoMap;
-	GLuint mMetallicMap;
-	GLuint mNormalMap;
-	GLuint mHeightMap;
-	GLuint mRoughnessMap;
-	GLuint mEmissionMap;
-	GLuint mSubsurfaceMap;
-	GLuint mOcclusionMap;
+	glm::fvec3 diffuse;
+	glm::fvec3 specular;
+	glm::fvec3 emissive;
 
 protected:
 

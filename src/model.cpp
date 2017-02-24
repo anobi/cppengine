@@ -26,7 +26,8 @@ Model::~Model()
 
 void Model::Render(Renderer &renderer) 
 {
-	for (int i = 0; i < this->meshes.size(); i++) {
+	for (int i = 0; i < this->meshes.size(); i++) 
+	{
 		this->meshes[i]->Draw();
 	}
 }
@@ -36,7 +37,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-		auto mesh = this->ProcessMesh(aiMesh);
+		auto mesh = this->ProcessMesh(aiMesh, scene);
 		meshes.push_back(mesh);
 	}
 
@@ -46,7 +47,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh)
+std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -104,6 +105,16 @@ std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh)
 			}
 		}
 	}
+
+	if (mesh->mMaterialIndex >= 0) 
+	{
+		aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
+		std::shared_ptr<Material> material = std::make_shared<Material>();
+
+		material->LoadMaps(aiMat);
+		materials.push_back(material);
+	}
+
 	auto m = std::make_shared<Mesh>(Mesh(vertices, indices));
 	return m;
 }
