@@ -11,6 +11,8 @@ Renderer::~Renderer()
 
 bool Renderer::Init()
 {
+	std::shared_ptr<Shader> defaultShader = std::make_shared<Shader>(Shader("default"));
+	this->AddShader(defaultShader);
 	return true;
 }
 
@@ -40,9 +42,10 @@ void Renderer::Render()
 	for(int i = 0; i < models.size(); i++)
 	{
 		// Bind shader
-		models[i]->Render(this->currentShader);
+		currentShader->Bind();
 
-		//need to get modelview without projection
+		// Update uniforms
+
 		glm::fmat4 model = models[i]->GetTransform().GetModel();
 		glm::fmat4 view = this->GetCamera()->GetView();
 		glm::fmat4 projection = this->GetCamera()->GetProjection();
@@ -77,9 +80,9 @@ void Renderer::Render()
 
 			loc += 6; // Number of light uniforms
 		}
-		// Update uniforms
-		// Bind texture
+
 		// Render
+		models[i]->Render(this->currentShader);
 	}
 
 	// Post processing pass here?

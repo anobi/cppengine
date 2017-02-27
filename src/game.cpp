@@ -165,10 +165,8 @@ void Game::Loop()
 		* Update entities and render *
 		******************************/
 
-		/*
 		GetEntity("Fireball")->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, glm::cos(counter * 25) * 15));
 		GetEntity("Lightningball")->GetTransform().SetPosition(glm::fvec3(7.5f, 2.5f, glm::cos(counter * 10) * -15));
-		*/
 
 		//TODO: figure out where to put this shit
 		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
@@ -322,12 +320,26 @@ void Game::ConstructScene()
 
 	//cool background light
 	std::shared_ptr<Entity> light2 = std::make_shared<Entity>("Skylight");
-	light2->GetTransform().SetPosition(glm::fvec3(0.0f, 20.0f, 0.0f));
-	light2->GetTransform().SetScale(glm::fvec3(0.2f));
 	//															  R     G      B     int   fall  radius
 	std::shared_ptr<PointLight> pl2 = std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 0.2f, 0.4f, 20.0);
+	light2->GetTransform().SetPosition(glm::fvec3(0.0f, 20.0f, 0.0f));
 	light2->AddComponent(pl2);
 	AddEntity(light2);
 	mRenderer.AddLight(pl2);
+
+	//awesome spinning FIRE BALL LIGHT YEAH
+	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
+	std::shared_ptr<PointLight> pl3 = std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
+	light3->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
+	light3->AddComponent(pl3);
+	AddEntity(light3);
+	mRenderer.AddLight(pl3);
+
+	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
+	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
+	light4->GetTransform().SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
+	light4->AddComponent(pl4);
+	AddEntity(light4);
+	mRenderer.AddLight(pl4);
 
 }

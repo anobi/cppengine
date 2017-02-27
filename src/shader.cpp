@@ -37,17 +37,17 @@ Shader::Shader(const std::string fileName)
 	uniforms[6] = glGetUniformLocation(program, "Time");
 
 	//Texture maps
-	uniforms[7] = glGetUniformLocation(program, "material.diffuse");
-	uniforms[8] = glGetUniformLocation(program, "material.specular");
-	uniforms[9] = glGetUniformLocation(program, "material.normal");
-	uniforms[10] = glGetUniformLocation(program, "material.height");
-	uniforms[11] = glGetUniformLocation(program, "material.emissive");
+	uniforms[7] = glGetUniformLocation(program, "diffuseMap");
+	uniforms[8] = glGetUniformLocation(program, "specularMap");
+	uniforms[9] = glGetUniformLocation(program, "normalMap");
+	uniforms[10] = glGetUniformLocation(program, "heightMap");
+	uniforms[11] = glGetUniformLocation(program, "emissiveMap");
 
-	uniforms[13] = glGetUniformLocation(program, "material.useDiffuseMap");
-	uniforms[14] = glGetUniformLocation(program, "material.useSpecularMap");
-	uniforms[15] = glGetUniformLocation(program, "material.useHeightMap");
-	uniforms[16] = glGetUniformLocation(program, "material.useNormalMap");
-	uniforms[17] = glGetUniformLocation(program, "material.useEmissiveMap");
+	//uniforms[13] = glGetUniformLocation(program, "material.useDiffuseMap");
+	//uniforms[14] = glGetUniformLocation(program, "material.useSpecularMap");
+	//uniforms[15] = glGetUniformLocation(program, "material.useHeightMap");
+	//uniforms[16] = glGetUniformLocation(program, "material.useNormalMap");
+	//uniforms[17] = glGetUniformLocation(program, "material.useEmissiveMap");
 
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {

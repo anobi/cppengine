@@ -47,12 +47,6 @@ uniform Light Lights[numLights];
 out vec3 tLightPos[numLights];
 out vec3 tLightDir[numLights];
 
-uniform sampler2D material.diffuse;
-uniform sampler2D material.specular;
-uniform sampler2D material.normal;
-uniform sampler2D material.height;
-uniform sampler2D material.emissive;
-
 void main()
 {
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);

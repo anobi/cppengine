@@ -34,11 +34,11 @@ in vec3 tLightDir[numLights];
 uniform int Time;
 uniform vec2 Resolution;
 
-uniform sampler2D material.diffuse;
-uniform sampler2D material.specular;
-uniform sampler2D material.normal;
-uniform sampler2D material.height;
-uniform sampler2D material.emissive;
+uniform sampler2D diffuseMap;
+uniform sampler2D specularMap;
+uniform sampler2D normalMap;
+uniform sampler2D heightMap;
+uniform sampler2D emissiveMap;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -79,7 +79,7 @@ vec3 pointLight(int index, vec2 texCoords, vec3 viewDir) {
 	float dr = (max(d - light.radius, 0.0f) / light.radius) + 1.0f;
 	
 	vec3 L = normalize(tLightDir[index]);
-	vec3 N = normalize(texture(NormalMap, texCoords).xyz * 2.0f - 1.0f);
+	vec3 N = normalize(texture(normalMap, texCoords).xyz * 2.0f - 1.0f);
 
 	//attenuation
 	float attenuation = 1.0f / (dr * dr);
@@ -101,7 +101,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 	float currentDepth = 0.0f;
 
 	vec2 offset = texCoords;
-	float heightValue = texture(HeightMap, offset).r;
+	float heightValue = texture(heightMap, offset).r;
 
 	vec2 delta = scale * viewDir.xy / -viewDir.z / layers;
 
@@ -109,12 +109,12 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 	{
 		currentDepth += depth;
 		offset -= delta;
-		heightValue = texture(HeightMap, offset).r;
+		heightValue = texture(heightMap, offset).r;
 	}
 	
 	vec2 prevTexCoords = offset + delta;
 	float nextHeight = heightValue - currentDepth;
-	float prevHeight = texture(HeightMap, prevTexCoords).r - currentDepth + depth;
+	float prevHeight = texture(heightMap, prevTexCoords).r - currentDepth + depth;
 	float weight = nextHeight / (nextHeight - prevHeight);
 	vec2 finalTexCoords = prevTexCoords * weight + offset * (1.0f - weight);
 
@@ -125,19 +125,19 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 
 vec2 par(vec2 texCoords, vec3 viewDir)
 { 
-    float height = texture(HeightMap, vs_in.texCoords).r;
+    float height = texture(heightMap, vs_in.texCoords).r;
     float p = height * 0.04f;
     return texCoords + viewDir.xy * p;    
 }
 
 void main(void)
 {
-	vec4 light = vec4(0.0f);
+	vec4 light = vec4(0.2f);
 	vec3 viewDir = normalize(vs_in.tViewDir);
 	vec2 texCoords = vs_in.texCoords;
 	float parallaxHeight = 1.0f;
 
-	texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
+	//texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
 
 	if(texCoords.x > 1.0f || texCoords.y > 1.0f || texCoords.x < 0.0f || texCoords.y < 0.0f)
 	{
@@ -150,5 +150,5 @@ void main(void)
 		light += vec4(pointLight(i, texCoords, viewDir), 1.0f) * Lights[i].intensity;
 	}
 
-	fragColor = texture(AlbedoMap, texCoords) * light;
+	fragColor = texture(diffuseMap, texCoords) * light;
 }

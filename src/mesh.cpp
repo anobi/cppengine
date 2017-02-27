@@ -1,4 +1,3 @@
-
 #include "mesh.hpp"
 
 
@@ -53,7 +52,7 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 		glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string type = this->textures[i].type;
-		glUniform1i(glGetUniformLocation(shader->program, ("material." + type).c_str()), i);
+		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), i);
 		glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
 	}
 	glActiveTexture(GL_TEXTURE0);
