@@ -13,6 +13,7 @@
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
 #include "mesh.hpp"
+#include "shader.hpp"
 #include "material.hpp"
 
 class Model : public EntityComponent
@@ -20,7 +21,11 @@ class Model : public EntityComponent
 public:
 	Model(const std::string fileName);
 	~Model();
-	void Render(Renderer& renderer);
+
+	void Update() {};
+	void Render(Renderer &renderer) {};
+	void Render(std::shared_ptr<Shader> shader);
+	
 private:
 
 	std::vector<std::shared_ptr<Mesh>> meshes;

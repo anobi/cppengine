@@ -3,9 +3,9 @@
 
 #include "shader.hpp"
 
-Shader::Shader(const std::string fileName) : EntityComponent() {
-
-	this->SetName("Shader");
+Shader::Shader(const std::string fileName)
+{
+	this->name = fileName;
 
 	program = glCreateProgram();
 
@@ -37,14 +37,17 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	uniforms[6] = glGetUniformLocation(program, "Time");
 
 	//Texture maps
-	uniforms[7] = glGetUniformLocation(program, "AlbedoMap");
-	uniforms[8] = glGetUniformLocation(program, "NormalMap");
-	uniforms[9] = glGetUniformLocation(program, "HeightMap");
-	uniforms[10] = glGetUniformLocation(program, "RoughnessMap");
-	uniforms[11] = glGetUniformLocation(program, "OcclusionMap");
-	uniforms[12] = glGetUniformLocation(program, "MetallicMap");
+	uniforms[7] = glGetUniformLocation(program, "material.diffuse");
+	uniforms[8] = glGetUniformLocation(program, "material.specular");
+	uniforms[9] = glGetUniformLocation(program, "material.normal");
+	uniforms[10] = glGetUniformLocation(program, "material.height");
+	uniforms[11] = glGetUniformLocation(program, "material.emissive");
 
-	uniforms[13] = glGetUniformLocation(program, "UseHeightMap");
+	uniforms[13] = glGetUniformLocation(program, "material.useDiffuseMap");
+	uniforms[14] = glGetUniformLocation(program, "material.useSpecularMap");
+	uniforms[15] = glGetUniformLocation(program, "material.useHeightMap");
+	uniforms[16] = glGetUniformLocation(program, "material.useNormalMap");
+	uniforms[17] = glGetUniformLocation(program, "material.useEmissiveMap");
 
 	unsigned int loc = LIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
@@ -64,8 +67,10 @@ Shader::Shader(const std::string fileName) : EntityComponent() {
 	}
 }
 
-Shader::~Shader() {
-	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
+Shader::~Shader()
+{
+	for (unsigned int i = 0; i < NUM_SHADERS; i++)
+	{
 		glDetachShader(program, shaders[i]);
 		glDeleteShader(shaders[i]);
 	}
@@ -73,7 +78,8 @@ Shader::~Shader() {
 }
 
 
-GLuint Shader::CreateShader(const std::string source, unsigned int type) {
+GLuint Shader::CreateShader(const std::string source, unsigned int type)
+{
 	GLuint shader = glCreateShader(type);	
 	
 	const char* shaderSrc = source.c_str();
@@ -87,62 +93,17 @@ GLuint Shader::CreateShader(const std::string source, unsigned int type) {
 	return shader;
 }
 
-void Shader::Bind() {
+void Shader::Bind()
+{
 	glUseProgram(this->program);
-}
-
-void Shader::Render(Renderer & renderer) {
-	this->Bind();
-	this->UpdateUniforms(GetTransform(), renderer);
-}
-
-void Shader::UpdateUniforms(Transform &transform, Renderer &renderer) {
-
-	//need to get modelview without projection
-	glm::fmat4 model = transform.GetModel();
-	glm::fmat4 view = renderer.GetCamera()->GetView();
-	glm::fmat4 projection = renderer.GetCamera()->GetProjection();
-	glm::fvec2 resolution = renderer.GetResolution();
-	glm::fvec3 eyePos = renderer.GetCamera()->GetPosition();
-	glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
-
-	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &view[0][0]);
-	glUniformMatrix4fv(uniforms[2], 1, GL_FALSE, &projection[0][0]);
-	glUniformMatrix3fv(uniforms[3], 1, GL_FALSE, &normalMatrix[0][0]);
-
-	glUniform2fv(uniforms[4], 1, &resolution[0]);
-	glUniform3fv(uniforms[5], 1, &eyePos[0]);
-
-	glUniform1i(uniforms[6], renderer.GetTick());
-	glUniform1i(uniforms[7], 0); //colormap
-	glUniform1i(uniforms[8], 1); //normal map
-	glUniform1i(uniforms[9], 2); //height map
-
-	auto lights = renderer.GetLights();
-	unsigned int loc = LIGHT_UNIFORM_OFFSET;
-	for (unsigned int i = 0; i < lights.size() && i < MAX_LIGHTS; i++) {
-
-		std::shared_ptr<PointLight> light = std::dynamic_pointer_cast<PointLight>(lights[i]);
-		glm::fvec3 lPos = light->GetTransform().GetPosition();
-
-		glUniform3fv(uniforms[loc + 0], 1, &glm::fvec3(0.5f, 1.0f, -1.0f)[0]);
-		glUniform3fv(uniforms[loc + 1], 1, &lPos[0]);
-		glUniform3fv(uniforms[loc + 2], 1, &light->GetColor()[0]);
-		glUniform1f(uniforms[loc + 3], light->GetIntensity());
-		glUniform1f(uniforms[loc + 4], light->GetRadius());
-		glUniform1f(uniforms[loc + 5], light->GetCutoff());
-
-		loc += NUM_LIGHT_UNIFORMS;
-	}
 }
 
 /*
 ** Helpers
 **/
 
-std::string Shader::ReadFile(const std::string fileName) {
-
+std::string Shader::ReadFile(const std::string fileName)
+{
 	std::string filePath;
 
 	filePath = "shaders/" + fileName;

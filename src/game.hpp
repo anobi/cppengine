@@ -26,10 +26,9 @@ public:
 
 	gameState_t gameState;
 
-	EntityRef AddEntity(EntityRef entity);
-	EntityRef GetEntity(const std::string name);
-
-	std::vector<EntityRef> GetEntities();
+	void AddEntity(std::shared_ptr<Entity> entity);
+	std::shared_ptr<Entity> GetEntity(const std::string name);
+	std::vector<std::shared_ptr<Entity>> GetEntities();
 
 	bool Init();
 	void Start();
@@ -42,7 +41,7 @@ private:
 	Controls mControls;
 	Display mDisplay;
 	Renderer mRenderer;
-	std::vector<EntityRef> entities;
+	std::vector<std::shared_ptr<Entity>> entities;
 
 	void UpdateUI();
 	void ConstructScene();

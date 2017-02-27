@@ -25,11 +25,6 @@ Material::~Material()
 
 void Material::Render(Renderer & renderer) 
 {
-	for (int i = 0; i < textures.size(); i++) 
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, textures[i].textureMap);
-	}
 }
 
 void Material::LoadMaps(aiMaterial* aiMat) {
@@ -38,7 +33,11 @@ void Material::LoadMaps(aiMaterial* aiMat) {
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-		LoadMap(texFile.C_Str(), DIFFUSE_MAP);
+
+		char path[256];
+		snprintf(path, 256, "res/textures/%s", texFile.C_Str());
+
+		LoadMap(path, DIFFUSE_MAP);
 	}
 }
 
@@ -51,29 +50,37 @@ void Material::LoadMap(const std::string filename, TextureType type)
 	// then we can reuse old already loaded textures instead of creating duplicates
 	Texture texture;
 
-	texture.textureFile = filename;
-	glGenTextures(1, &texture.textureMap);
-	glBindTexture(GL_TEXTURE_2D, texture.textureMap);
+	texture.filename = filename;
+	glGenTextures(1, &texture.id);
+	glBindTexture(GL_TEXTURE_2D, texture.id);
 
-	this->textures.push_back(texture);
 
 	switch (type) 
 	{
 	case DIFFUSE_MAP:
+		texture.type = "diffuse";
 		break;
 	case SPECULAR_MAP:
+		texture.type = "specular";
 		useSpecularMap = true;
 		break;
 	case NORMAL_MAP:
+		texture.type = "normal";
 		useNormalMap = true;
 		break;
 	case HEIGHT_MAP:
+		texture.type = "height";
 		useHeightMap = true;
 		break;
 	case EMISSIVE_MAP:
+		texture.type = "emissive";
 		useEmissiveMap = true;
 		break;
+	default:
+		break;
 	}
+
+	this->textures.push_back(texture);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

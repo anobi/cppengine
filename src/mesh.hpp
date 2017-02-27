@@ -7,9 +7,11 @@
 
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
-#include "renderer.hpp"
+#include "material.hpp"
+#include "shader.hpp"
 
-struct Vertex {
+struct Vertex
+{
 	glm::fvec3 position;
 	glm::fvec3 normal;
 	glm::fvec3 tangent;
@@ -17,16 +19,18 @@ struct Vertex {
 	glm::fvec2 texCoords;
 };
 
-class Mesh{
+class Mesh
+{
 public:
 	GLuint VAO;
+	std::vector<Texture> textures;
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
 	~Mesh();
 
-	void Draw();
+	void Draw(std::shared_ptr<Shader> shader);
 
 private:
 	GLuint VBO;

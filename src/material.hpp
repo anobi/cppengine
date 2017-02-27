@@ -20,9 +20,9 @@ enum TextureType
 
 struct Texture
 {
-	TextureType type;
-	std::string textureFile;
-	GLuint textureMap;
+	std::string type;
+	std::string filename;
+	GLuint id;
 };
 
 class Material : public EntityComponent 
@@ -33,15 +33,13 @@ public:
 	Material();
 	~Material();
 
-	void Render(Renderer& renderer);
+	std::vector<Texture> textures;
 
+	void Render(Renderer& renderer);
 	void LoadMaps(aiMaterial* aiMaterial);
 	void LoadMap(const std::string filename, TextureType type);
 
 private:
-
-	std::vector<Texture> textures;
-
 	bool useDiffuseMap;
 	bool useSpecularMap;
 	bool useNormalMap;

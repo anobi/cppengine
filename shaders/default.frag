@@ -34,12 +34,11 @@ in vec3 tLightDir[numLights];
 uniform int Time;
 uniform vec2 Resolution;
 
-uniform sampler2D AlbedoMap;
-uniform sampler2D NormalMap;
-uniform sampler2D HeightMap;
-uniform sampler2D RoughnessMap;
-uniform sampler2D OcclusionMap;
-uniform sampler2D MetallicMap;
+uniform sampler2D material.diffuse;
+uniform sampler2D material.specular;
+uniform sampler2D material.normal;
+uniform sampler2D material.height;
+uniform sampler2D material.emissive;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -96,7 +95,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 {
 	const float minLayers = 10.0f;
 	const float maxLayers = 20.0f;
-	float layers = mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
+	float layers = 50.0f; //mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
 
 	float depth = 1.0f / layers;
 	float currentDepth = 0.0f;
@@ -106,7 +105,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 
 	vec2 delta = scale * viewDir.xy / -viewDir.z / layers;
 
-	while(currentDepth < heightValue)
+	while(heightValue > currentDepth)
 	{
 		currentDepth += depth;
 		offset -= delta;
@@ -138,7 +137,7 @@ void main(void)
 	vec2 texCoords = vs_in.texCoords;
 	float parallaxHeight = 1.0f;
 
-	texCoords = parallaxMapping(texCoords, viewDir, 0.05f, parallaxHeight);
+	texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
 
 	if(texCoords.x > 1.0f || texCoords.y > 1.0f || texCoords.x < 0.0f || texCoords.y < 0.0f)
 	{

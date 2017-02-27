@@ -16,9 +16,6 @@ class Camera;
 class EntityComponent;
 class Entity;
 
-typedef std::shared_ptr<EntityComponent> EntityComponentRef;
-typedef std::shared_ptr<Entity> EntityRef;
-
 class Entity {
 public:
 	Entity() {}
@@ -33,14 +30,14 @@ public:
 	void SetName(const std::string name) { this->mEntityName = name; };
 	const std::string GetName() const { return this->mEntityName; }
 
-	EntityComponentRef AddComponent(EntityComponentRef component);
-	EntityComponentRef GetComponent(const std::string componentName);
+	void AddComponent(std::shared_ptr<EntityComponent> component);
+	std::shared_ptr<EntityComponent> GetComponent(const std::string componentName);
 
 	Transform& GetTransform() { return mTransform; }
 
 private:
 	std::string mEntityName;
-	std::vector<EntityComponentRef> mComponents;
+	std::vector<std::shared_ptr<EntityComponent>> mComponents;
 	Transform mTransform;
 };
 

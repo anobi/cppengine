@@ -2,9 +2,10 @@
 #include "mesh.hpp"
 
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures) {
 	this->vertices = vertices;
 	this->indices = indices;
+	this->textures = textures;
 	this->SetupMesh();
 }
 
@@ -20,7 +21,6 @@ void Mesh::SetupMesh()
 	glBindVertexArray(this->VAO);
 	glGenBuffers(1, &this->VBO);
 	glGenBuffers(1, &this->EBO);
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * this->vertices.size(), &this->vertices[0], GL_STATIC_DRAW);
@@ -46,8 +46,18 @@ void Mesh::SetupMesh()
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw() 
+void Mesh::Draw(std::shared_ptr<Shader> shader) 
 {
+	for(int i = 0; i < this->textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+
+		std::string type = this->textures[i].type;
+		glUniform1i(glGetUniformLocation(shader->program, ("material." + type).c_str()), i);
+		glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
+	}
+	glActiveTexture(GL_TEXTURE0);
+
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
 	glBindVertexArray(0);

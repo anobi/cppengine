@@ -47,7 +47,11 @@ uniform Light Lights[numLights];
 out vec3 tLightPos[numLights];
 out vec3 tLightDir[numLights];
 
-uniform sampler2D HeightMap;
+uniform sampler2D material.diffuse;
+uniform sampler2D material.specular;
+uniform sampler2D material.normal;
+uniform sampler2D material.height;
+uniform sampler2D material.emissive;
 
 void main()
 {

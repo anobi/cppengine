@@ -9,33 +9,33 @@
 #include <glm/gtx/transform.hpp>
 
 #include "opengl.hpp"
-#include "entitycomponent.hpp"
-#include "renderer.hpp"
 
-class Shader : public EntityComponent {
+class Shader
+{
 
 public:
-	Shader(const std::string filename);
-	~Shader();
-
-	void Bind();
-	void UpdateUniforms(Transform &transform, Renderer &renderer);
-	void Render(Renderer& renderer);
-
-private:
 	static const unsigned int NUM_SHADERS = 2;
 	static const unsigned int NUM_UNIFORMS = 128;
 	static const unsigned int MAX_LIGHTS = 5;
-	static const unsigned int LIGHT_UNIFORM_OFFSET = 10;
+	static const unsigned int LIGHT_UNIFORM_OFFSET = 32;
 	static const unsigned int NUM_LIGHT_UNIFORMS = 6;
 
-	GLuint CreateShader(const std::string source, unsigned int type);
-	std::string ReadFile(const std::string filename);
-	std::string GetShaderStatus(GLuint program);
+	Shader(const std::string filename);
+	~Shader();
+
+	std::string name;
 
 	GLuint program;
 	GLuint shaders[NUM_SHADERS];
 	GLuint uniforms[NUM_UNIFORMS];
+
+	void Bind();
+
+private:
+	GLuint CreateShader(const std::string source, unsigned int type);
+	std::string ReadFile(const std::string filename);
+	std::string GetShaderStatus(GLuint program);
+
 };
 
 #endif

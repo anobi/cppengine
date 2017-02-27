@@ -15,14 +15,13 @@ void Entity::Render(Renderer &renderer){
 
 void Entity::Update(){}
 
-EntityComponentRef Entity::AddComponent(EntityComponentRef component) {
+void Entity::AddComponent(std::shared_ptr<EntityComponent> component) {
 	component->SetParent(this);
 	mComponents.push_back(component);
-	return mComponents.back();
 }
 
-EntityComponentRef Entity::GetComponent(const std::string name) {
-	EntityComponentRef component = nullptr;
+std::shared_ptr<EntityComponent> Entity::GetComponent(const std::string name) {
+	std::shared_ptr<EntityComponent> component = nullptr;
 	for (unsigned int i = 0; i < mComponents.size(); i++) {
 		if (mComponents[i]->GetName() == name) {
 			component = mComponents[i];
