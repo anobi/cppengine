@@ -221,26 +221,41 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 	int width, height, numComponents;
 	unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
 
+
 	// Should prolly be a reference that gets loaded to material's texture list
 	// then we can reuse old already loaded textures instead of creating duplicates
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
 	texture->filename = filename;
-	glGenTextures(1, &texture->id);
-	glBindTexture(GL_TEXTURE_2D, texture->id);
 
 	switch (type)
 	{
 	case DIFFUSE_MAP:
+		if(data == nullptr)
+		{
+			data = stbi_load("res/Default.Diffuse.png", &width, &height, &numComponents, 4);
+		}
 		texture->type = "diffuse";
 		break;
 	case SPECULAR_MAP:
+		if(data == nullptr)
+		{
+			data = stbi_load("res/Default.Specular.png", &width, &height, &numComponents, 4);
+		}
 		texture->type = "specular";
 		break;
 	case NORMAL_MAP:
+		if(data == nullptr)
+		{
+			data = stbi_load("res/Default.Normal.png", &width, &height, &numComponents, 4);
+		}
 		texture->type = "normal";
 		break;
 	case HEIGHT_MAP:
+		if(data == nullptr)
+		{
+			data = stbi_load("res/Default.Height.png", &width, &height, &numComponents, 4);
+		}
 		texture->type = "height";
 		break;
 	case EMISSIVE_MAP:
@@ -249,6 +264,9 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 	default:
 		break;
 	}
+
+	glGenTextures(1, &texture->id);
+	glBindTexture(GL_TEXTURE_2D, texture->id);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

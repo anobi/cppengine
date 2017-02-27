@@ -65,21 +65,30 @@ void Renderer::Render()
 		// Time
 		glUniform1i(this->currentShader->uniforms[6], this->GetTick());
 
-		// Lights
-		unsigned int loc = 32; // Light uniform offset
-		for (unsigned int i = 0; i < this->lights.size(); i++)
+		// Point Lights
+		unsigned int loc = 32; // PointLight uniform offset
+		for (unsigned int i = 0; i < this->pointLights.size(); i++)
 		{
-			std::shared_ptr<PointLight> light = std::dynamic_pointer_cast<PointLight>(this->lights[i]);
-			glm::fvec3 lPos = light->GetTransform().GetPosition();
+			glm::fvec3 lPos = pointLights[i]->GetTransform().GetPosition();
 
-			glUniform3fv(this->currentShader->uniforms[loc + 0], 1, &glm::fvec3(0.5f, 1.0f, -1.0f)[0]);
-			glUniform3fv(this->currentShader->uniforms[loc + 1], 1, &lPos[0]);
-			glUniform3fv(this->currentShader->uniforms[loc + 2], 1, &light->GetColor()[0]);
-			glUniform1f(this->currentShader->uniforms[loc + 3], light->GetIntensity());
-			glUniform1f(this->currentShader->uniforms[loc + 4], light->GetRadius());
-			glUniform1f(this->currentShader->uniforms[loc + 5], light->GetCutoff());
+			glUniform3fv(this->currentShader->uniforms[loc + 0], 1, &lPos[0]);
+			glUniform3fv(this->currentShader->uniforms[loc + 1], 1, &pointLights[i]->GetColor()[0]);
+			glUniform1f(this->currentShader->uniforms[loc + 2], pointLights[i]->GetIntensity());
+			glUniform1f(this->currentShader->uniforms[loc + 3], pointLights[i]->GetRadius());
+			glUniform1f(this->currentShader->uniforms[loc + 4], pointLights[i]->GetCutoff());
 
 			loc += 6; // Number of light uniforms
+		}
+
+		// Lights
+		unsigned int dloc = 64; // PointLight uniform offset
+		for (unsigned int i = 0; i < this->directionalLights.size(); i++)
+		{
+			glUniform3fv(this->currentShader->uniforms[dloc + 0], 1, &directionalLights[i]->GetTransform().GetPosition()[0]);
+			glUniform3fv(this->currentShader->uniforms[dloc + 1], 1, &directionalLights[i]->GetColor()[0]);
+			glUniform1f(this->currentShader->uniforms[dloc + 2], directionalLights[i]->GetIntensity());
+
+			dloc += 3; // Number of light uniforms
 		}
 
 		// Render

@@ -31,13 +31,15 @@ protected:
 	glm::fvec3 mColor;
 };
 
-class DirectionalLight : public Light {
+class DirectionalLight : public Light
+{
+public:
 	DirectionalLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
 	{
 		this->SetName("DirectionalLight");
 	};
 
-	~DirectionalLight();
+	~DirectionalLight() {};
 
 	glm::fvec3 direction;
 };

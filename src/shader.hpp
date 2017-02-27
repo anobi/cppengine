@@ -16,9 +16,14 @@ class Shader
 public:
 	static const unsigned int NUM_SHADERS = 2;
 	static const unsigned int NUM_UNIFORMS = 128;
-	static const unsigned int MAX_LIGHTS = 5;
-	static const unsigned int LIGHT_UNIFORM_OFFSET = 32;
-	static const unsigned int NUM_LIGHT_UNIFORMS = 6;
+
+	static const unsigned int MAX_POINTLIGHTS = 5;
+	static const unsigned int POINTLIGHT_UNIFORM_OFFSET = 32;
+	static const unsigned int POINTLIGHT_UNIFORMS = 5;
+
+	static const unsigned int MAX_DLIGHTS = 3;
+	static const unsigned int DLIGHT_UNIFORM_OFFSET = 64;
+	static const unsigned int DLIGHT_UNIFORMS = 3;
 
 	Shader(const std::string filename);
 	~Shader();

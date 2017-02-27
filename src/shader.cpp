@@ -49,21 +49,34 @@ Shader::Shader(const std::string fileName)
 	//uniforms[16] = glGetUniformLocation(program, "material.useNormalMap");
 	//uniforms[17] = glGetUniformLocation(program, "material.useEmissiveMap");
 
-	unsigned int loc = LIGHT_UNIFORM_OFFSET;
-	for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
-
-		std::stringstream light;
-		light << "Lights[" << i << "]";
+	unsigned int loc = POINTLIGHT_UNIFORM_OFFSET;
+	for (unsigned int i = 0; i < MAX_POINTLIGHTS; i++)
+	{
+		std::stringstream pointlight;
+		pointlight << "pointLights[" << i << "]";
 
 		//LOOKS BETTER ALIGNED LOL
-		uniforms[loc + 0] = glGetUniformLocation(program, (light.str() + ".direction").c_str());
-		uniforms[loc + 1] = glGetUniformLocation(program, (light.str() + ".position").c_str());
-		uniforms[loc + 2] = glGetUniformLocation(program, (light.str() + ".color").c_str());
-		uniforms[loc + 3] = glGetUniformLocation(program, (light.str() + ".intensity").c_str());
-		uniforms[loc + 4] = glGetUniformLocation(program, (light.str() + ".radius").c_str());
-		uniforms[loc + 5] = glGetUniformLocation(program, (light.str() + ".cutoff").c_str());
+		uniforms[loc + 0] = glGetUniformLocation(program, (pointlight.str() + ".position").c_str());
+		uniforms[loc + 1] = glGetUniformLocation(program, (pointlight.str() + ".color").c_str());
+		uniforms[loc + 2] = glGetUniformLocation(program, (pointlight.str() + ".intensity").c_str());
+		uniforms[loc + 3] = glGetUniformLocation(program, (pointlight.str() + ".radius").c_str());
+		uniforms[loc + 4] = glGetUniformLocation(program, (pointlight.str() + ".cutoff").c_str());
 
-		loc += NUM_LIGHT_UNIFORMS;
+		loc += POINTLIGHT_UNIFORMS;
+	}
+
+	unsigned int dloc = DLIGHT_UNIFORM_OFFSET;
+	for (unsigned int i = 0; i < MAX_DLIGHTS; i++)
+	{
+		std::stringstream directionalLight;
+		directionalLight << "directionalLights[" << i << "]";
+
+		//LOOKS BETTER ALIGNED LOL
+		uniforms[dloc + 0] = glGetUniformLocation(program, (directionalLight.str() + ".position").c_str());
+		uniforms[dloc + 1] = glGetUniformLocation(program, (directionalLight.str() + ".color").c_str());
+		uniforms[dloc + 2] = glGetUniformLocation(program, (directionalLight.str() + ".intensity").c_str());
+
+		dloc += DLIGHT_UNIFORMS;
 	}
 }
 

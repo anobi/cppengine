@@ -306,10 +306,10 @@ void Game::ConstructScene()
 
 	//Room
 	std::shared_ptr<Entity> room = std::make_shared<Entity>(Entity("Room"));
-	room->GetTransform().SetScale(glm::fvec3(0.01f));
+	room->GetTransform().SetScale(glm::fvec3(1.0f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/sponza.obj");
+	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/rungholt/rungholt.obj");
 	mRenderer.AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);
@@ -320,12 +320,10 @@ void Game::ConstructScene()
 
 	//cool background light
 	std::shared_ptr<Entity> light2 = std::make_shared<Entity>("Skylight");
-	//															  R     G      B     int   fall  radius
-	std::shared_ptr<PointLight> pl2 = std::make_shared<PointLight>(glm::fvec3(0.5f, 0.75f, 1.0f), 0.2f, 0.4f, 20.0);
-	light2->GetTransform().SetPosition(glm::fvec3(0.0f, 20.0f, 0.0f));
+	std::shared_ptr<DirectionalLight> pl2 = std::make_shared<DirectionalLight>(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
 	light2->AddComponent(pl2);
 	AddEntity(light2);
-	mRenderer.AddLight(pl2);
+	mRenderer.AddDirectionalLight(pl2);
 
 	//awesome spinning FIRE BALL LIGHT YEAH
 	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
@@ -333,13 +331,13 @@ void Game::ConstructScene()
 	light3->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
 	light3->AddComponent(pl3);
 	AddEntity(light3);
-	mRenderer.AddLight(pl3);
+	mRenderer.AddPointLight(pl3);
 
 	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
 	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
 	light4->GetTransform().SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
 	light4->AddComponent(pl4);
 	AddEntity(light4);
-	mRenderer.AddLight(pl4);
+	mRenderer.AddPointLight(pl4);
 
 }
