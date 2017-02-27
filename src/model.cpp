@@ -1,5 +1,8 @@
 #include "model.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION    
+#include "lib/stb_image.h"
+
 Model::Model(const std::string fileName) : EntityComponent() {
 
 	this->SetName("Mesh");
@@ -12,7 +15,8 @@ Model::Model(const std::string fileName) : EntityComponent() {
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_FlipUVs
 		| aiProcess_FixInfacingNormals
-		| aiProcess_CalcTangentSpace);
+		| aiProcess_CalcTangentSpace
+		| aiProcess_RemoveRedundantMaterials);
 
 	if (scene == NULL) return;
 
@@ -21,7 +25,10 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 Model::~Model()
 {
-
+	for (int i = 0; i < this->meshes.size(); i++)
+	{
+		this->meshes[i]->Cleanup();
+	}
 }
 
 void Model::Render(std::shared_ptr<Shader> shader) 
@@ -37,8 +44,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-		auto mesh = this->ProcessMesh(aiMesh, scene);
-		meshes.push_back(mesh);
+		this->ProcessMesh(aiMesh, scene);
 	}
 
 	for (int i = 0; i < node->mNumChildren; i++)
@@ -47,7 +53,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -93,7 +99,7 @@ std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	//indices
-	if (mesh->HasFaces()) 
+	if (mesh->HasFaces())
 	{
 		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
@@ -110,11 +116,148 @@ std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	if (mesh->mMaterialIndex >= 0) 
 	{
 		aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
+		aiString matName;
+		aiMat->Get(AI_MATKEY_NAME, matName);
 
-		material->LoadMaps(aiMat);
-		materials.push_back(material);
+		// Use already loaded materials from cache if possible
+		bool skip = false;
+		for (int i = 0; i < this->materials.size(); i++)
+		{
+			if (this->materials[i]->name == matName.C_Str())
+			{
+				material = materials[i];
+				skip = true;
+			}
+		}
+
+		// Material not in cache, load it
+		if (!skip) 
+		{
+			material = ProcessMaterials(aiMat);
+			materials.push_back(material);
+		}
 	}
 
-	auto m = std::make_shared<Mesh>(Mesh(vertices, indices, material->textures));
-	return m;
+	std::shared_ptr<Mesh> m = std::make_shared<Mesh>(Mesh(vertices, indices, material->textures));
+	meshes.push_back(m);
+}
+
+std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
+{
+	std::shared_ptr<Material> material = std::make_shared<Material>();
+
+	// Name the material so we can utilize the material cache
+	aiString matName;
+	aiMat->Get(AI_MATKEY_NAME, matName);
+	material->name = matName.C_Str();
+
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+	{
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
+	}
+
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
+	{
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));;
+	}
+
+	if (aiMat->GetTextureCount(aiTextureType_NORMALS) >= 0) {
+		for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_NORMALS); i++)
+		{
+			aiString texFile;
+			aiMat->GetTexture(aiTextureType_NORMALS, i, &texFile);
+			material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
+		}
+	}
+	else 
+	{
+		material->textures.push_back(LoadCachedTexture("Default.Normal.png"));
+	}
+
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
+	{
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
+	}
+
+	return material;
+}
+
+std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile)
+{
+	std::shared_ptr<Texture> texture;
+	bool skip = false;
+
+	char path[256];
+	snprintf(path, 256, "res/textures/%s", texFile.c_str());
+
+	for (int j = 0; j < materials.size(); j++)
+	{
+		for (int t = 0; t < materials[j]->textures.size(); t++)
+		{
+			if (materials[j]->textures[t]->filename == path)
+			{
+				texture = materials[j]->textures[t];
+				skip = true;
+			}
+		}
+	}
+
+	if (!skip)
+	{
+		texture = LoadTexture(path, DIFFUSE_MAP);
+	}
+
+	return texture;
+}
+
+std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureType type)
+{
+	int width, height, numComponents;
+	unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
+
+	// Should prolly be a reference that gets loaded to material's texture list
+	// then we can reuse old already loaded textures instead of creating duplicates
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+
+	texture->filename = filename;
+	glGenTextures(1, &texture->id);
+	glBindTexture(GL_TEXTURE_2D, texture->id);
+
+	switch (type)
+	{
+	case DIFFUSE_MAP:
+		texture->type = "diffuse";
+		break;
+	case SPECULAR_MAP:
+		texture->type = "specular";
+		break;
+	case NORMAL_MAP:
+		texture->type = "normal";
+		break;
+	case HEIGHT_MAP:
+		texture->type = "height";
+		break;
+	case EMISSIVE_MAP:
+		texture->type = "emissive";
+		break;
+	default:
+		break;
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
+
+	return texture;
 }

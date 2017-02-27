@@ -23,14 +23,15 @@ class Mesh
 {
 public:
 	GLuint VAO;
-	std::vector<Texture> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<std::shared_ptr<Texture>> textures);
 	~Mesh();
 
 	void Draw(std::shared_ptr<Shader> shader);
+	void Cleanup();
 
 private:
 	GLuint VBO;

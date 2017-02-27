@@ -51,11 +51,12 @@ float lambert(vec3 L, vec3 N) {
 	return max(dot(L, N), 0.0f);
 }
 
-vec3 specular(vec3 L, vec3 N, vec3 V) {
+vec3 specular(vec3 L, vec3 N, vec3 V) 
+{
 	vec3 value = vec3(0.0f);
 
-	if(max(dot(L, N), 0.0f) > 0.0f){
-
+	if(max(dot(L, N), 0.0f) > 0.0f)
+	{
 		//phong:
 		vec3 specularity = vec3(1.0f, 1.0f, 1.0f);
 		float specular_hardness = 32.0f;
@@ -95,7 +96,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 {
 	const float minLayers = 10.0f;
 	const float maxLayers = 20.0f;
-	float layers = 50.0f; //mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
+	float layers = 20.0f; //mix(maxLayers, minLayers, abs(dot(vec3(0.0f, 0.0f, 1.0f), viewDir)));
 
 	float depth = 1.0f / layers;
 	float currentDepth = 0.0f;

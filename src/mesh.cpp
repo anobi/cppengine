@@ -1,7 +1,8 @@
 #include "mesh.hpp"
 
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<std::shared_ptr<Texture>> textures)
+{
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
@@ -51,13 +52,19 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 
-		std::string type = this->textures[i].type;
+		std::string type = this->textures[i]->type;
 		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), i);
-		glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, this->textures[i]->id);
 	}
 	glActiveTexture(GL_TEXTURE0);
 
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
 	glBindVertexArray(0);
+}
+
+void Mesh::Cleanup()
+{
+	glDeleteBuffers(1, &this->VBO);
+	glDeleteVertexArrays(1, &this->VAO);
 }
