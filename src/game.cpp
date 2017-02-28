@@ -321,6 +321,7 @@ void Game::ConstructScene()
 	//cool background light
 	std::shared_ptr<Entity> light2 = std::make_shared<Entity>("Skylight");
 	std::shared_ptr<DirectionalLight> pl2 = std::make_shared<DirectionalLight>(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
+	light2->GetTransform().SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
 	light2->AddComponent(pl2);
 	AddEntity(light2);
 	mRenderer.AddDirectionalLight(pl2);

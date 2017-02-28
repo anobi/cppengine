@@ -53,41 +53,24 @@ uniform vec3 CameraPosition;
 uniform pointLight pointLights[numPLights];
 uniform directionalLight directionalLights[numDLights];
 
-out vec3 tPLightPos[numPLights];
-out vec3 tPLightDir[numPLights];
-out vec3 dLightDir[numDLights];
-out vec3 tDLightDir[numDLights];
+out vec3 PLightPos[numPLights];
+out vec3 DLightPos[numDLights];
 
 void main()
 {
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);
 
-	vec3 T		= normalize((ModelMatrix * vec4(tangent, 0.0f)).xyz);
-	vec3 N		= normalize((ModelMatrix * vec4(normal, 0.0f)).xyz);
-	T           = normalize(T - dot(T, N) * N);
-	vec3 B		= cross(T, N);
-	mat3 TBN	= transpose(mat3(T, B, N));
-
 	vs_out.texCoords	= texCoord;
-	vs_out.normal       = normal;
-	vs_out.fragPos		= vec3(ModelMatrix * vec4(position, 1.0f));
-	vs_out.viewPos		= CameraPosition;
-	vs_out.viewDir		= CameraPosition - position;
-
-	vs_out.tbn			= TBN;
-	vs_out.tFragPos		= TBN * vs_out.fragPos;
-	vs_out.tViewPos		= TBN * vs_out.viewPos;
-	vs_out.tViewDir		= vs_out.tViewPos - vs_out.tFragPos;
+	vs_out.normal       = mat3(transpose(inverse(ViewMatrix * ModelMatrix))) * normal;
+	vs_out.fragPos		= vec3(ViewMatrix * ModelMatrix * vec4(position, 1.0f));
 
 	for(int i = 0; i < numPLights; i++)
 	{
-		tPLightPos[i] = TBN * pointLights[i].position;
-		tPLightDir[i] = TBN * (pointLights[i].position - vs_out.fragPos);
+		PLightPos[i] = vec3(ViewMatrix * vec4(pointLights[i].position, 1.0));
 	}
 
 	for(int i = 0; i < numDLights; i++)
 	{
-		dLightDir[i] = directionalLights[i].position - vs_out.fragPos;
-		tDLightDir[i] = TBN * (directionalLights[i].position - vs_out.fragPos);
+		PLightPos[i] = vec3(ViewMatrix * vec4(directionalLights[i].position, 1.0));
 	}
 }
