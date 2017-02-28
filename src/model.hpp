@@ -34,7 +34,7 @@ private:
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	std::shared_ptr<Material> ProcessMaterials(aiMaterial* aiMat);
-	std::shared_ptr<Texture> LoadCachedTexture(const std::string texFile);
+	std::shared_ptr<Texture> LoadCachedTexture(const std::string texFile, TextureType type);
 	std::shared_ptr<Texture> LoadTexture(const std::string filename, TextureType type);
 };
 

@@ -172,11 +172,6 @@ void Game::Loop()
 		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		int numEntities = entities.size();
-		for (int i = 0; i < numEntities; i++) 
-		{
-		}
-
 		mRenderer.Render();
 
 		UpdateUI();
@@ -306,10 +301,10 @@ void Game::ConstructScene()
 
 	//Room
 	std::shared_ptr<Entity> room = std::make_shared<Entity>(Entity("Room"));
-	room->GetTransform().SetScale(glm::fvec3(1.0f));
+	room->GetTransform().SetScale(glm::fvec3(0.015f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/rungholt/rungholt.obj");
+	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/sponza/sponza.obj");
 	mRenderer.AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);

@@ -155,40 +155,41 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), DIFFUSE_MAP));
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));;
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP));;
 	}
 
-	if (aiMat->GetTextureCount(aiTextureType_NORMALS) >= 0) {
-		for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_NORMALS); i++)
-		{
-			aiString texFile;
-			aiMat->GetTexture(aiTextureType_NORMALS, i, &texFile);
-			material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
-		}
-	}
-	else 
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_NORMALS); i++)
 	{
-		material->textures.push_back(LoadCachedTexture("Default.Normal.png"));
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_NORMALS, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), NORMAL_MAP));
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str()));
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP));
+	}
+
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
+	{
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), ALPHA_MAP));
 	}
 
 	return material;
 }
 
-std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile)
+std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, TextureType type)
 {
 	std::shared_ptr<Texture> texture;
 	bool skip = false;
@@ -210,7 +211,7 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile)
 
 	if (!skip)
 	{
-		texture = LoadTexture(path, DIFFUSE_MAP);
+		texture = LoadTexture(path, type);
 	}
 
 	return texture;
@@ -219,44 +220,27 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile)
 std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureType type)
 {
 	int width, height, numComponents;
-	unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
-
-
-	// Should prolly be a reference that gets loaded to material's texture list
-	// then we can reuse old already loaded textures instead of creating duplicates
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
 
 	texture->filename = filename;
 
 	switch (type)
 	{
 	case DIFFUSE_MAP:
-		if(data == nullptr)
-		{
-			data = stbi_load("res/Default.Diffuse.png", &width, &height, &numComponents, 4);
-		}
 		texture->type = "diffuse";
 		break;
 	case SPECULAR_MAP:
-		if(data == nullptr)
-		{
-			data = stbi_load("res/Default.Specular.png", &width, &height, &numComponents, 4);
-		}
 		texture->type = "specular";
 		break;
 	case NORMAL_MAP:
-		if(data == nullptr)
-		{
-			data = stbi_load("res/Default.Normal.png", &width, &height, &numComponents, 4);
-		}
 		texture->type = "normal";
 		break;
 	case HEIGHT_MAP:
-		if(data == nullptr)
-		{
-			data = stbi_load("res/Default.Height.png", &width, &height, &numComponents, 4);
-		}
 		texture->type = "height";
+		break;
+	case ALPHA_MAP:
+		texture->type = "alpha";
 		break;
 	case EMISSIVE_MAP:
 		texture->type = "emissive";
@@ -272,7 +256,6 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);

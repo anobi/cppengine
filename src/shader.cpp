@@ -42,12 +42,14 @@ Shader::Shader(const std::string fileName)
 	uniforms[9] = glGetUniformLocation(program, "normalMap");
 	uniforms[10] = glGetUniformLocation(program, "heightMap");
 	uniforms[11] = glGetUniformLocation(program, "emissiveMap");
+	uniforms[12] = glGetUniformLocation(program, "alphaMap");
 
-	//uniforms[13] = glGetUniformLocation(program, "material.useDiffuseMap");
-	//uniforms[14] = glGetUniformLocation(program, "material.useSpecularMap");
-	//uniforms[15] = glGetUniformLocation(program, "material.useHeightMap");
-	//uniforms[16] = glGetUniformLocation(program, "material.useNormalMap");
-	//uniforms[17] = glGetUniformLocation(program, "material.useEmissiveMap");
+	uniforms[13] = glGetUniformLocation(program, "use_diffuseMap");
+	uniforms[14] = glGetUniformLocation(program, "use_specularMap");
+	uniforms[15] = glGetUniformLocation(program, "use_heightMap");
+	uniforms[16] = glGetUniformLocation(program, "use_normalMap");
+	uniforms[17] = glGetUniformLocation(program, "use_emissiveMap");
+	uniforms[18] = glGetUniformLocation(program, "use_alphaMap");
 
 	unsigned int loc = POINTLIGHT_UNIFORM_OFFSET;
 	for (unsigned int i = 0; i < MAX_POINTLIGHTS; i++)

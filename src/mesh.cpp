@@ -54,10 +54,11 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 
 		std::string type = this->textures[i]->type;
 		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), i);
+		glUniform1i(glGetUniformLocation(shader->program, ("use_" + type + "Map").c_str()), 1);
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]->id);
 	}
-	glActiveTexture(GL_TEXTURE0);
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
 	glBindVertexArray(0);

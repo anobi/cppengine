@@ -28,7 +28,6 @@ struct directionalLight {
 };
 
 struct pointLight {
-	vec3 direction;
 	vec3 position;
 	vec3 color;
 	float intensity;
@@ -60,6 +59,12 @@ void main()
 {
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);
 
+	vec3 T		= normalize((ModelMatrix * vec4(tangent, 0.0f)).xyz);
+	vec3 N		= normalize((ModelMatrix * vec4(normal, 0.0f)).xyz);
+	T           = normalize(T - dot(T, N) * N);
+	vec3 B		= cross(T, N);
+	mat3 TBN	= transpose(mat3(T, B, N));
+
 	vs_out.texCoords	= texCoord;
 	vs_out.normal       = mat3(transpose(inverse(ViewMatrix * ModelMatrix))) * normal;
 	vs_out.fragPos		= vec3(ViewMatrix * ModelMatrix * vec4(position, 1.0f));
@@ -71,6 +76,6 @@ void main()
 
 	for(int i = 0; i < numDLights; i++)
 	{
-		PLightPos[i] = vec3(ViewMatrix * vec4(directionalLights[i].position, 1.0));
+		DLightPos[i] = vec3(ViewMatrix * vec4(directionalLights[i].position, 1.0));
 	}
 }

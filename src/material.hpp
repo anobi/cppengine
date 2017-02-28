@@ -15,7 +15,8 @@ enum TextureType
 	SPECULAR_MAP = 2,
 	EMISSIVE_MAP = 4,
 	HEIGHT_MAP = 5,
-	NORMAL_MAP = 6
+	NORMAL_MAP = 6,
+	ALPHA_MAP = 7
 };
 
 struct Texture

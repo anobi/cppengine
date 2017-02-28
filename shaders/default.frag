@@ -22,7 +22,6 @@ in VertexOut {
 } vs_in;
 
 struct pointLight {
-	vec3 direction;
 	vec3 position;
 	vec3 color;
 	float intensity;
@@ -43,11 +42,19 @@ in vec3 DLightPos[numDLights];
 uniform int Time;
 uniform vec2 Resolution;
 
+uniform int use_diffuseMap;
+uniform int use_specularMap;
+uniform int use_normalMap;
+uniform int use_heightMap;
+uniform int use_emissiveMap;
+uniform int use_alphaMap;
+
 uniform sampler2D diffuseMap;
 uniform sampler2D specularMap;
 uniform sampler2D normalMap;
 uniform sampler2D heightMap;
 uniform sampler2D emissiveMap;
+uniform sampler2D alphaMap;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -66,12 +73,20 @@ vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir)
 {
 	vec3 value = vec3(0.0f);
 	vec3 specularity = vec3(1.0f, 1.0f, 1.0f);
-	float specular_hardness = 32.0f;
+	float specular_intensity = 1.0f;
+	float shininess = 32.0f;
 
-	vec3 reflect_dir = reflect(-light_dir, normal);
-	float spec = pow(max(dot(view_dir, reflect_dir), 0.0f), specular_hardness);
+	if(use_specularMap == 1)
+	{
+		shininess = texture(specularMap, vs_in.texCoords).r * 255.0f;
+	}
 
-	value = specularity * spec * vec3(texture(specularMap, vs_in.texCoords));
+	if(shininess < 255.0f)
+	{
+		vec3 reflect_dir = reflect(-light_dir, normal);
+		float spec = pow(max(dot(view_dir, reflect_dir), 0.0f), shininess);
+		value = specularity * spec;
+	}
 
 	return value;
 }
@@ -145,27 +160,58 @@ vec2 par(vec2 texCoords, vec3 viewDir)
 
 void main(void)
 {
-	vec4 light = vec4(0.2f);
+	vec3 light = vec3(0.2f);
 	vec3 viewDir = normalize(-vs_in.fragPos);
-	vec3 normal = normalize(vs_in.normal);
-	//vec3 normal = normalize((texture(normalMap, vs_in.texCoords).rgb) * 2.0f - 1.0f);
 	vec2 texCoords = vs_in.texCoords;
 
-	//float parallaxHeight = 1.0f;
-	//texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
 
+	//////////////////////
+	//   Texture Maps   //
+	//////////////////////
+
+	float alpha = 1.0f;
+	if(use_alphaMap == 1)
+	{
+		//alpha = texture(alphaMap, texCoords).r;
+	}
+
+	vec3 diffuse = vec3(0.8f, 0.8f, 0.8f);
+	if(use_diffuseMap == 1)
+	{
+		diffuse = texture(diffuseMap, texCoords).rgb;
+	}
+
+	vec3 normal = normalize(vs_in.normal);
+	if(use_normalMap == 1)
+	{
+		normal = normalize((texture(normalMap, vs_in.texCoords).rgb) * 2.0f - 1.0f);
+	}
+
+	if(use_heightMap == 1)
+	{
+		float parallaxHeight = 1.0f;
+		texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
+	}
+
+
+	//////////////////////
+	// Calculate lights //
+	//////////////////////
+
+	// Directional lights
 	for(int i = 0; i < numDLights; i++)
 	{
 		vec3 lightDir = normalize(DLightPos[i] - vs_in.fragPos);
-		light += vec4(addDirectionalLight(i, texCoords, lightDir, viewDir, normal), 0.0f);
+		light += vec3(addDirectionalLight(i, texCoords, lightDir, viewDir, normal));
 	}
 	
-	//light position translated to camera space
+	// Point lights
 	for(int i = 0; i < numPLights; i++)
 	{
 		vec3 lightDir = normalize(PLightPos[i] - vs_in.fragPos);
-		//light += vec4(addPointLight(i, texCoords, lightDir, viewDir), 1.0f) * pointLights[i].intensity;
+		light += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
 	}
 
-	fragColor = texture(diffuseMap, texCoords) * light;
+	fragColor.rgb = diffuse * light;
+	fragColor.a = alpha;
 }

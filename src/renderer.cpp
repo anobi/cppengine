@@ -77,7 +77,7 @@ void Renderer::Render()
 			glUniform1f(this->currentShader->uniforms[loc + 3], pointLights[i]->GetRadius());
 			glUniform1f(this->currentShader->uniforms[loc + 4], pointLights[i]->GetCutoff());
 
-			loc += 6; // Number of light uniforms
+			loc += 5; // Number of light uniforms
 		}
 
 		// Lights
