@@ -14,9 +14,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
 		| aiProcess_GenSmoothNormals
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_FlipUVs
-		| aiProcess_FixInfacingNormals
-		| aiProcess_CalcTangentSpace
-		| aiProcess_RemoveRedundantMaterials);
+		| aiProcess_CalcTangentSpace);
 
 	if (scene == NULL) return;
 

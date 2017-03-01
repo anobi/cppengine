@@ -172,7 +172,12 @@ void main(void)
 	float alpha = 1.0f;
 	if(use_alphaMap == 1)
 	{
-		//alpha = texture(alphaMap, texCoords).r;
+		alpha = texture(alphaMap, texCoords).r;
+
+		if(alpha < 0.8f)
+		{
+			discard;
+		}
 	}
 
 	vec3 diffuse = vec3(0.8f, 0.8f, 0.8f);

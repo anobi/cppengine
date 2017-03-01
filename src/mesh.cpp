@@ -62,6 +62,14 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
 	glBindVertexArray(0);
+
+	// Reset the texture map uniforms so they don't leak in to wrong meshes
+	for(int i = 0; i < this->textures.size(); i++)
+	{
+		std::string type = this->textures[i]->type;
+		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), 0);
+		glUniform1i(glGetUniformLocation(shader->program, ("use_" + type + "Map").c_str()), 0);
+	}
 }
 
 void Mesh::Cleanup()
