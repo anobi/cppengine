@@ -1,22 +1,16 @@
 #version 330 core
 
-const int numPLights = 5;
-const int numDLights = 3;
+const int numPLights = 2;
+const int numDLights = 1;
 
 in VertexOut {
 
 	vec2 texCoords;
-
 	vec3 normal;
 	
 	vec3 fragPos;
 	vec3 tFragPos;
-
-	vec3 viewPos;
-	vec3 viewDir;
-
 	vec3 tViewPos;
-	vec3 tViewDir;
 
 	mat3 tbn;
 } vs_in;
@@ -29,7 +23,7 @@ struct pointLight {
 	float cutoff;
 };
 uniform pointLight pointLights[numPLights];
-in vec3 PLightPos[numPLights];
+in vec3 tPLightPos[numPLights];
 
 struct directionalLight {
 	vec3 position;
@@ -37,7 +31,8 @@ struct directionalLight {
 	float intensity;
 };
 uniform directionalLight directionalLights[numDLights];
-in vec3 DLightPos[numDLights];
+in vec3 tDLightPos[numDLights];
+in vec3 tDLightDir[numDLights];
 
 uniform int Time;
 uniform vec2 Resolution;
@@ -106,7 +101,7 @@ vec3 addPointLight(int index, vec2 texCoords, vec3 lightDir, vec3 viewDir, vec3 
 	pointLight light = pointLights[index];
 
 	vec3 value = vec3(0.0f);
-	float d = distance(PLightPos[index], vs_in.fragPos);
+	float d = distance(tPLightPos[index], vs_in.tFragPos);
 	float dr = (max(d - light.radius, 0.0f) / light.radius) + 1.0f;
 
 	//attenuation
@@ -129,7 +124,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 	float currentDepth = 0.0f;
 
 	vec2 offset = texCoords;
-	float heightValue = texture(heightMap, offset).r;
+	float heightValue = texture(diffuseMap, offset).r;
 
 	vec2 delta = scale * viewDir.xy / -viewDir.z / layers;
 
@@ -137,12 +132,12 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 	{
 		currentDepth += depth;
 		offset -= delta;
-		heightValue = texture(heightMap, offset).r;
+		heightValue = texture(diffuseMap, offset).r;
 	}
 	
 	vec2 prevTexCoords = offset + delta;
 	float nextHeight = heightValue - currentDepth;
-	float prevHeight = texture(heightMap, prevTexCoords).r - currentDepth + depth;
+	float prevHeight = texture(diffuseMap, prevTexCoords).r - currentDepth + depth;
 	float weight = nextHeight / (nextHeight - prevHeight);
 	vec2 finalTexCoords = prevTexCoords * weight + offset * (1.0f - weight);
 
@@ -152,6 +147,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir, float scale, out float parall
 }
 
 vec2 par(vec2 texCoords, vec3 viewDir)
+
 { 
     float height = texture(heightMap, vs_in.texCoords).r;
     float p = height * 0.04f;
@@ -161,7 +157,7 @@ vec2 par(vec2 texCoords, vec3 viewDir)
 void main(void)
 {
 	vec3 light = vec3(0.2f);
-	vec3 viewDir = normalize(-vs_in.fragPos);
+	vec3 viewDir = normalize(vs_in.tViewPos - vs_in.tFragPos);
 	vec2 texCoords = vs_in.texCoords;
 
 
@@ -189,15 +185,15 @@ void main(void)
 	vec3 normal = normalize(vs_in.normal);
 	if(use_normalMap == 1)
 	{
-		normal = normalize((texture(normalMap, vs_in.texCoords).rgb) * 2.0f - 1.0f);
+		normal = normalize(texture(normalMap, vs_in.texCoords).rgb * 2.0f - 1.0f);
 	}
 
 	if(use_heightMap == 1)
 	{
-		float parallaxHeight = 1.0f;
-		texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
 	}
 
+	float parallaxHeight = 1.0f;
+	texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
 
 	//////////////////////
 	// Calculate lights //
@@ -206,14 +202,14 @@ void main(void)
 	// Directional lights
 	for(int i = 0; i < numDLights; i++)
 	{
-		vec3 lightDir = normalize(DLightPos[i] - vs_in.fragPos);
+		vec3 lightDir = normalize(tDLightPos[i]);
 		light += vec3(addDirectionalLight(i, texCoords, lightDir, viewDir, normal));
 	}
 	
 	// Point lights
 	for(int i = 0; i < numPLights; i++)
 	{
-		vec3 lightDir = normalize(PLightPos[i] - vs_in.fragPos);
+		vec3 lightDir = normalize(tPLightPos[i] - vs_in.tFragPos);
 		light += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
 	}
 

@@ -163,17 +163,17 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP));;
 	}
 
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_NORMALS); i++)
-	{
-		aiString texFile;
-		aiMat->GetTexture(aiTextureType_NORMALS, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), NORMAL_MAP));
-	}
-
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
+		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), NORMAL_MAP));
+	}
+
+	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DISPLACEMENT); i++)
+	{
+		aiString texFile;
+		aiMat->GetTexture(aiTextureType_DISPLACEMENT, i, &texFile);
 		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP));
 	}
 

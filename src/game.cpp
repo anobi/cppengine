@@ -304,7 +304,7 @@ void Game::ConstructScene()
 	room->GetTransform().SetScale(glm::fvec3(0.015f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/sponza/sponza.obj");
+	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/crytek-sponza/sponza.obj");
 	mRenderer.AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);
@@ -324,10 +324,14 @@ void Game::ConstructScene()
 	//awesome spinning FIRE BALL LIGHT YEAH
 	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
 	std::shared_ptr<PointLight> pl3 = std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
+	std::shared_ptr<Model> pl3model = std::make_shared<Model>("res/uvcube.obj");
 	light3->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
+	light3->GetTransform().SetScale(glm::fvec3(0.1f));
 	light3->AddComponent(pl3);
+	light3->AddComponent(pl3model);
 	AddEntity(light3);
 	mRenderer.AddPointLight(pl3);
+	mRenderer.AddModel(pl3model);
 
 	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
 	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
