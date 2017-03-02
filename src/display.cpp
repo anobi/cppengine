@@ -56,14 +56,14 @@ void Display::SetResolution(const int w, const int h, bool fullScreen){
 	displayMode.w = w;
 	displayMode.h = h;
 	SDL_SetWindowDisplayMode(_window, &displayMode);
-	SDL_GL_MakeCurrent(_window, _context);
+	//SDL_GL_MakeCurrent(_window, _context);
 
 	glViewport(0, 0, this->width, this->height);
 	resizing = false;
 }
 
-void Display::Shutdown() {
-	std::cout << "* Display\n";
+void Display::Shutdown()
+{
 	SDL_GL_DeleteContext(_context);
 	SDL_DestroyWindow(_window);
 

@@ -28,6 +28,13 @@ Shader::Shader(const std::string fileName)
 	glValidateProgram(program);
 	std::string vError = GetShaderStatus(program);
 
+	// Detach and clean up the shaders after linking them to the program
+	for (unsigned int i = 0; i < NUM_SHADERS; i++)
+	{
+		glDetachShader(program, shaders[i]);
+		glDeleteShader(shaders[i]);
+	}
+
 	uniforms[0] = glGetUniformLocation(program, "ModelMatrix");
 	uniforms[1] = glGetUniformLocation(program, "ViewMatrix");
 	uniforms[2] = glGetUniformLocation(program, "ProjectionMatrix");
@@ -84,11 +91,18 @@ Shader::Shader(const std::string fileName)
 
 Shader::~Shader()
 {
-	for (unsigned int i = 0; i < NUM_SHADERS; i++)
-	{
-		glDetachShader(program, shaders[i]);
-		glDeleteShader(shaders[i]);
-	}
+	//this->Cleanup();
+}
+
+void Shader::Cleanup()
+{
+	glUniform1i(glGetUniformLocation(program, "diffuseMap"), 0);
+	glUniform1i(glGetUniformLocation(program, "specularMap"), 0);
+	glUniform1i(glGetUniformLocation(program, "normalMap"), 0);
+	glUniform1i(glGetUniformLocation(program, "heightMap"), 0);
+	glUniform1i(glGetUniformLocation(program, "emissiveMap"), 0);
+	glUniform1i(glGetUniformLocation(program, "alphaMap"), 0);
+
 	glDeleteShader(program);
 }
 

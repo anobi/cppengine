@@ -156,7 +156,7 @@ vec2 par(vec2 texCoords, vec3 viewDir)
 
 void main(void)
 {
-	vec3 light = vec3(0.2f);
+	vec4 light = vec4(0.2f, 0.2f, 0.2f, 1.0f);
 	vec3 viewDir = normalize(vs_in.tViewPos - vs_in.tFragPos);
 	vec2 texCoords = vs_in.texCoords;
 
@@ -165,21 +165,16 @@ void main(void)
 	//   Texture Maps   //
 	//////////////////////
 
-	float alpha = 1.0f;
 	if(use_alphaMap == 1)
 	{
-		alpha = texture(alphaMap, texCoords).r;
-
-		if(alpha < 0.8f)
-		{
-			discard;
-		}
+		float value = texture(diffuseMap, texCoords).r;
+		if(value == 0) discard;
 	}
 
-	vec3 diffuse = vec3(0.8f, 0.8f, 0.8f);
+	vec4 diffuse = vec4(0.8f, 0.8f, 0.8f, 1.0);
 	if(use_diffuseMap == 1)
 	{
-		diffuse = texture(diffuseMap, texCoords).rgb;
+		diffuse = texture(diffuseMap, texCoords);
 	}
 
 	vec3 normal = normalize(vs_in.normal);
@@ -203,16 +198,15 @@ void main(void)
 	for(int i = 0; i < numDLights; i++)
 	{
 		vec3 lightDir = normalize(tDLightPos[i]);
-		light += vec3(addDirectionalLight(i, texCoords, lightDir, viewDir, normal));
+		light += vec4(addDirectionalLight(i, texCoords, lightDir, viewDir, normal), 0.0f);
 	}
 	
 	// Point lights
 	for(int i = 0; i < numPLights; i++)
 	{
 		vec3 lightDir = normalize(tPLightPos[i] - vs_in.tFragPos);
-		light += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
+		light += vec4(addPointLight(i, texCoords, lightDir, viewDir, normal), 0.0f) * pointLights[i].intensity;
 	}
 
-	fragColor.rgb = diffuse * light;
-	fragColor.a = alpha;
+	fragColor = diffuse * light;
 }

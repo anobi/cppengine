@@ -7,7 +7,18 @@ Renderer::Renderer()
 }
 Renderer::~Renderer()
 {
+}
 
+void Renderer::Shutdown()
+{
+	for(int i = 0; i < this->models.size(); i++)
+	{
+		this->models[i]->Cleanup();
+	}
+	for(int i = 0; i < this->shaders.size(); i++)
+	{
+		this->shaders[i]->Cleanup();
+	}
 }
 
 bool Renderer::Init()

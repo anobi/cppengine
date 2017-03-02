@@ -38,6 +38,7 @@ public:
 	std::string name;
 
 	void Render(Renderer& renderer);
+	void Cleanup();
 
 private:
 	bool useDiffuseMap;

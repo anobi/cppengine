@@ -35,6 +35,7 @@ public:
 	GLuint uniforms[NUM_UNIFORMS];
 
 	void Bind();
+	void Cleanup();
 
 private:
 	GLuint CreateShader(const std::string source, unsigned int type);

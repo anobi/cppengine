@@ -20,6 +20,14 @@ Material::~Material()
 	// and reuse if necessary
 }
 
+void Material::Cleanup()
+{
+	for(int i = 0; i < this->textures.size(); i++)
+	{
+		glDeleteTextures(1, &this->textures[i]->id);
+	}
+}
+
 void Material::Render(Renderer & renderer) 
 {
 }

@@ -43,6 +43,7 @@ void Mesh::SetupMesh()
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) offsetof(Vertex, texCoords));
 
+	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 }
 
@@ -58,10 +59,8 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]->id);
 	}
 
-	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
-	glBindVertexArray(0);
 
 	// Reset the texture map uniforms so they don't leak in to wrong meshes
 	for(int i = 0; i < this->textures.size(); i++)
@@ -70,10 +69,25 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), 0);
 		glUniform1i(glGetUniformLocation(shader->program, ("use_" + type + "Map").c_str()), 0);
 	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(0);
 }
 
 void Mesh::Cleanup()
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
+	for(int i = 0; i < this->textures.size(); i++)
+	{
+		glDeleteTextures(1, &this->textures[i]->id);
+	}
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
+	glDisableVertexAttribArray(4);
+
 	glDeleteBuffers(1, &this->VBO);
+	glDeleteBuffers(1, &this->EBO);
 	glDeleteVertexArrays(1, &this->VAO);
 }

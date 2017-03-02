@@ -23,9 +23,18 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 Model::~Model()
 {
+}
+
+void Model::Cleanup()
+{
 	for (int i = 0; i < this->meshes.size(); i++)
 	{
 		this->meshes[i]->Cleanup();
+	}
+
+	for (int i = 0; i < this->materials.size(); i++)
+	{
+		this->materials[i]->Cleanup();
 	}
 }
 

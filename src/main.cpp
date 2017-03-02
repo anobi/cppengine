@@ -1,3 +1,4 @@
+#include <iostream>
 #include "game.hpp"
 
 
@@ -21,6 +22,7 @@ int main() {
 	Game game;
 	game.Start();
 
-	return 0;
+	std::cout << "Exiting";
+	return EXIT_SUCCESS;
 }
 #endif

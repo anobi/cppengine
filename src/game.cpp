@@ -26,13 +26,13 @@ bool Game::Init()
     std::cout << "Initializing game...\n" ;
 
     //init stuff
-    std::cout << "* SDL: ";
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-        std::cout << "Error: %s\n", SDL_GetError();
-        return false;
-    } 
-	else std::cout << "done\n";
+    // std::cout << "* SDL: ";
+    // if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	// {
+    //     std::cout << "Error: %s\n", SDL_GetError();
+    //     return false;
+    // } 
+	// else std::cout << "done\n";
 
 	//Display
 	std::cout << "* Display: ";
@@ -191,7 +191,14 @@ void Game::Shutdown()
     std::cout << "Shutting down...\n";
 
 	ImGui::Shutdown();
+
+	std::cout << "* Input\n";
     mInput.Shutdown();
+
+	std::cout << "* Renderer\n";
+	mRenderer.Shutdown();
+
+	std::cout << "* Display\n";
 	mDisplay.Shutdown();
 
 	SDL_Quit();
@@ -301,7 +308,7 @@ void Game::ConstructScene()
 
 	//Room
 	std::shared_ptr<Entity> room = std::make_shared<Entity>(Entity("Room"));
-	room->GetTransform().SetScale(glm::fvec3(0.015f));
+	room->GetTransform().SetScale(glm::fvec3(0.02f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/crytek-sponza/sponza.obj");

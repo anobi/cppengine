@@ -23,6 +23,7 @@ public:
 	glm::fvec2 GetResolution() { return this->resolution; }
 
 	void Render();
+	void Shutdown();
 
 	inline void AddShader(std::shared_ptr<Shader> shader) { this->shaders.push_back(shader); }
 	inline void AddModel(std::shared_ptr<Model> model) { this->models.push_back(model); }

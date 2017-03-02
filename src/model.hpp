@@ -25,6 +25,7 @@ public:
 	void Update() {};
 	void Render(Renderer &renderer) {};
 	void Render(std::shared_ptr<Shader> shader);
+	void Cleanup();
 	
 private:
 
