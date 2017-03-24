@@ -1,13 +1,17 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <iostream>
-#include <vector>
-#include "opengl.hpp"
+#include <glm/glm.hpp>
 
-typedef struct {
-	GLuint id;
-	std::string type;
-} texture_t;
+struct boundingBox
+{
+	glm::fvec3 center;
+};
+
+struct boundingSphere
+{
+	float radius;
+	glm::fvec3 center;
+};
 
 #endif
