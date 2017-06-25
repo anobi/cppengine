@@ -47,6 +47,7 @@ private:
 	void ConstructScene();
 
 	bool menu = false;
+	bool debug_ui = true;
 };
 
 #endif
