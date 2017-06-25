@@ -103,7 +103,6 @@ void Game::Loop()
 
     while(gameState == GAMESTATE_RUNNING) 
 	{
-		ImGui_ImplSdlGL3_NewFrame(mDisplay.GetWindow());
 		
 		/*************************
 		* Update clock and so on *
@@ -136,10 +135,14 @@ void Game::Loop()
 						Quit();
 						break;
 
-					case SDLK_F1:
+					case SDLK_RALT:
 						menu = !menu;
 						SDL_ShowCursor(menu);
 						SDL_SetRelativeMouseMode((SDL_bool)!menu);
+						break;
+
+					case SDLK_F1:
+						debug_ui = !debug_ui;
 						break;
 				}
 			}
@@ -174,8 +177,12 @@ void Game::Loop()
 
 		mRenderer.Render();
 
-		UpdateUI();
-		ImGui::Render();
+		if (this->debug_ui)
+		{
+			ImGui_ImplSdlGL3_NewFrame(mDisplay.GetWindow());
+			UpdateUI();
+			ImGui::Render();
+		}
 
 		mDisplay.Update();
 
@@ -223,7 +230,8 @@ void Game::AddEntity(std::shared_ptr<Entity> entity)
 std::shared_ptr<Entity> Game::GetEntity(const std::string name) 
 {
 	std::shared_ptr<Entity> entity = NULL;
-	for (unsigned int i = 0; i < entities.size(); i++) 
+
+	for (unsigned int i = 0; i < entities.size(); i++)
 	{
 		if (entities[i]->GetName() == name) 
 		{
@@ -231,14 +239,21 @@ std::shared_ptr<Entity> Game::GetEntity(const std::string name)
 			break;
 		}
 	}
+
 	return entity;
 }
 
 static auto vector_getter = [](void* vec, int idx, const char** out_text)
 {
 	auto& vector = *static_cast<std::vector<std::string>*>(vec);
-	if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+
+	if (idx < 0 || idx >= static_cast<int>(vector.size())) 
+	{ 
+		return false; 
+	}
+
 	*out_text = vector.at(idx).c_str();
+
 	return true;
 };
 
