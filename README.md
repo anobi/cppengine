@@ -9,4 +9,6 @@ Completion ETA: about 20 years.
 * GLEW
 * SDL2
 * Assimp
-* GLM (included)
+* GLM
+
+![Screenshot](/screenshot/cppengine_1.png)
