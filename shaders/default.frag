@@ -167,8 +167,8 @@ void main(void)
 
 	if(use_alphaMap == 1)
 	{
-		float value = texture(diffuseMap, texCoords).r;
-		if(value == 0) discard;
+		float value = texture(alphaMap, texCoords).r;
+		if(value < 0.1f) discard;
 	}
 
 	vec4 diffuse = vec4(0.8f, 0.8f, 0.8f, 1.0);
