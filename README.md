@@ -11,4 +11,4 @@ Completion ETA: about 20 years.
 * Assimp
 * GLM
 
-![Screenshot](/screenshots/cppengine_1.png)
+![Screenshot](/screenshots/cppengine_1.jpg?raw=true)
