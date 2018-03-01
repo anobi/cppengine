@@ -23,10 +23,10 @@ Shader::Shader(const std::string fileName)
 	glBindAttribLocation(program, 4, "texCoord");
 
 	glLinkProgram(program);
-	std::string lError = GetShaderStatus(program);
+	GetShaderStatus(program);
 
 	glValidateProgram(program);
-	std::string vError = GetShaderStatus(program);
+	GetShaderStatus(program);
 
 	// Detach and clean up the shaders after linking them to the program
 	for (unsigned int i = 0; i < NUM_SHADERS; i++)
@@ -181,7 +181,6 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 		for (auto c : shaderError) {
 			errorMessage += c;
 		}
-        std::cerr << errorMessage << std::endl;
         std::cerr << "Shader error: " << errorMessage << std::endl;
 	}
 

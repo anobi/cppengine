@@ -23,6 +23,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 Model::~Model()
 {
+	this->Cleanup();
 }
 
 void Model::Cleanup()
@@ -111,7 +112,6 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
 			const aiFace &face = mesh->mFaces[j];
-
 			for (unsigned int k = 0; k < face.mNumIndices; k++)
 			{
 				indices.push_back(face.mIndices[k]);
@@ -158,39 +158,60 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	aiMat->Get(AI_MATKEY_NAME, matName);
 	material->name = matName.C_Str();
 
+	// TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), DIFFUSE_MAP));
+		auto texture = LoadCachedTexture(texFile.C_Str(), DIFFUSE_MAP);
+		if(texture)
+		{
+			material->textures.push_back(texture);
+		}
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP));;
+		auto texture = LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP);
+		if(texture)
+		{
+			material->textures.push_back(texture);
+		}
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), NORMAL_MAP));
+		auto texture = LoadCachedTexture(texFile.C_Str(), NORMAL_MAP);
+		if(texture)
+		{
+			material->textures.push_back(texture);
+		}
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DISPLACEMENT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DISPLACEMENT, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP));
+		auto texture = LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP);
+		if(texture)
+		{
+			material->textures.push_back(texture);
+		}
 	}
 
 	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
-		material->textures.push_back(LoadCachedTexture(texFile.C_Str(), ALPHA_MAP));
+		auto texture = LoadCachedTexture(texFile.C_Str(), ALPHA_MAP);
+		if(texture)
+		{
+			material->textures.push_back(texture);
+		}
 	}
 
 	return material;
@@ -200,7 +221,6 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
 {
 	std::shared_ptr<Texture> texture;
 	bool skip = false;
-
 	char path[256];
 	snprintf(path, 256, "res/textures/%s", texFile.c_str());
 
@@ -230,30 +250,37 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 	unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
 
+	if (!data)
+	{
+		// TODO: Load some ugly generated default texture that doesn't require any files?
+		std::cerr << "Unable to load texture:" << filename << std::endl;
+		return NULL;
+	}
+
 	texture->filename = filename;
 
 	switch (type)
 	{
-	case DIFFUSE_MAP:
-		texture->type = "diffuse";
-		break;
-	case SPECULAR_MAP:
-		texture->type = "specular";
-		break;
-	case NORMAL_MAP:
-		texture->type = "normal";
-		break;
-	case HEIGHT_MAP:
-		texture->type = "height";
-		break;
-	case ALPHA_MAP:
-		texture->type = "alpha";
-		break;
-	case EMISSIVE_MAP:
-		texture->type = "emissive";
-		break;
-	default:
-		break;
+		case DIFFUSE_MAP:
+			texture->type = "diffuse";
+			break;
+		case SPECULAR_MAP:
+			texture->type = "specular";
+			break;
+		case NORMAL_MAP:
+			texture->type = "normal";
+			break;
+		case HEIGHT_MAP:
+			texture->type = "height";
+			break;
+		case ALPHA_MAP:
+			texture->type = "alpha";
+			break;
+		case EMISSIVE_MAP:
+			texture->type = "emissive";
+			break;
+		default:
+			break;
 	}
 
 	glGenTextures(1, &texture->id);
