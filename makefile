@@ -1,4 +1,4 @@
-CC = clang++
+CC = g++
 
 BUILDDIR = bin
 BIN = game
@@ -20,6 +20,7 @@ endif
 
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
+	CC = clang++
 	LIBS += -framework OpenGL -lglew -I/usr/local/include -L/usr/local/lib -lSDL2
 else
 	LIBS += -lGL -lGLU -lGLEW

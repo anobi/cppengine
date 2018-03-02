@@ -1,4 +1,5 @@
 #include <iostream>
+#include "configuration.hpp"
 #include "game.hpp"
 
 
@@ -19,13 +20,23 @@ int CALLBACK WinMain(
 	return 0;
 }
 #else
+
+std::string GetWorkingDirectory(char* executable_path)
+{
+	std::string::size_type pos = std::string(executable_path).find_last_of( "\\/" );
+    return std::string(executable_path).substr( 0, pos);
+}
+
 int main(int argc, char* argv[]) 
 {
 	Game game;
-	game.workingDirectory = argv[0];
+
+	char* exe = argv[0];
+	Configuration::Get().workingDirectory = GetWorkingDirectory(exe);
+
 	game.Start();
 
-	std::cout << "Exiting";
+	std::cout << "* Exiting... Bye bye!" << std::endl;
 	return EXIT_SUCCESS;
 }
 #endif

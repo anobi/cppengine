@@ -6,6 +6,7 @@
 #include "lib/imgui_internal.h"
 #include "lib/imgui_impl_sdl_gl3.h"
 
+#include "configuration.hpp"
 #include "game.hpp"
 #include "display.hpp"
 #include "input.hpp"
@@ -23,8 +24,9 @@ int selected_entity = 0;
 
 bool Game::Init()
 {
-    std::cout << "Initializing game...\n" ;
-    std::cout << "Working directory: " << this->workingDirectory << std::endl;
+    std::cout << "Initializing game..." << std::endl;
+	std::cout << "--------------------" << std::endl;
+    std::cout << "* Working directory: " << Configuration::Get().workingDirectory << std::endl;
 
     //init stuff
     // std::cout << "* SDL: ";
@@ -42,7 +44,7 @@ bool Game::Init()
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
-	else std::cout << "done\n";
+	else std::cout << "done" << std::endl;
 
 	//Renderer
 	std::cout << "* Renderer: ";
@@ -51,7 +53,7 @@ bool Game::Init()
 		std::cout << "Error: %s\n", SDL_GetError();
 		return false;
 	}
-	else std::cout << "done\n";
+	else std::cout << "done" << std::endl;
     
     //Input system
     std::cout << "* Input: ";
@@ -60,7 +62,7 @@ bool Game::Init()
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
     } 
-	else std::cout << "done\n";
+	else std::cout << "done" << std::endl;
 
 	ImGui_ImplSdlGL3_Init(mDisplay.GetWindow());
 
@@ -68,6 +70,7 @@ bool Game::Init()
 
 	mControls.SetSensitivity(0.00025f);
 	
+	std::cout << std::endl;
     return true;
 }
 
@@ -87,7 +90,7 @@ void Game::Start()
     } 
 	else 
 	{
-        std::cout << "Failed to initialize game \n";
+        std::cout << "  !! ERROR: Failed to initialize game" << std::endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -197,6 +200,7 @@ void Game::Loop()
 void Game::Shutdown() 
 {
     std::cout << "Shutting down...\n";
+	std::cout << "--------------------" << std::endl;
 
 	ImGui::Shutdown();
 
@@ -307,6 +311,10 @@ void Game::UpdateUI()
 
 void Game::ConstructScene() 
 {
+	std::cout << "Loading game content..." << std::endl;
+	std::cout << "--------------------" << std::endl;
+	std::shared_ptr<Shader> defaultShader = std::make_shared<Shader>(Shader("default"));
+	mRenderer.AddShader(defaultShader);
 
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(Camera(glm::perspective(
 		45.0f, //FOV
@@ -327,7 +335,7 @@ void Game::ConstructScene()
 	room->GetTransform().SetScale(glm::fvec3(0.02f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/sponza.obj");
+	std::shared_ptr<Model> roomModel = std::make_shared<Model>("sponza.obj");
 	mRenderer.AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);
@@ -347,7 +355,7 @@ void Game::ConstructScene()
 	//awesome spinning FIRE BALL LIGHT YEAH
 	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
 	std::shared_ptr<PointLight> pl3 = std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
-	std::shared_ptr<Model> pl3model = std::make_shared<Model>("res/uvcube.obj");
+	std::shared_ptr<Model> pl3model = std::make_shared<Model>("uvcube.obj");
 	light3->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
 	light3->GetTransform().SetScale(glm::fvec3(0.1f));
 	light3->AddComponent(pl3);
@@ -363,4 +371,6 @@ void Game::ConstructScene()
 	AddEntity(light4);
 	mRenderer.AddPointLight(pl4);
 
+	// Done loading, print empty line
+	std::cout << std::endl;
 }

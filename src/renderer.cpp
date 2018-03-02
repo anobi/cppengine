@@ -23,8 +23,6 @@ void Renderer::Shutdown()
 
 bool Renderer::Init()
 {
-	std::shared_ptr<Shader> defaultShader = std::make_shared<Shader>(Shader("default"));
-	this->AddShader(defaultShader);
 	return true;
 }
 

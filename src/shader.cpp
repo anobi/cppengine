@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "configuration.hpp"
 #include "shader.hpp"
 
 Shader::Shader(const std::string fileName)
@@ -133,9 +134,10 @@ void Shader::Bind()
 
 std::string Shader::ReadFile(const std::string fileName)
 {
-	std::string filePath;
-
-	filePath = "shaders/" + fileName;
+	std::ostringstream oss;
+	oss << Configuration::Get().workingDirectory << "/shaders/" << fileName;
+	std::string filePath = oss.str();
+	std::cout << "* Loading shader: " << filePath << std::endl;
 
 	std::string content;
 	std::fstream stream(filePath, std::ios::in);
