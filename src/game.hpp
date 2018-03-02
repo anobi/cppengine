@@ -11,7 +11,7 @@
 #include "entity.hpp"
 #include "renderer.hpp"
 
-typedef enum gameState_t
+enum gameState_t
 {
 	GAMESTATE_RUNNING,
 	GAMESTATE_STOPPED
@@ -25,6 +25,7 @@ public:
 	Game();
 
 	gameState_t gameState;
+	std::string workingDirectory;
 
 	void AddEntity(std::shared_ptr<Entity> entity);
 	std::shared_ptr<Entity> GetEntity(const std::string name);

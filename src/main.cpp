@@ -11,15 +11,18 @@ int CALLBACK WinMain(
 	_In_ HINSTANCE hPrevInstance,
 	_In_ LPSTR     lpCmdLine,
 	_In_ int       nCmdShow
-	) {
+	) 
+{
 	Game game;
 	game.Start();
 
 	return 0;
 }
 #else
-int main() {
+int main(int argc, char* argv[]) 
+{
 	Game game;
+	game.workingDirectory = argv[0];
 	game.Start();
 
 	std::cout << "Exiting";

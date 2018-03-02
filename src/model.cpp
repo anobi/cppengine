@@ -9,10 +9,17 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(fileName,
-		aiProcess_Triangulate
+		aiProcess_ValidateDataStructure
+		| aiProcess_Triangulate
+		| aiProcess_FindInstances
+		| aiProcess_JoinIdenticalVertices
+		| aiProcess_OptimizeGraph
+		| aiProcess_OptimizeMeshes
+		| aiProcess_SortByPType
+		| aiProcess_SplitLargeMeshes
+		| aiProcess_RemoveRedundantMaterials
 		| aiProcess_GenUVCoords
 		| aiProcess_GenSmoothNormals
-		| aiProcess_JoinIdenticalVertices
 		| aiProcess_FlipUVs
 		| aiProcess_CalcTangentSpace);
 
@@ -23,7 +30,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 Model::~Model()
 {
-	this->Cleanup();
+	// this->Cleanup();
 }
 
 void Model::Cleanup()

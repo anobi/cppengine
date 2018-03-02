@@ -1,4 +1,4 @@
-CC = g++
+CC = clang++
 
 BUILDDIR = bin
 BIN = game
@@ -8,8 +8,15 @@ LIBDIR = src/lib
 OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/entity.o $(OBJDIR)/mesh.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/material.o $(OBJDIR)/main.o
 OBJDIR = obj
 
-CFLAGS = -Wall -std=c++11 -g
+CFLAGS = -Wall -std=c++14
 LIBS = -lSDL2 -lassimp
+
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+    CFLAGS += -g
+else
+    CFLAGS += -O3
+endif
 
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
@@ -69,4 +76,4 @@ run: $(OBJ)
 	exec $(BUILDDIR)/$(BIN)
 
 clean: $(OBJ)
-	rm $(PRE) && rm $(BUILD)
+	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)

@@ -24,6 +24,7 @@ int selected_entity = 0;
 bool Game::Init()
 {
     std::cout << "Initializing game...\n" ;
+    std::cout << "Working directory: " << this->workingDirectory << std::endl;
 
     //init stuff
     // std::cout << "* SDL: ";
@@ -326,7 +327,7 @@ void Game::ConstructScene()
 	room->GetTransform().SetScale(glm::fvec3(0.02f));
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/crytek-sponza/sponza.obj");
+	std::shared_ptr<Model> roomModel = std::make_shared<Model>("res/sponza.obj");
 	mRenderer.AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);
