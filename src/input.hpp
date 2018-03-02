@@ -5,6 +5,7 @@ class Input {
     
 public:
     Input();
+    ~Input(){};
     
     bool Init();
     void Update();

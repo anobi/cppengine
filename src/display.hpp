@@ -24,6 +24,7 @@ public:
 		this->width = 800;
 		this->height = 600;
 	}
+	~Display(){};
 
     bool Init(const int width, const int height);
     void Update();

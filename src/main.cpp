@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "configuration.hpp"
 #include "game.hpp"
 
@@ -29,12 +30,12 @@ std::string GetWorkingDirectory(char* executable_path)
 
 int main(int argc, char* argv[]) 
 {
-	Game game;
+	std::unique_ptr<Game> game = std::make_unique<Game>();
 
 	char* exe = argv[0];
 	Configuration::Get().workingDirectory = GetWorkingDirectory(exe);
 
-	game.Start();
+	game->Start();
 
 	std::cout << "* Exiting... Bye bye!" << std::endl;
 	return EXIT_SUCCESS;

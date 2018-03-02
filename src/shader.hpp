@@ -40,8 +40,7 @@ public:
 private:
 	GLuint CreateShader(const std::string source, unsigned int type);
 	std::string ReadFile(const std::string filename);
-	std::string GetShaderStatus(GLuint program);
-
+	void GetShaderStatus(GLuint program);
 };
 
 #endif

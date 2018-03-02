@@ -28,18 +28,13 @@ bool Renderer::Init()
 
 std::shared_ptr<Shader> Renderer::GetShader(const std::string name)
 {
-	std::shared_ptr<Shader> shader = nullptr;
-
 	for(int i = 0; i < this->shaders.size(); i++)
 	{
 		if(this->shaders[i]->name == name)
 		{
-			shader = shaders[i];
-			break;
+			return shaders[i];
 		}
 	}
-
-	return shader;
 }
 
 void Renderer::Render()

@@ -6,6 +6,7 @@
 
 Shader::Shader(const std::string fileName)
 {
+	std::cout << "* Loading shader: " << fileName << std::endl;
 	this->name = fileName;
 
 	program = glCreateProgram();
@@ -24,10 +25,7 @@ Shader::Shader(const std::string fileName)
 	glBindAttribLocation(program, 4, "texCoord");
 
 	glLinkProgram(program);
-	GetShaderStatus(program);
-
 	glValidateProgram(program);
-	GetShaderStatus(program);
 
 	// Detach and clean up the shaders after linking them to the program
 	for (unsigned int i = 0; i < NUM_SHADERS; i++)
@@ -92,7 +90,7 @@ Shader::Shader(const std::string fileName)
 
 Shader::~Shader()
 {
-	//this->Cleanup();
+	this->Cleanup();
 }
 
 void Shader::Cleanup()
@@ -117,8 +115,7 @@ GLuint Shader::CreateShader(const std::string source, unsigned int type)
 	length[0] = source.length();
 	glShaderSource(shader, 1, &shaderSrc, length);
 	glCompileShader(shader);
-
-	std::string vError = GetShaderStatus(shader);
+	GetShaderStatus(shader);
 
 	return shader;
 }
@@ -137,13 +134,12 @@ std::string Shader::ReadFile(const std::string fileName)
 	std::ostringstream oss;
 	oss << Configuration::Get().workingDirectory << "/shaders/" << fileName;
 	std::string filePath = oss.str();
-	std::cout << "* Loading shader: " << filePath << std::endl;
 
 	std::string content;
 	std::fstream stream(filePath, std::ios::in);
 
 	if (!stream.is_open()) {
-		std::cerr << "Cannot read file " << filePath << std::endl;
+		std::cerr << "  !! ERROR: Unable to read shader file: " << filePath << std::endl;
 		return "";
 	}
 
@@ -157,15 +153,13 @@ std::string Shader::ReadFile(const std::string fileName)
 	return content;
 }
 
-std::string Shader::GetShaderStatus(GLuint shader) {
-
+void Shader::GetShaderStatus(GLuint shader) 
+{
 	int shaderLogLength = 0;
 	int programLogLength = 0;
 
 	GLint shaderResult = GL_FALSE;
 	GLint programResult = GL_FALSE;
-
-	std::string errorMessage = "";
 
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderResult);
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &shaderLogLength);
@@ -173,25 +167,27 @@ std::string Shader::GetShaderStatus(GLuint shader) {
 	glGetProgramiv(shader, GL_COMPILE_STATUS, &programResult);
 	glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &programLogLength);
 
-	std::vector<GLchar> shaderError((shaderLogLength > 1) ? shaderLogLength : 1);
+	std::vector<GLchar> shaderError(shaderLogLength);
 	glGetShaderInfoLog(shader, shaderLogLength, NULL, &shaderError[0]);
 
-	std::vector<GLchar> programError((programLogLength > 1) ? programLogLength : 1);
+	std::vector<GLchar> programError(programLogLength);
 	glGetShaderInfoLog(shader, programLogLength, NULL, &programError[0]);
 
-	if (shaderError.size() > 1) {
-		for (auto c : shaderError) {
-			errorMessage += c;
-		}
-        std::cerr << "Shader error: " << errorMessage << std::endl;
+	if (shaderLogLength > 1) {
+		std::string shaderErrorMessage = "";
+		for (auto c : shaderError)
+			shaderErrorMessage += c;
+
+		if(!shaderErrorMessage.empty())
+        	std::cerr << "  !! Shader error: " << std::endl << shaderErrorMessage << std::endl;
 	}
 
-	if (programError.size() > 1) {
-		for (auto c : programError) {
-			errorMessage += c;
-		}
-        std::cerr << "Program error: " << errorMessage << std::endl;
-	}
+	if (programLogLength > 1) {
+		std::string programErrorMessage = "";
+		for (auto c : programError)
+			programErrorMessage += c;
 
-	return errorMessage;
+		if(!programErrorMessage.empty())
+			std::cerr << "  !! Program error: " << std::endl << programErrorMessage << std::endl;
+	}
 }
