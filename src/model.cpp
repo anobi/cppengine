@@ -37,7 +37,11 @@ Model::Model(const std::string fileName) : EntityComponent() {
 		| aiProcess_FlipUVs
 		| aiProcess_CalcTangentSpace);
 
-	if (scene == NULL) return;
+	if (scene == NULL) 
+	{
+		std::cerr << "  !! ERROR: Unable to load model:" << path << std::endl;
+		return;
+	}
 
 	this->ProcessNode(scene->mRootNode, scene);
 }
@@ -253,7 +257,7 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
 	oss << Configuration::Get().workingDirectory << textures_dir << texFile.c_str();
 	std::string path = oss.str();
 	
-
+	// Try fetching a cached texture
 	for (int j = 0; j < materials.size(); j++)
 	{
 		for (int t = 0; t < materials[j]->textures.size(); t++)
@@ -266,6 +270,7 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
 		}
 	}
 
+	// Texture not found in cache, load it from the file
 	if (!skip)
 	{
 		texture = LoadTexture(path, type);
