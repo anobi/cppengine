@@ -11,7 +11,18 @@ Shader::Shader(const std::string fileName)
 
 	program = glCreateProgram();
 
-	shaders[0] = CreateShader(ReadFile(fileName + ".vert"), GL_VERTEX_SHADER);
+	std::string vertex_shader_data = ReadFile(fileName + ".vert");
+	std::string fragment_shader_data = ReadFile(fileName + ".frag");
+	if (vertex_shader_data.size() == 0) {
+		std::cerr << "No vertex shader data!";
+		return;
+	}
+	if (fragment_shader_data.size() == 0) {
+		std::cerr << "No fragment shader data!";
+		return;
+	}
+
+	shaders[0] = CreateShader(vertex_shader_data, GL_VERTEX_SHADER);
 	shaders[1] = CreateShader(ReadFile(fileName + ".frag"), GL_FRAGMENT_SHADER);
 
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
@@ -132,7 +143,7 @@ void Shader::Bind()
 std::string Shader::ReadFile(const std::string fileName)
 {
 	std::ostringstream oss;
-	oss << Configuration::Get().workingDirectory << "/shaders/" << fileName;
+	oss << Configuration::Get().workingDirectory << "shaders/" << fileName;
 	std::string filePath = oss.str();
 
 	std::string content;
@@ -150,6 +161,11 @@ std::string Shader::ReadFile(const std::string fileName)
 	}
 
 	stream.close();
+
+	if (content.size() == 0) {
+		std::cerr << "  !! ERROR: Unable to read shader data: " << filePath << std::endl;
+		return "";
+	}
 	return content;
 }
 
@@ -167,10 +183,10 @@ void Shader::GetShaderStatus(GLuint shader)
 	glGetProgramiv(shader, GL_COMPILE_STATUS, &programResult);
 	glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &programLogLength);
 
-	std::vector<GLchar> shaderError(shaderLogLength);
+	GLchar shaderError[512] = "";
 	glGetShaderInfoLog(shader, shaderLogLength, NULL, &shaderError[0]);
 
-	std::vector<GLchar> programError(programLogLength);
+	GLchar programError[512] = "";
 	glGetShaderInfoLog(shader, programLogLength, NULL, &programError[0]);
 
 	if (shaderLogLength > 1) {
