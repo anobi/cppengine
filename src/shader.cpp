@@ -143,7 +143,14 @@ void Shader::Bind()
 std::string Shader::ReadFile(const std::string fileName)
 {
 	std::ostringstream oss;
-	oss << Configuration::Get().workingDirectory << "shaders/" << fileName;
+
+#ifdef _WIN32 
+	std::string shaders_dir = "shaders/";
+#else
+	std::string shaders_dir = "/shaders/";
+#endif
+
+	oss << Configuration::Get().workingDirectory << shaders_dir << fileName;
 	std::string filePath = oss.str();
 
 	std::string content;
