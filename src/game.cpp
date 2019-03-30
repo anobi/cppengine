@@ -70,9 +70,9 @@ bool Game::Init()
 	ImGui_ImplSdlGL3_Init(mDisplay->GetWindow());
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-
 	mControls = std::make_unique<Controls>();
 	mControls->SetSensitivity(0.00025f);
+	mControls->ResetMousePosition(mDisplay->GetWindow(), mDisplay->GetWidth() / 2, mDisplay->GetHeight() / 2);
 	
 	std::cout << std::endl;
     return true;
@@ -143,10 +143,11 @@ void Game::Loop()
 						Quit();
 						break;
 
-					case SDLK_RALT:
+					case SDLK_LALT:
 						menu = !menu;
-						SDL_ShowCursor(menu);
 						SDL_SetRelativeMouseMode((SDL_bool)!menu);
+						mControls->ResetMousePosition(mDisplay->GetWindow(), mDisplay->GetWidth() / 2, mDisplay->GetHeight() / 2);
+						SDL_ShowCursor(menu);
 						break;
 
 					case SDLK_F1:
