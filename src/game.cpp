@@ -370,10 +370,14 @@ void Game::ConstructScene()
 
 	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
 	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
+	std::shared_ptr<Model> pl4model = std::make_shared<Model>("uvcube.obj");
 	light4->GetTransform().SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
+	light4->GetTransform().SetScale(glm::fvec3(0.1f));
 	light4->AddComponent(pl4);
+	light4->AddComponent(pl4model);
 	AddEntity(light4);
 	mRenderer->AddPointLight(pl4);
+	mRenderer->AddModel(pl4model);
 
 	// Done loading, print empty line
 	std::cout << std::endl;

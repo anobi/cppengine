@@ -10,8 +10,14 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
 	this->SetName("Mesh");
 
+#ifdef _WIN32 
+	std::string resources_dir = "res/";
+#else
+	std::string resources_dir = "/res/";
+#endif
+
 	std::ostringstream oss;
-	oss << Configuration::Get().workingDirectory << "/res/" << fileName;
+	oss << Configuration::Get().workingDirectory << resources_dir << fileName;
 	std::string path = oss.str();
 	std::cout << "* Loading model: " << path << std::endl;
 
@@ -237,8 +243,14 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
 	std::shared_ptr<Texture> texture;
 	bool skip = false;
 
+#ifdef _WIN32 
+	std::string textures_dir = "res/textures/";
+#else
+	std::string textures_dir = "/res/textures/";
+#endif
+
 	std::ostringstream oss;
-	oss << Configuration::Get().workingDirectory << "/res/textures/" << texFile.c_str();
+	oss << Configuration::Get().workingDirectory << textures_dir << texFile.c_str();
 	std::string path = oss.str();
 	
 
