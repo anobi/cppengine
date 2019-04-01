@@ -179,6 +179,7 @@
     <ClCompile Include="..\src\controls.cpp" />
     <ClCompile Include="..\src\display.cpp" />
     <ClCompile Include="..\src\entity.cpp" />
+    <ClCompile Include="..\src\frustum.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\input.cpp" />
     <ClCompile Include="..\src\lib\imgui.cpp" />

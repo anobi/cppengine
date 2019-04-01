@@ -3,12 +3,12 @@
 
 #include <glm/glm.hpp>
 
-struct boundingBox
+struct BoundingBox
 {
 	glm::fvec3 center;
 };
 
-struct boundingSphere
+struct BoundingSphere
 {
 	float radius;
 	glm::fvec3 center;

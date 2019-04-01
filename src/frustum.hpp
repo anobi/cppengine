@@ -13,14 +13,13 @@ public:
 
 	void Update(glm::fmat4 viewProjection);
 
-	// Need structs for bounding boxes & spheres
-	bool Intersects(const boundingSphere sphere);
+	bool Intersects(const BoundingSphere sphere);
+	bool Intersects(const BoundingBox box);
 
 private:
 
-	Camera* camera;
-	std::vector<glm::fmat4x3> planes;
-
+	Camera* _camera;
+	std::vector<glm::fvec4> _planes;
 };
 
 #endif
