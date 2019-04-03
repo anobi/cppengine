@@ -216,6 +216,7 @@
     <ClInclude Include="..\src\model.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\renderer.hpp" />
+    <ClInclude Include="..\src\scene.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />
     <ClInclude Include="..\src\types.hpp" />

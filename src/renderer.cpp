@@ -11,14 +11,6 @@ Renderer::~Renderer()
 
 void Renderer::Shutdown()
 {
-	for(int i = 0; i < this->models.size(); i++)
-	{
-		this->models[i]->Cleanup();
-	}
-	for(int i = 0; i < this->shaders.size(); i++)
-	{
-		this->shaders[i]->Cleanup();
-	}
 }
 
 bool Renderer::Init()
@@ -26,77 +18,67 @@ bool Renderer::Init()
 	return true;
 }
 
-std::shared_ptr<Shader> Renderer::GetShader(const std::string name)
+void Renderer::Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shader)
 {
-	for(int i = 0; i < this->shaders.size(); i++)
+	shader->Bind();
+
+	auto models = scene->GetModels();
+	auto point_lights = scene->GetPointLights();
+	auto dir_lights = scene->GetDirectionalLights();
+
+	//
+	// Update dynamic lights
+	//
+	unsigned int loc = 32; // PointLight uniform offset
+	for (unsigned int i = 0; i < point_lights.size(); i++)
 	{
-		if(this->shaders[i]->name == name)
-		{
-			return shaders[i];
-		}
+		glm::fvec3 lPos = point_lights[i]->GetTransform().GetPosition();
+
+		glUniform3fv(shader->uniforms[loc + 0], 1, &lPos[0]);
+		glUniform3fv(shader->uniforms[loc + 1], 1, &point_lights[i]->GetColor()[0]);
+		glUniform1f(shader->uniforms[loc + 2], point_lights[i]->GetIntensity());
+		glUniform1f(shader->uniforms[loc + 3], point_lights[i]->GetRadius());
+		glUniform1f(shader->uniforms[loc + 4], point_lights[i]->GetCutoff());
+
+		loc += 5; // Number of light uniforms
 	}
-}
 
-void Renderer::Render()
-{
+	unsigned int dloc = 64; // PointLight uniform offset
+	for (unsigned int i = 0; i < dir_lights.size(); i++)
+	{
+		glUniform3fv(shader->uniforms[dloc + 0], 1, &dir_lights[i]->GetTransform().GetPosition()[0]);
+		glUniform3fv(shader->uniforms[dloc + 1], 1, &dir_lights[i]->GetColor()[0]);
+		glUniform1f(shader->uniforms[dloc + 2], dir_lights[i]->GetIntensity());
 
-	// Render shadowmaps
-	
-	// Render entities
-	this->currentShader = this->GetShader("default");
+		dloc += 3; // Number of light uniforms
+	}
+
+	//
+	// Update and render models
+	//
 	for(int i = 0; i < models.size(); i++)
 	{
-		// Bind shader
-		currentShader->Bind();
-
 		// Update uniforms
-
 		glm::fmat4 model = models[i]->GetTransform().GetModel();
-		glm::fmat4 view = this->GetCamera()->GetView();
-		glm::fmat4 projection = this->GetCamera()->GetProjection();
+		glm::fmat4 view = scene->GetCamera()->GetView();
+		glm::fmat4 projection = scene->GetCamera()->GetProjection();
 		glm::fvec2 resolution = this->GetResolution();
-		glm::fvec3 eyePos = this->GetCamera()->GetPosition();
+		glm::fvec3 eyePos = scene->GetCamera()->GetPosition();
 		glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
 
-		glUniformMatrix4fv(this->currentShader->uniforms[0], 1, GL_FALSE, &model[0][0]);
-		glUniformMatrix4fv(this->currentShader->uniforms[1], 1, GL_FALSE, &view[0][0]);
-		glUniformMatrix4fv(this->currentShader->uniforms[2], 1, GL_FALSE, &projection[0][0]);
-		glUniformMatrix3fv(this->currentShader->uniforms[3], 1, GL_FALSE, &normalMatrix[0][0]);
+		glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &model[0][0]);
+		glUniformMatrix4fv(shader->uniforms[1], 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(shader->uniforms[2], 1, GL_FALSE, &projection[0][0]);
+		glUniformMatrix3fv(shader->uniforms[3], 1, GL_FALSE, &normalMatrix[0][0]);
 
-		glUniform2fv(this->currentShader->uniforms[4], 1, &resolution[0]);
-		glUniform3fv(this->currentShader->uniforms[5], 1, &eyePos[0]);
+		glUniform2fv(shader->uniforms[4], 1, &resolution[0]);
+		glUniform3fv(shader->uniforms[5], 1, &eyePos[0]);
 
 		// Time
-		glUniform1i(this->currentShader->uniforms[6], this->GetTick());
-
-		// Point Lights
-		unsigned int loc = 32; // PointLight uniform offset
-		for (unsigned int i = 0; i < this->pointLights.size(); i++)
-		{
-			glm::fvec3 lPos = pointLights[i]->GetTransform().GetPosition();
-
-			glUniform3fv(this->currentShader->uniforms[loc + 0], 1, &lPos[0]);
-			glUniform3fv(this->currentShader->uniforms[loc + 1], 1, &pointLights[i]->GetColor()[0]);
-			glUniform1f(this->currentShader->uniforms[loc + 2], pointLights[i]->GetIntensity());
-			glUniform1f(this->currentShader->uniforms[loc + 3], pointLights[i]->GetRadius());
-			glUniform1f(this->currentShader->uniforms[loc + 4], pointLights[i]->GetCutoff());
-
-			loc += 5; // Number of light uniforms
-		}
-
-		// Lights
-		unsigned int dloc = 64; // PointLight uniform offset
-		for (unsigned int i = 0; i < this->directionalLights.size(); i++)
-		{
-			glUniform3fv(this->currentShader->uniforms[dloc + 0], 1, &directionalLights[i]->GetTransform().GetPosition()[0]);
-			glUniform3fv(this->currentShader->uniforms[dloc + 1], 1, &directionalLights[i]->GetColor()[0]);
-			glUniform1f(this->currentShader->uniforms[dloc + 2], directionalLights[i]->GetIntensity());
-
-			dloc += 3; // Number of light uniforms
-		}
+		glUniform1i(shader->uniforms[6], this->GetTick());
 
 		// Render
-		models[i]->Render(this->currentShader);
+		models[i]->Render(shader);
 	}
 
 	// Post processing pass here?

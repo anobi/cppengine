@@ -215,5 +215,8 @@
     <ClInclude Include="..\src\frustum.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\scene.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -67,6 +67,8 @@ bool Game::Init()
     } 
 	else std::cout << "done" << std::endl;
 
+	this->_scene = std::make_unique<Scene>();
+
 	ImGui_ImplSdlGL3_Init(mDisplay->GetWindow());
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -163,14 +165,14 @@ void Game::Loop()
 					case SDL_WINDOWEVENT_RESIZED:
 						mDisplay->SetResolution(event.window.data1, event.window.data2, true);
 						mRenderer->UpdateResolution(mDisplay->GetWidth(), mDisplay->GetHeight());
-						mRenderer->GetCamera()->SetAspectRatio(45.0f, mDisplay->GetAspectRatio());
+						this->_scene->GetCamera()->SetAspectRatio(45.0f, mDisplay->GetAspectRatio());
 						break;
 				}
 			}
 		}
 
 		if (!menu) {
-			mControls->Update(event, mRenderer->GetCamera(), delay);
+			mControls->Update(event, this->_scene->GetCamera(), delay);
 		}
 
 		/*****************************
@@ -184,7 +186,7 @@ void Game::Loop()
 		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mRenderer->Render();
+		mRenderer->Render(this->GetScene(), this->shader);
 
 		if (this->debug_ui)
 		{
@@ -269,8 +271,8 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 
 void Game::UpdateUI()
 {
-	glm::fvec3 cPos = mRenderer->GetCamera()->GetPosition();
-	glm::fvec3 cRot = mRenderer->GetCamera()->mTransform.GetRotation();
+	glm::fvec3 cPos = this->_scene->GetCamera()->GetPosition();
+	glm::fvec3 cRot = this->_scene->GetCamera()->mTransform.GetRotation();
 
 	std::vector<std::string> entity_list;	
 	
@@ -316,10 +318,12 @@ void Game::UpdateUI()
 
 void Game::ConstructScene() 
 {
+	this->SetScene(std::make_shared<Scene>(Scene()));
+
 	std::cout << "Loading game content..." << std::endl;
 	std::cout << "--------------------" << std::endl;
 	std::shared_ptr<Shader> defaultShader = std::make_shared<Shader>(Shader("default"));
-	mRenderer->AddShader(defaultShader);
+	this->shader = defaultShader;
 
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(Camera(glm::perspective(
 		45.0f, //FOV
@@ -327,9 +331,11 @@ void Game::ConstructScene()
 		0.1f, //depth aka znear
 		100.0f))); //zFar
 
+	// TODO: Make a scene object that contains cameras and shite
+	// They don't belong in renderer
 	camera->mTransform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));
 	camera->mTransform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
-	mRenderer->SetCamera(camera);
+	this->_scene->SetCamera(camera);
 
 	/*
 	Meshes
@@ -341,7 +347,7 @@ void Game::ConstructScene()
 	room->GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
 	room->GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 	std::shared_ptr<Model> roomModel = std::make_shared<Model>("sponza.obj");
-	mRenderer->AddModel(roomModel);
+	this->_scene->AddModel(roomModel);
 	room->AddComponent(roomModel);
 	AddEntity(room);
 
@@ -355,7 +361,7 @@ void Game::ConstructScene()
 	light2->GetTransform().SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
 	light2->AddComponent(pl2);
 	AddEntity(light2);
-	mRenderer->AddDirectionalLight(pl2);
+	this->_scene->AddDirectionalLight(pl2);
 
 	//awesome spinning FIRE BALL LIGHT YEAH
 	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
@@ -366,8 +372,8 @@ void Game::ConstructScene()
 	light3->AddComponent(pl3);
 	light3->AddComponent(pl3model);
 	AddEntity(light3);
-	mRenderer->AddPointLight(pl3);
-	mRenderer->AddModel(pl3model);
+	this->_scene->AddPointLight(pl3);
+	this->_scene->AddModel(pl3model);
 
 	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
 	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
@@ -377,8 +383,8 @@ void Game::ConstructScene()
 	light4->AddComponent(pl4);
 	light4->AddComponent(pl4model);
 	AddEntity(light4);
-	mRenderer->AddPointLight(pl4);
-	mRenderer->AddModel(pl4model);
+	this->_scene->AddPointLight(pl4);
+	this->_scene->AddModel(pl4model);
 
 	// Done loading, print empty line
 	std::cout << std::endl;
