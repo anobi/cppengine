@@ -4,12 +4,12 @@
 #include <vector>
 #include <memory>
 
-#include "display.hpp"
-#include "camera.hpp"
-#include "scene.hpp"
-#include "shader.hpp"
-#include "model.hpp"
-#include "light.hpp"
+#include "../display.hpp"
+#include "../camera.hpp"
+#include "../scene.hpp"
+#include "../shader.hpp"
+#include "../model.hpp"
+#include "../light.hpp"
 
 class Renderer {
 public:

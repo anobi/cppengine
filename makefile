@@ -49,7 +49,7 @@ $(OBJDIR)/game.o: $(SRC)/game.cpp
 $(OBJDIR)/display.o: $(SRC)/display.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/renderer.o: $(SRC)/renderer.cpp
+$(OBJDIR)/renderer.o: $(SRC)/rendering/renderer.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/input.o: $(SRC)/input.cpp

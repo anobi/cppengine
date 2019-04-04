@@ -1,4 +1,4 @@
-#include "opengl.hpp"
+#include "gl/opengl.hpp"
 #include "renderer.hpp"
 
 Renderer::Renderer()

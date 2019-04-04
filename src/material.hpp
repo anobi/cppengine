@@ -5,7 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#include "opengl.hpp"
+#include "rendering/gl/opengl.hpp"
 #include "entitycomponent.hpp"
 
 enum TextureType 
@@ -23,7 +23,7 @@ struct Texture
 {
 	std::string type;
 	std::string filename;
-	GLuint id;
+	unsigned int id;
 };
 
 class Material : public EntityComponent 

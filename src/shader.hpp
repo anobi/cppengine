@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-#include "opengl.hpp"
+#include "rendering/gl/opengl.hpp"
 
 class Shader
 {

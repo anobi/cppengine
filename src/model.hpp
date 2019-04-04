@@ -10,7 +10,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "opengl.hpp"
+#include "rendering/gl/opengl.hpp"
 #include "entitycomponent.hpp"
 #include "mesh.hpp"
 #include "shader.hpp"
@@ -29,7 +29,7 @@ public:
 	
 private:
 
-	std::vector<std::shared_ptr<Mesh>> meshes;
+	std::vector<std::shared_ptr<Resources::Mesh>> meshes;
 	std::vector<std::shared_ptr<Material>> materials;
 
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene);

@@ -88,13 +88,13 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 
 void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
-	std::vector<Vertex> vertices;
+	std::vector<Resources::Vertex> vertices;
 	std::vector<unsigned int> indices;
 
 	//construct the vertexes
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
-		Vertex vertex;
+		Resources::Vertex vertex;
 		//positions
 		if (mesh->HasPositions())
 		{
@@ -170,7 +170,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	std::shared_ptr<Mesh> m = std::make_shared<Mesh>(Mesh(vertices, indices, material->textures));
+	std::shared_ptr<Resources::Mesh> m = std::make_shared<Resources::Mesh>(Resources::Mesh(vertices, indices, material->textures));
 	meshes.push_back(m);
 }
 

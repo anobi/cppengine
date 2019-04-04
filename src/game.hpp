@@ -9,7 +9,7 @@
 #include "input.hpp"
 #include "controls.hpp"
 #include "entity.hpp"
-#include "renderer.hpp"
+#include "rendering/renderer.hpp"
 #include "scene.hpp"
 
 enum gameState_t
