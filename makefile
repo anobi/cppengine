@@ -1,4 +1,4 @@
-CC = g++
+CC = clang++
 
 BUILDDIR = bin
 BIN = game

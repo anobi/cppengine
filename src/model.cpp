@@ -188,7 +188,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-		auto texture = LoadCachedTexture(texFile.C_Str(), DIFFUSE_MAP);
+		auto texture = LoadCachedTexture(texFile.C_Str(), Resources::RTextureMapType::DIFFUSE_MAP);
 		if(texture)
 		{
 			material->textures.push_back(texture);
@@ -199,7 +199,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-		auto texture = LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP);
+		auto texture = LoadCachedTexture(texFile.C_Str(), Resources::RTextureMapType::SPECULAR_MAP);
 		if(texture)
 		{
 			material->textures.push_back(texture);
@@ -210,7 +210,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-		auto texture = LoadCachedTexture(texFile.C_Str(), NORMAL_MAP);
+		auto texture = LoadCachedTexture(texFile.C_Str(), Resources::RTextureMapType::NORMAL_MAP);
 		if(texture)
 		{
 			material->textures.push_back(texture);
@@ -221,7 +221,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DISPLACEMENT, i, &texFile);
-		auto texture = LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP);
+		auto texture = LoadCachedTexture(texFile.C_Str(), Resources::RTextureMapType::HEIGHT_MAP);
 		if(texture)
 		{
 			material->textures.push_back(texture);
@@ -232,7 +232,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
-		auto texture = LoadCachedTexture(texFile.C_Str(), ALPHA_MAP);
+		auto texture = LoadCachedTexture(texFile.C_Str(), Resources::RTextureMapType::ALPHA_MAP);
 		if(texture)
 		{
 			material->textures.push_back(texture);
@@ -242,7 +242,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	return material;
 }
 
-std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, TextureType type)
+std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Resources::RTextureMapType type)
 {
 	std::shared_ptr<Texture> texture;
 	bool skip = false;
@@ -279,7 +279,7 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
 	return texture;
 }
 
-std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureType type)
+std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, Resources::RTextureMapType type)
 {
 	int width, height, numComponents;
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
@@ -296,22 +296,22 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 
 	switch (type)
 	{
-		case DIFFUSE_MAP:
+		case Resources::RTextureMapType::DIFFUSE_MAP:
 			texture->type = "diffuse";
 			break;
-		case SPECULAR_MAP:
+		case Resources::RTextureMapType::SPECULAR_MAP:
 			texture->type = "specular";
 			break;
-		case NORMAL_MAP:
+		case Resources::RTextureMapType::NORMAL_MAP:
 			texture->type = "normal";
 			break;
-		case HEIGHT_MAP:
+		case Resources::RTextureMapType::HEIGHT_MAP:
 			texture->type = "height";
 			break;
-		case ALPHA_MAP:
+		case Resources::RTextureMapType::ALPHA_MAP:
 			texture->type = "alpha";
 			break;
-		case EMISSIVE_MAP:
+		case Resources::RTextureMapType::EMISSIVE_MAP:
 			texture->type = "emissive";
 			break;
 		default:

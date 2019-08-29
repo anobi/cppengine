@@ -13,3 +13,15 @@ Resources::Mesh::~Mesh()
 	this->indices.clear();
 	this->textures.clear();
 }
+
+void Resources::Mesh::Draw(std::shared_ptr<Shader> shader)
+{
+}
+
+void Resources::Mesh::Cleanup()
+{
+}
+
+void Resources::Mesh::SetupMesh()
+{
+}

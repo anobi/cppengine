@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 
 #include "rendering/gl/opengl.hpp"
+#include "resources/res_texture.hpp"
 #include "entitycomponent.hpp"
 #include "mesh.hpp"
 #include "shader.hpp"
@@ -35,8 +36,8 @@ private:
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	std::shared_ptr<Material> ProcessMaterials(aiMaterial* aiMat);
-	std::shared_ptr<Texture> LoadCachedTexture(const std::string texFile, TextureType type);
-	std::shared_ptr<Texture> LoadTexture(const std::string filename, TextureType type);
+	std::shared_ptr<Texture> LoadCachedTexture(const std::string texFile, Resources::RTextureMapType type);
+	std::shared_ptr<Texture> LoadTexture(const std::string filename, Resources::RTextureMapType type);
 };
 
 #endif

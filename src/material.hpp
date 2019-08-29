@@ -8,17 +8,6 @@
 #include "rendering/gl/opengl.hpp"
 #include "entitycomponent.hpp"
 
-enum TextureType 
-{
-	NONE = 0,
-	DIFFUSE_MAP = 1,
-	SPECULAR_MAP = 2,
-	EMISSIVE_MAP = 4,
-	HEIGHT_MAP = 5,
-	NORMAL_MAP = 6,
-	ALPHA_MAP = 7
-};
-
 struct Texture
 {
 	std::string type;

@@ -148,17 +148,17 @@
     <ClCompile Include="..\src\rendering\renderer.cpp">
       <Filter>src\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\rendering\gl\mesh.cpp">
-      <Filter>src\rendering\gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\rendering\gl\texture.cpp">
-      <Filter>src\rendering\gl</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\rendering\renderable.cpp" />
-    <ClCompile Include="..\src\loader\model.cpp">
+    <ClCompile Include="..\src\loader\l_model.cpp">
       <Filter>src\loader</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\resources\texture.cpp">
+    <ClCompile Include="..\src\rendering\gl\gl_texture.cpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\gl\gl_mesh.cpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\resources\res_texture.cpp">
       <Filter>src\resources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,9 +194,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\mesh.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\opengl.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\shader.hpp">
@@ -250,16 +247,16 @@
     <ClInclude Include="..\src\rendering\renderable.hpp">
       <Filter>src\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\rendering\gl\mesh.hpp">
-      <Filter>src\rendering\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\rendering\gl\texture.hpp">
-      <Filter>src\rendering\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\loader\model.hpp">
+    <ClInclude Include="..\src\loader\l_model.hpp">
       <Filter>src\loader</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\resources\texture.hpp">
+    <ClInclude Include="..\src\rendering\gl\gl_texture.hpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\gl\gl_mesh.hpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\resources\res_texture.hpp">
       <Filter>src\resources</Filter>
     </ClInclude>
   </ItemGroup>

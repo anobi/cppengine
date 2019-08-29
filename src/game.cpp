@@ -9,8 +9,6 @@
 #include "configuration.hpp"
 #include "game.hpp"
 #include "display.hpp"
-#include "input.hpp"
-#include "entity.hpp"
 #include "shader.hpp"
 #include "model.hpp"
 #include "material.hpp"
