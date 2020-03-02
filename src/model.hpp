@@ -12,8 +12,8 @@
 
 #include "rendering/gl/opengl.hpp"
 #include "resources/res_texture.hpp"
+#include "resources/res_mesh.hpp"
 #include "entitycomponent.hpp"
-#include "mesh.hpp"
 #include "shader.hpp"
 #include "material.hpp"
 
@@ -24,8 +24,6 @@ public:
 	~Model();
 
 	void Update() {};
-	void Render(Renderer &renderer) {};
-	void Render(std::shared_ptr<Shader> shader);
 	void Cleanup();
 	
 private:

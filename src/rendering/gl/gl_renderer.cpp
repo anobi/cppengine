@@ -1,17 +1,17 @@
-#include "gl/opengl.hpp"
-#include "renderer.hpp"
+#include "opengl.hpp"
+#include "gl_renderer.hpp"
 
 
-void Rendering::Renderer::Shutdown()
+void GL::GLRenderer::Shutdown()
 {
 }
 
-bool Rendering::Renderer::Init()
+bool GL::GLRenderer::Init()
 {
 	return true;
 }
 
-void Rendering::Renderer::Render(std::shared_ptr<Camera> camera, std::shared_ptr<Shader> shader)
+void GL::GLRenderer::Render(std::shared_ptr<Camera> camera, std::shared_ptr<Shader> shader)
 {
 	shader->Bind();
 	//
@@ -25,14 +25,14 @@ void Rendering::Renderer::Render(std::shared_ptr<Camera> camera, std::shared_ptr
 	//
 	// Update and render models
 	//
-	for(int i = 0; i < this->_renderEntities.size(); i++)
+	for (int i = 0; i < this->_renderEntities.size(); i++)
 	{
 		// Update uniforms
-		glm::fmat4 model = models[i]->GetTransform().GetModel();
-		glm::fmat4 view = camera->GetView();
-		glm::fmat4 projection = scene->GetCamera()->GetProjection();
 		glm::fvec2 resolution = this->GetResolution();
-		glm::fvec3 eyePos = scene->GetCamera()->GetPosition();
+		glm::fvec3 eyePos = camera->GetPosition();
+		glm::fmat4 model = this->_renderEntities[i]->GetModelMatrix();
+		glm::fmat4 view = camera->GetView();
+		glm::fmat4 projection = camera->GetProjection();
 		glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
 
 		glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &model[0][0]);

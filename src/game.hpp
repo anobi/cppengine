@@ -53,7 +53,7 @@ private:
 	std::unique_ptr<Input> mInput;
 	std::unique_ptr<Controls> mControls;
 	std::unique_ptr<Display> mDisplay;
-	std::unique_ptr<Renderer> mRenderer;
+	std::unique_ptr<Rendering::Renderer> mRenderer;
 
 	std::shared_ptr<Scene> _scene;
 	std::vector<std::shared_ptr<Entity>> entities;

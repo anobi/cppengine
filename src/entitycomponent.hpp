@@ -9,23 +9,23 @@
 class EntityComponent {
 public:
 	EntityComponent() {}
+	EntityComponent(std::shared_ptr<Entity> parent) { this->_parent = parent; }
 	virtual ~EntityComponent() {}
 
 	virtual void Update() {}
-	virtual void Render(Renderer &renderer){}
-	virtual void AddToParent(Entity* parent) { mParent = parent; }
+	virtual void AddToParent(std::shared_ptr<Entity> parent) { _parent = parent; }
 
-	Entity* GetParent() { return this->mParent; }
-	void SetParent(Entity* parent) { this->mParent = parent; }
+	std::shared_ptr<Entity> GetParent() { return this->_parent; }
+	void SetParent(std::shared_ptr<Entity> parent) { this->_parent = parent; }
 	void SetName(const std::string name) { this->mComponentName = name; }
 
 	const std::string GetName() const { return this->mComponentName; }
-	Transform& GetTransform() { return mParent->GetTransform(); }
+	Transform& GetTransform() { return _parent->GetTransform(); }
 
 
 private:
 	std::string mComponentName;
-	Entity* mParent;
+	std::shared_ptr<Entity> _parent;
 };
 
 #endif

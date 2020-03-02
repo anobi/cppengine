@@ -7,7 +7,7 @@
 class BoxCollider : public EntityComponent {
 
 public:
-	BoxCollider();
+	BoxCollider(std::shared_ptr<Entity> parent);
 	~BoxCollider();
 
 	bool IsColliding(BoxCollider $collider);

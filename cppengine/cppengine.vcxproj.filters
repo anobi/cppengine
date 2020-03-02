@@ -98,6 +98,9 @@
     <Filter Include="src\resources">
       <UniqueIdentifier>{e1f9994a-35dc-49c8-91fc-7be1b24afd58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{650e5f4e-1775-4f74-aafd-12e08ceff813}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\boxcollider.cpp">
@@ -124,9 +127,6 @@
     <ClCompile Include="..\src\material.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\shader.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -145,10 +145,6 @@
     <ClCompile Include="..\src\frustum.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\rendering\renderer.cpp">
-      <Filter>src\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\rendering\renderable.cpp" />
     <ClCompile Include="..\src\loader\l_model.cpp">
       <Filter>src\loader</Filter>
     </ClCompile>
@@ -160,6 +156,15 @@
     </ClCompile>
     <ClCompile Include="..\src\resources\res_texture.cpp">
       <Filter>src\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\resources\res_mesh.cpp">
+      <Filter>src\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\gl\gl_renderer.cpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\gl\gl_light.cpp">
+      <Filter>src\rendering\gl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,13 +192,7 @@
     <ClInclude Include="..\src\input.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\light.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\material.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mesh.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\shader.hpp">
@@ -244,9 +243,6 @@
     <ClInclude Include="..\src\rendering\gl\opengl.hpp">
       <Filter>src\rendering\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\rendering\renderable.hpp">
-      <Filter>src\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\loader\l_model.hpp">
       <Filter>src\loader</Filter>
     </ClInclude>
@@ -258,6 +254,27 @@
     </ClInclude>
     <ClInclude Include="..\src\resources\res_texture.hpp">
       <Filter>src\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\render_entity.hpp">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\resources\res_mesh.hpp">
+      <Filter>src\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\resources\res_vertex.hpp">
+      <Filter>src\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\gl\gl_light.hpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\gl\gl_renderer.hpp">
+      <Filter>src\rendering\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\light.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\r_light.hpp">
+      <Filter>src\rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,28 +6,32 @@
 
 #include "../scene.hpp"
 #include "../shader.hpp"
+#include "render_entity.hpp"
+#include "r_light.hpp"
 
-class Renderer {
-public:
-	Renderer();
-	~Renderer();
-	bool Init();
-	
-	void UpdateTick(const int tick) { this->m_tick = tick; }
-	int GetTick() { return this->m_tick; }
+namespace Rendering {
+	class Renderer {
+	public:
+		bool Init() { return false; };
+		void Render(std::shared_ptr<Camera> camera, std::shared_ptr<Shader> shader) {};
+		void Shutdown() {};
 
-	void UpdateResolution(const int w, const int h) { this->resolution = glm::fvec2(w, h); }
-	glm::fvec2 GetResolution() { return this->resolution; }
+		void UpdateTick(const int tick) { this->m_tick = tick; }
+		int GetTick() { return this->m_tick; }
 
-	void Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shader);
-	void Shutdown();
+		void UpdateResolution(const int w, const int h) { this->resolution = glm::fvec2(w, h); }
+		glm::fvec2 GetResolution() { return this->resolution; }
 
-private:
+	protected:
 
-	int m_tick = 0;
-	glm::fvec2 resolution;
+		int m_tick = 0;
+		glm::fvec2 resolution;
 
-	std::vector<std::shared_ptr<Shader>> shaders;
-};
+		std::vector<std::shared_ptr<Rendering::RenderEntity>> _renderEntities;
+		std::vector<std::shared_ptr<Rendering::Light>> _staticLights;
+		std::vector<std::shared_ptr<Rendering::Light>> _dynamicLights;
+		std::vector<std::shared_ptr<Shader>> _shaders;
+	};
+}
 
 #endif

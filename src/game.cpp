@@ -13,6 +13,8 @@
 #include "model.hpp"
 #include "material.hpp"
 
+#include "rendering/gl/gl_renderer.hpp"
+
 Game::Game()
 {
     gameState = GAMESTATE_STOPPED; 
@@ -47,7 +49,7 @@ bool Game::Init()
 
 	//Renderer
 	std::cout << "* Renderer: ";
-	mRenderer = std::make_unique<Renderer>();
+	mRenderer = std::make_unique<GL::GLRenderer>();
 	if (!mRenderer->Init()) 
 	{
 		std::cout << "Error: %s\n", SDL_GetError();
@@ -184,7 +186,7 @@ void Game::Loop()
 		glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mRenderer->Render(this->GetScene(), this->shader);
+		mRenderer->Render(this->GetScene()->GetCamera(), this->shader);
 
 		if (this->debug_ui)
 		{
@@ -355,7 +357,7 @@ void Game::ConstructScene()
 
 	//cool background light
 	std::shared_ptr<Entity> light2 = std::make_shared<Entity>("Skylight");
-	std::shared_ptr<DirectionalLight> pl2 = std::make_shared<DirectionalLight>(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
+	std::shared_ptr<Core::DirectionalLight> pl2 = std::make_shared<Core::DirectionalLight>(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
 	light2->GetTransform().SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
 	light2->AddComponent(pl2);
 	AddEntity(light2);
@@ -363,7 +365,7 @@ void Game::ConstructScene()
 
 	//awesome spinning FIRE BALL LIGHT YEAH
 	std::shared_ptr<Entity> light3 = std::make_shared<Entity>("Fireball");
-	std::shared_ptr<PointLight> pl3 = std::make_shared<PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
+	std::shared_ptr<Core::PointLight> pl3 = std::make_shared<Core::PointLight>(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
 	std::shared_ptr<Model> pl3model = std::make_shared<Model>("uvcube.obj");
 	light3->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
 	light3->GetTransform().SetScale(glm::fvec3(0.1f));
@@ -374,7 +376,7 @@ void Game::ConstructScene()
 	this->_scene->AddModel(pl3model);
 
 	std::shared_ptr<Entity> light4 = std::make_shared<Entity>("Lightningball");
-	std::shared_ptr<PointLight> pl4 = std::make_shared<PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
+	std::shared_ptr<Core::PointLight> pl4 = std::make_shared<Core::PointLight>(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
 	std::shared_ptr<Model> pl4model = std::make_shared<Model>("uvcube.obj");
 	light4->GetTransform().SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
 	light4->GetTransform().SetScale(glm::fvec3(0.1f));

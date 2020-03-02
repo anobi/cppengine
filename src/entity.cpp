@@ -7,23 +7,19 @@ Entity::~Entity() {
 	}
 }
 
-void Entity::Render(Renderer &renderer){
-	for (unsigned int i = 0; i < mComponents.size(); i++) {
-		mComponents[i]->Render(renderer);
-	}
-}
-
 void Entity::Update(){}
 
 void Entity::AddComponent(std::shared_ptr<EntityComponent> component) {
-	component->SetParent(this);
+	component->SetParent((std::shared_ptr<Entity>) this);
 	mComponents.push_back(component);
 }
 
 std::shared_ptr<EntityComponent> Entity::GetComponent(const std::string name) {
+	std::shared_ptr<EntityComponent> component = nullptr;
 	for (unsigned int i = 0; i < mComponents.size(); i++) {
 		if (mComponents[i]->GetName() == name) {
-			return mComponents[i];
+			component = mComponents[i];
 		}
 	}
+	return component;
 }

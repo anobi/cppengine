@@ -64,23 +64,15 @@ void Model::Cleanup()
 	}
 }
 
-void Model::Render(std::shared_ptr<Shader> shader) 
-{
-	for (int i = 0; i < this->meshes.size(); i++) 
-	{
-		this->meshes[i]->Draw(shader);
-	}
-}
-
 void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
-	for (int i = 0; i < node->mNumMeshes; i++)
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
 		this->ProcessMesh(aiMesh, scene);
 	}
 
-	for (int i = 0; i < node->mNumChildren; i++)
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		this->ProcessNode(node->mChildren[i], scene);
 	}
@@ -170,7 +162,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	std::shared_ptr<Resources::Mesh> m = std::make_shared<Resources::Mesh>(Resources::Mesh(vertices, indices, material->textures));
+	std::shared_ptr<Resources::Mesh> m = std::make_shared<Resources::Mesh>(Resources::Mesh(vertices, indices));
 	meshes.push_back(m);
 }
 
@@ -184,7 +176,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 	material->name = matName.C_Str();
 
 	// TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+	for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
@@ -195,7 +187,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 		}
 	}
 
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
+	for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
@@ -206,7 +198,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 		}
 	}
 
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
+	for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
@@ -217,7 +209,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 		}
 	}
 
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DISPLACEMENT); i++)
+	for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_DISPLACEMENT); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_DISPLACEMENT, i, &texFile);
@@ -228,7 +220,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
 		}
 	}
 
-	for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
+	for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
 	{
 		aiString texFile;
 		aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);

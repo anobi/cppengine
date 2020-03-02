@@ -1,7 +1,8 @@
 #include "material.hpp"
 
-Material::Material() : EntityComponent() 
+Material::Material(std::shared_ptr<Entity> parent) : EntityComponent(parent)
 {
+	this->SetParent(parent);
 	diffuse = glm::fvec3(0.8f);
 
 	specular = glm::fvec3(1.0f);
@@ -26,8 +27,4 @@ void Material::Cleanup()
 	{
 		glDeleteTextures(1, &this->textures[i]->id);
 	}
-}
-
-void Material::Render(Renderer & renderer) 
-{
 }

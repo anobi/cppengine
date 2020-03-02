@@ -9,13 +9,13 @@ class Display {
 
 private:
 
-	SDL_GLContext _context;
-	SDL_Window* _window;
+	SDL_GLContext _context = nullptr;
+	SDL_Window* _window = nullptr;
 
-	bool resizing;
+	bool resizing = false;
 
-	int width;
-	int height;
+	int width = 800;
+	int height = 600;
 
 	void InitGL();
 

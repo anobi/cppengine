@@ -1,7 +1,7 @@
 #include "BoxCollider.hpp"
 
-BoxCollider::BoxCollider() {
-
+BoxCollider::BoxCollider(std::shared_ptr<Entity> parent) : EntityComponent(parent) {
+	this->SetParent(parent);
 }
 
 BoxCollider::~BoxCollider() {

@@ -189,12 +189,12 @@
     <ClCompile Include="..\src\loader\l_model.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\material.cpp" />
-    <ClCompile Include="..\src\mesh.cpp" />
     <ClCompile Include="..\src\model.cpp" />
+    <ClCompile Include="..\src\rendering\gl\gl_light.cpp" />
     <ClCompile Include="..\src\rendering\gl\gl_mesh.cpp" />
+    <ClCompile Include="..\src\rendering\gl\gl_renderer.cpp" />
     <ClCompile Include="..\src\rendering\gl\gl_texture.cpp" />
-    <ClCompile Include="..\src\rendering\renderable.cpp" />
-    <ClCompile Include="..\src\rendering\renderer.cpp" />
+    <ClCompile Include="..\src\resources\res_mesh.cpp" />
     <ClCompile Include="..\src\resources\res_texture.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
   </ItemGroup>
@@ -202,6 +202,7 @@
     <ClInclude Include="..\src\boxcollider.hpp" />
     <ClInclude Include="..\src\camera.hpp" />
     <ClInclude Include="..\src\controls.hpp" />
+    <ClInclude Include="..\src\core\light.hpp" />
     <ClInclude Include="..\src\display.hpp" />
     <ClInclude Include="..\src\entity.hpp" />
     <ClInclude Include="..\src\entitycomponent.hpp" />
@@ -216,17 +217,20 @@
     <ClInclude Include="..\src\lib\stb_rect_pack.h" />
     <ClInclude Include="..\src\lib\stb_textedit.h" />
     <ClInclude Include="..\src\lib\stb_truetype.h" />
-    <ClInclude Include="..\src\light.hpp" />
     <ClInclude Include="..\src\loader\l_model.hpp" />
     <ClInclude Include="..\src\material.hpp" />
-    <ClInclude Include="..\src\mesh.hpp" />
     <ClInclude Include="..\src\model.hpp" />
+    <ClInclude Include="..\src\rendering\gl\gl_light.hpp" />
     <ClInclude Include="..\src\rendering\gl\gl_mesh.hpp" />
+    <ClInclude Include="..\src\rendering\gl\gl_renderer.hpp" />
     <ClInclude Include="..\src\rendering\gl\opengl.hpp" />
     <ClInclude Include="..\src\rendering\gl\gl_texture.hpp" />
-    <ClInclude Include="..\src\rendering\renderable.hpp" />
+    <ClInclude Include="..\src\rendering\render_entity.hpp" />
     <ClInclude Include="..\src\rendering\renderer.hpp" />
+    <ClInclude Include="..\src\rendering\r_light.hpp" />
+    <ClInclude Include="..\src\resources\res_mesh.hpp" />
     <ClInclude Include="..\src\resources\res_texture.hpp" />
+    <ClInclude Include="..\src\resources\res_vertex.hpp" />
     <ClInclude Include="..\src\scene.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />

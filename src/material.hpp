@@ -17,29 +17,20 @@ struct Texture
 
 class Material : public EntityComponent 
 {
-
 public:
-
-	Material();
+	Material(std::shared_ptr<Entity> parent);
+	Material() {};
 	~Material();
 
 	std::vector<std::shared_ptr<Texture>> textures;
 	std::string name;
 
-	void Render(Renderer& renderer);
 	void Cleanup();
 
 private:
-	bool useDiffuseMap;
-	bool useSpecularMap;
-	bool useNormalMap;
-	bool useHeightMap;
-	bool useEmissiveMap;
-	bool useAplhaMap;
-
-	float specularStrength;
-	float emissiveStrength;
-	float heightStrength;
+	float specularStrength = 0.5;
+	float emissiveStrength = 0.0;
+	float heightStrength  = 0.0;
 	
 	glm::fvec3 diffuse;
 	glm::fvec3 specular;
