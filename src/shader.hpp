@@ -9,6 +9,21 @@
 
 #include "opengl.hpp"
 
+typedef struct {
+	int diffuse;
+	int use_diffuse;
+
+	int specular;
+	int use_specular;
+
+	int normal;
+	int use_normal;
+
+	int alpha;
+	int use_alpha;
+} shader_uniforms_t;
+
+
 class Shader
 {
 
@@ -32,6 +47,7 @@ public:
 	GLuint program;
 	GLuint shaders[NUM_SHADERS];
 	GLuint uniforms[NUM_UNIFORMS];
+	shader_uniforms_t _uniforms;
 
 	void Bind();
 	void Cleanup();

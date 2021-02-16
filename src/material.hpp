@@ -21,7 +21,7 @@ enum TextureType
 
 struct Texture
 {
-	std::string type;
+	TextureType type;
 	std::string filename;
 	GLuint id;
 };

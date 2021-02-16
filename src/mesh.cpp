@@ -53,9 +53,31 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 
-		std::string type = this->textures[i]->type;
-		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), i);
-		glUniform1i(glGetUniformLocation(shader->program, ("use_" + type + "Map").c_str()), 1);
+		int uloc = 0;
+		int use_uloc = 0;
+		switch(this->textures[i]->type) {
+		case DIFFUSE_MAP:
+			uloc = shader->_uniforms.diffuse;
+			use_uloc = shader->_uniforms.use_diffuse;
+			break;
+		case SPECULAR_MAP:
+			uloc = shader->_uniforms.specular;
+			use_uloc = shader->_uniforms.use_specular;
+			break;
+		case NORMAL_MAP:
+			uloc = shader->_uniforms.normal;
+			use_uloc = shader->_uniforms.use_normal;
+			break;
+		case ALPHA_MAP:
+			uloc = shader->_uniforms.alpha;
+			use_uloc = shader->_uniforms.use_alpha;
+			break;
+		default:
+			break;
+		}
+
+		glUniform1i(uloc, i);
+		glUniform1i(use_uloc, 1);
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]->id);
 	}
 
@@ -65,9 +87,31 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 	// Reset the texture map uniforms so they don't leak in to wrong meshes
 	for(int i = 0; i < this->textures.size(); i++)
 	{
-		std::string type = this->textures[i]->type;
-		glUniform1i(glGetUniformLocation(shader->program, (type + "Map").c_str()), 0);
-		glUniform1i(glGetUniformLocation(shader->program, ("use_" + type + "Map").c_str()), 0);
+		int uloc = 0;
+		int use_uloc = 0;
+		switch (this->textures[i]->type) {
+		case DIFFUSE_MAP:
+			uloc = shader->_uniforms.diffuse;
+			use_uloc = shader->_uniforms.use_diffuse;
+			break;
+		case SPECULAR_MAP:
+			uloc = shader->_uniforms.specular;
+			use_uloc = shader->_uniforms.use_specular;
+			break;
+		case NORMAL_MAP:
+			uloc = shader->_uniforms.normal;
+			use_uloc = shader->_uniforms.use_normal;
+			break;
+		case ALPHA_MAP:
+			uloc = shader->_uniforms.alpha;
+			use_uloc = shader->_uniforms.use_alpha;
+			break;
+		default:
+			break;
+		}
+
+		glUniform1i(uloc, 0);
+		glUniform1i(use_uloc, 0);
 	}
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(0);

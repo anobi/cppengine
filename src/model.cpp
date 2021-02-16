@@ -293,30 +293,7 @@ std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureT
 	}
 
 	texture->filename = filename;
-
-	switch (type)
-	{
-		case DIFFUSE_MAP:
-			texture->type = "diffuse";
-			break;
-		case SPECULAR_MAP:
-			texture->type = "specular";
-			break;
-		case NORMAL_MAP:
-			texture->type = "normal";
-			break;
-		case HEIGHT_MAP:
-			texture->type = "height";
-			break;
-		case ALPHA_MAP:
-			texture->type = "alpha";
-			break;
-		case EMISSIVE_MAP:
-			texture->type = "emissive";
-			break;
-		default:
-			break;
-	}
+	texture->type = type;
 
 	glGenTextures(1, &texture->id);
 	glBindTexture(GL_TEXTURE_2D, texture->id);

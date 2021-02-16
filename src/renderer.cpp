@@ -56,16 +56,18 @@ void Renderer::Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shad
 	//
 	// Update and render models
 	//
+
+	glm::fvec2 resolution = this->GetResolution();
+	glm::fmat4 view = scene->GetCamera()->GetView();
+	glm::fmat4 projection = scene->GetCamera()->GetProjection();
+	glm::fvec3 eyePos = scene->GetCamera()->GetPosition();
+
 	for(int i = 0; i < models.size(); i++)
 	{
 		// Update uniforms
 		glm::fmat4 model = models[i]->GetTransform().GetModel();
-		glm::fmat4 view = scene->GetCamera()->GetView();
-		glm::fmat4 projection = scene->GetCamera()->GetProjection();
-		glm::fvec2 resolution = this->GetResolution();
-		glm::fvec3 eyePos = scene->GetCamera()->GetPosition();
-		glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
 
+		glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
 		glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &model[0][0]);
 		glUniformMatrix4fv(shader->uniforms[1], 1, GL_FALSE, &view[0][0]);
 		glUniformMatrix4fv(shader->uniforms[2], 1, GL_FALSE, &projection[0][0]);

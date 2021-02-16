@@ -124,7 +124,7 @@ void Game::Loop()
         auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
         auto delay = ((milliseconds)1000 / 60 - elapsed).count();
 
-        if(delay >= 0) SDL_Delay(delay);
+        // if(delay >= 0) SDL_Delay(delay);
 
 		/*****************************
 		* Handle controls and events *
