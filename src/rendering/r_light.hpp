@@ -1,5 +1,5 @@
-#ifndef R_LIGHT_H
-#define R_LIGHT_H
+#ifndef R_LIGHT
+#define R_LIGHT
 
 #include <glm/glm.hpp>
 #include "../shader.hpp"

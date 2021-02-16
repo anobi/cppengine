@@ -1,5 +1,5 @@
-#ifndef RES_MESH_H
-#define RES_MESH_H
+#ifndef RES_MESH
+#define RES_MESH
 
 #include <iostream>
 #include <vector>
@@ -7,7 +7,6 @@
 #include "res_vertex.hpp"
 
 namespace Resources {
-
 	class Mesh
 	{
 	public:

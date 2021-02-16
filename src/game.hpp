@@ -12,7 +12,7 @@
 #include "rendering/renderer.hpp"
 #include "scene.hpp"
 
-enum gameState_t
+enum game_state_e
 {
 	GAMESTATE_RUNNING,
 	GAMESTATE_STOPPED
@@ -20,20 +20,18 @@ enum gameState_t
 
 class Game 
 {
-
-
 public:
 	Game();
 
-	gameState_t gameState;
-	std::string workingDirectory;
+	Input input;
+	Controls controls;
+	Display display;
+	Scene scene;
 
-	void SetScene(std::shared_ptr<Scene> scene) { this->_scene = scene; }
-	inline std::shared_ptr<Scene> GetScene() { return this->_scene;  }
+	Rendering::Renderer renderer;
 
-	void AddEntity(std::shared_ptr<Entity> entity);
-	std::shared_ptr<Entity> GetEntity(const std::string name);
-	std::vector<std::shared_ptr<Entity>> GetEntities();
+	game_state_e gamestate;
+	std::string working_directory;
 
 	bool Init();
 	void Start();
@@ -49,17 +47,12 @@ public:
 
 	// ::::::::::::::::::::::: End of temp stuff :::::::::::::::::::::::::::
 
-private:
-	std::unique_ptr<Input> mInput;
-	std::unique_ptr<Controls> mControls;
-	std::unique_ptr<Display> mDisplay;
-	std::unique_ptr<Rendering::Renderer> mRenderer;
-
-	std::shared_ptr<Scene> _scene;
 	std::vector<std::shared_ptr<Entity>> entities;
 
 	void UpdateUI();
 	void ConstructScene();
+	void AddEntity(std::shared_ptr<Entity> entity);
+	std::shared_ptr<Entity> GetEntity(const std::string name);
 
 	bool menu = false;
 	bool debug_ui = true;

@@ -1,5 +1,5 @@
-#ifndef RES_TEXTURE_H
-#define RES_TEXTURE_H
+#ifndef RES_TEXTURE
+#define RES_TEXTURE
 
 #include <iostream>
 

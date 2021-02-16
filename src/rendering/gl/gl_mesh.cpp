@@ -1,7 +1,7 @@
 #include <memory>
 #include "gl_mesh.hpp"
 
-GL::GLMesh::GLMesh(std::shared_ptr<Resources::Mesh> mesh) 
+Rendering::GL::GLMesh::GLMesh(std::shared_ptr<Resources::Mesh> mesh) 
 {
 	this->_num_indices = mesh->indices.size();
 	this->_num_vertices = mesh->vertices.size();
@@ -36,7 +36,7 @@ GL::GLMesh::GLMesh(std::shared_ptr<Resources::Mesh> mesh)
 	glBindVertexArray(0);
 }
 
-GL::GLMesh::~GLMesh() 
+Rendering::GL::GLMesh::~GLMesh() 
 {
 	this->_textures.clear();
 
@@ -51,13 +51,13 @@ GL::GLMesh::~GLMesh()
 	glDeleteVertexArrays(1, &this->_vao);
 }
 
-void GL::GLMesh::Draw()
+void Rendering::GL::GLMesh::Draw()
 {
 	glBindVertexArray(this->_vao);
 	glDrawElements(GL_TRIANGLES, this->_num_indices, GL_UNSIGNED_INT, (void*)0);
 }
 
-void GL::GLMesh::PostDraw()
+void Rendering::GL::GLMesh::PostDraw()
 {
 	glBindVertexArray(0);
 }

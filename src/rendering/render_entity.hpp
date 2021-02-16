@@ -1,5 +1,5 @@
-#ifndef R_RENDER_ENTITY_H
-#define R_RENDER_ENTITY_H
+#ifndef R_RENDER_ENTITY
+#define R_RENDER_ENTITY
 
 #include <glm/glm.hpp>
 

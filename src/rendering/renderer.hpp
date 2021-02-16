@@ -1,5 +1,5 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef R_RENDERER
+#define R_RENDERER
 
 #include <vector>
 #include <memory>
@@ -12,7 +12,7 @@
 namespace Rendering {
 	class Renderer {
 	public:
-		bool Init() { return false; };
+		bool Init() { return true; };
 		void Render(std::shared_ptr<Camera> camera, std::shared_ptr<Shader> shader) {};
 		void Shutdown() {};
 

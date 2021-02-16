@@ -1,26 +1,28 @@
-#ifndef R_GL_TEXTURE_H
-#define R_GL_TEXTURE_H
+#ifndef R_GL_TEXTURE
+#define R_GL_TEXTURE
 
 #include <iostream>
 #include "../render_entity.hpp"
 #include "../../resources/res_texture.hpp"
 #include "opengl.hpp"
 
-namespace GL {
-	class GLTexture  : Rendering::RenderEntity {
+namespace Rendering {
+	namespace GL {
+		class GLTexture : Rendering::RenderEntity {
 
-	public:
-		GLTexture(std::shared_ptr<Resources::RTexture> texture);
-		~GLTexture();
+		public:
+			GLTexture(std::shared_ptr<Resources::RTexture> texture);
+			~GLTexture();
 
-		void Draw(GLuint shader_program);
-		void PostDraw(GLuint shader_program);
+			void Draw(GLuint shader_program);
+			void PostDraw(GLuint shader_program);
 
-	private:
-		std::string _type = "";
-		unsigned int _i = 0;  // Not sure what this is but oh well. Somekind of a layout/order thing.
-		GLuint _id = 0;
-	};
+		private:
+			std::string _type = "";
+			unsigned int _texture_index = 0;
+			GLuint _id = 0;
+		};
+	}
 }
 
 #endif

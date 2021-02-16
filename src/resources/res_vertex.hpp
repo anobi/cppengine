@@ -1,5 +1,5 @@
-#ifndef RES_VERTEX_H
-#define RES_VERTEX_H
+#ifndef RES_VERTEX
+#define RES_VERTEX
 
 #include <iostream>
 #include <vector>
@@ -16,5 +16,4 @@ namespace Resources {
 		glm::fvec2 texCoords;
 	};
 }
-
 #endif

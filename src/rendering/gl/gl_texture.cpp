@@ -1,7 +1,7 @@
 #include "opengl.hpp"
 #include "gl_texture.hpp"
 
-GL::GLTexture::GLTexture(std::shared_ptr<Resources::RTexture> texture)
+Rendering::GL::GLTexture::GLTexture(std::shared_ptr<Resources::RTexture> texture)
 {
 	this->_id = texture->GetId();
 	glGenTextures(1, &this->_id);
@@ -14,21 +14,21 @@ GL::GLTexture::GLTexture(std::shared_ptr<Resources::RTexture> texture)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->GetTextureData());
 }
 
-GL::GLTexture::~GLTexture()
+Rendering::GL::GLTexture::~GLTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &this->_id);
 }
 
-void GL::GLTexture::Draw(GLuint shader_program)
+void Rendering::GL::GLTexture::Draw(GLuint shader_program)
 {
-	glActiveTexture(GL_TEXTURE0 + this->_i);
-	glUniform1i(glGetUniformLocation(shader_program, (this->_type + "Map").c_str()), this->_i);
+	glActiveTexture(GL_TEXTURE0 + this->_id);
+	glUniform1i(glGetUniformLocation(shader_program, (this->_type + "Map").c_str()), this->_id);
 	glUniform1i(glGetUniformLocation(shader_program, ("use_" + this->_type + "Map").c_str()), 1);
 	glBindTexture(GL_TEXTURE_2D, this->_id);
 }
 
-void GL::GLTexture::PostDraw(GLuint shader_program)
+void Rendering::GL::GLTexture::PostDraw(GLuint shader_program)
 {
 	glUniform1i(glGetUniformLocation(shader_program, (this->_type + "Map").c_str()), 0);
 	glUniform1i(glGetUniformLocation(shader_program, ("use_" + this->_type + "Map").c_str()), 0);
