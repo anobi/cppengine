@@ -30,7 +30,7 @@ std::string GetWorkingDirectory(char* executable_path)
 
 int main(int argc, char* argv[])
 {
-    std::unique_ptr<Game> game = std::make_unique<Game>();
+    Game game = Game();
 
     char* exe = argv[0];
     Configuration::Get().workingDirectory = GetWorkingDirectory(exe);

@@ -52,7 +52,7 @@ private:
     Display display;
     Renderer renderer;
 
-    Scene scene;
+    Scene* scene;
     Shader* shader;
     std::vector<Entity*> entities;
 

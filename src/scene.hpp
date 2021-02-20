@@ -25,11 +25,9 @@ public:
     inline void AddDirectionalLight(DirectionalLight* light) { this->_directionalLights.push_back(light); }
     inline std::vector<DirectionalLight*> GetDirectionalLights() { return this->_directionalLights; }
 
-    inline void SetCamera(Camera* camera) { this->_camera = camera; }
-    inline Camera* GetCamera() { return this->_camera; }
+    Camera* camera;
 
 private:
-    Camera* _camera;
     std::vector<PointLight*> _pointLights;
     std::vector<DirectionalLight*> _directionalLights;
     std::vector<Model*> _models;

@@ -156,14 +156,14 @@ void Game::Loop()
                 case SDL_WINDOWEVENT_RESIZED:
                     this->display.SetResolution(event.window.data1, event.window.data2, true);
                     this->renderer.UpdateResolution(this->display.width, this->display.height);
-                    this->scene.GetCamera()->SetAspectRatio(45.0f, this->display.GetAspectRatio());
+                    this->scene->camera->SetAspectRatio(45.0f, this->display.GetAspectRatio());
                     break;
                 }
             }
         }
 
         if (!menu) {
-            this->controls.Update(event, this->scene.GetCamera(), delay);
+            this->controls.Update(event, this->scene->camera, delay);
         }
 
         /*****************************
@@ -177,7 +177,7 @@ void Game::Loop()
         glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        this->renderer.Render(&this->scene, this->shader);
+        this->renderer.Render(this->scene, this->shader);
 
         if (this->debug_ui)
         {
@@ -262,8 +262,8 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 
 void Game::UpdateUI()
 {
-    glm::fvec3 cPos = this->scene.GetCamera()->GetPosition();
-    glm::fvec3 cRot = this->scene.GetCamera()->mTransform.GetRotation();
+    glm::fvec3 cPos = this->scene->camera->GetPosition();
+    glm::fvec3 cRot = this->scene->camera->mTransform.GetRotation();
 
     std::vector<std::string> entity_list;
 
@@ -333,7 +333,7 @@ PointLight pl4;
 
 void Game::ConstructScene()
 {
-    this->scene = defaultScene;
+    this->scene = &defaultScene;
 
     std::cout << "Loading game content..." << std::endl;
     std::cout << "--------------------" << std::endl;
@@ -350,7 +350,7 @@ void Game::ConstructScene()
     // They don't belong in renderer
     camera.mTransform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));
     camera.mTransform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
-    this->scene.SetCamera(&camera);
+    this->scene->camera = &camera;
 
     /*
     Meshes
@@ -365,7 +365,7 @@ void Game::ConstructScene()
     room.AddComponent(&roomModel);
 
     AddEntity(&room);
-    this->scene.AddModel(&roomModel);
+    this->scene->AddModel(&roomModel);
 
     /*
     Lights
@@ -377,7 +377,7 @@ void Game::ConstructScene()
     light2.GetTransform().SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
     light2.AddComponent(&pl2);
     AddEntity(&light2);
-    this->scene.AddDirectionalLight(&pl2);
+    this->scene->AddDirectionalLight(&pl2);
 
     //awesome spinning FIRE BALL LIGHT YEAH
     light3 = Entity("Fireball");
@@ -389,8 +389,8 @@ void Game::ConstructScene()
     light3.AddComponent(&pl3model);
 
     AddEntity(&light3);
-    this->scene.AddPointLight(&pl3);
-    this->scene.AddModel(&pl3model);
+    this->scene->AddPointLight(&pl3);
+    this->scene->AddModel(&pl3model);
 
 
     light4 = Entity("Lightningball");
@@ -402,8 +402,11 @@ void Game::ConstructScene()
     light4.AddComponent(&pl4model);
 
     AddEntity(&light4);
-    this->scene.AddPointLight(&pl4);
-    this->scene.AddModel(&pl4model);
+    this->scene->AddPointLight(&pl4);
+    this->scene->AddModel(&pl4model);
+
+    assert(this->scene);
+    assert(this->scene->camera);
 
     // Done loading, print empty line
     std::cout << std::endl;
