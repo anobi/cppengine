@@ -5,21 +5,21 @@
 
 Game game;
 
-Input::Input(){
-    
+Input::Input() {
+
 }
 
-bool Input::Init(){
+bool Input::Init() {
     //init input devices etc
     SDL_Init(SDL_INIT_EVENTS);
-    return true; 
+    return true;
 }
 
-void Input::Update(){
+void Input::Update() {
 
 }
-    
-void Input::Shutdown(){
+
+void Input::Shutdown() {
     std::cout << "* Input\n";
     //deinit shiet 
 }

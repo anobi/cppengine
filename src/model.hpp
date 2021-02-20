@@ -23,10 +23,10 @@ public:
     ~Model();
 
     void Update() {};
-    void Render(Renderer &renderer) {};
+    void Render(Renderer& renderer) {};
     void Render(std::shared_ptr<Shader> shader);
     void Cleanup();
-    
+
 private:
 
     std::vector<std::shared_ptr<Mesh>> meshes;

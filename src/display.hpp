@@ -20,11 +20,11 @@ private:
     void InitGL();
 
 public:
-    Display(){
+    Display() {
         this->width = 800;
         this->height = 600;
     }
-    ~Display(){};
+    ~Display() {};
 
     bool Init(const int width, const int height);
     void Update();
@@ -36,7 +36,7 @@ public:
 
     inline int GetWidth() { return this->width; }
     inline int GetHeight() { return this->height; }
-    inline float GetAspectRatio() {return (float)this->width / (float)this->height;}
+    inline float GetAspectRatio() { return (float)this->width / (float)this->height; }
 
     inline bool IsResizing() { return this->resizing; }
 };

@@ -16,7 +16,7 @@ public:
     Renderer();
     ~Renderer();
     bool Init();
-    
+
     void UpdateTick(const int tick) { this->m_tick = tick; }
     int GetTick() { return this->m_tick; }
 

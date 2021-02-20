@@ -54,14 +54,14 @@ Shader::Shader(const std::string fileName)
     uniforms[6] = glGetUniformLocation(program, "Time");
 
     //Texture maps
-    
+
     uniforms[7] = glGetUniformLocation(program, "diffuseMap");
     uniforms[8] = glGetUniformLocation(program, "specularMap");
     uniforms[9] = glGetUniformLocation(program, "normalMap");
     uniforms[10] = glGetUniformLocation(program, "heightMap");
     uniforms[11] = glGetUniformLocation(program, "emissiveMap");
     uniforms[12] = glGetUniformLocation(program, "alphaMap");
-    
+
     uniforms[13] = glGetUniformLocation(program, "use_diffuseMap");
     uniforms[14] = glGetUniformLocation(program, "use_specularMap");
     uniforms[15] = glGetUniformLocation(program, "use_heightMap");
@@ -78,7 +78,7 @@ Shader::Shader(const std::string fileName)
     _uniforms.use_normal = uniforms[16];
     _uniforms.use_alpha = uniforms[18];
 
-    
+
 
     unsigned int loc = POINTLIGHT_UNIFORM_OFFSET;
     for (unsigned int i = 0; i < MAX_POINTLIGHTS; i++)
@@ -129,8 +129,8 @@ void Shader::Cleanup()
 
 GLuint Shader::CreateShader(const std::string source, unsigned int type)
 {
-    GLuint shader = glCreateShader(type);	
-    
+    GLuint shader = glCreateShader(type);
+
     const char* shaderSrc = source.c_str();
     GLint length[1];
     length[0] = source.length();
@@ -186,7 +186,7 @@ std::string Shader::ReadFile(const std::string fileName)
     return content;
 }
 
-void Shader::GetShaderStatus(GLuint shader) 
+void Shader::GetShaderStatus(GLuint shader)
 {
     int shaderLogLength = 0;
     int programLogLength = 0;
@@ -211,7 +211,7 @@ void Shader::GetShaderStatus(GLuint shader)
         for (auto c : shaderError)
             shaderErrorMessage += c;
 
-        if(!shaderErrorMessage.empty())
+        if (!shaderErrorMessage.empty())
             std::cerr << "  !! Shader error: " << std::endl << shaderErrorMessage << std::endl;
     }
 
@@ -220,7 +220,7 @@ void Shader::GetShaderStatus(GLuint shader)
         for (auto c : programError)
             programErrorMessage += c;
 
-        if(!programErrorMessage.empty())
+        if (!programErrorMessage.empty())
             std::cerr << "  !! Program error: " << std::endl << programErrorMessage << std::endl;
     }
 }

@@ -9,13 +9,13 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vecto
     this->SetupMesh();
 }
 
-Mesh::~Mesh() 
+Mesh::~Mesh()
 {
     //glDeleteBuffers(1, &this->VBO);
     //glDeleteVertexArrays(1, &this->VAO);
 }
 
-void Mesh::SetupMesh() 
+void Mesh::SetupMesh()
 {
     glGenVertexArrays(1, &this->VAO);
     glBindVertexArray(this->VAO);
@@ -29,33 +29,33 @@ void Mesh::SetupMesh()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
 
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) offsetof(Vertex, normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
 
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) offsetof(Vertex, tangent));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, tangent));
 
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) offsetof(Vertex, bitangent));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, bitangent));
 
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) offsetof(Vertex, texCoords));
+    glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texCoords));
 
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 }
 
-void Mesh::Draw(std::shared_ptr<Shader> shader) 
+void Mesh::Draw(std::shared_ptr<Shader> shader)
 {
-    for(int i = 0; i < this->textures.size(); i++)
+    for (int i = 0; i < this->textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
 
         int uloc = 0;
         int use_uloc = 0;
-        switch(this->textures[i]->type) {
+        switch (this->textures[i]->type) {
         case DIFFUSE_MAP:
             uloc = shader->_uniforms.diffuse;
             use_uloc = shader->_uniforms.use_diffuse;
@@ -82,10 +82,10 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
     }
 
     glBindVertexArray(this->VAO);
-    glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*) 0);
+    glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, (void*)0);
 
     // Reset the texture map uniforms so they don't leak in to wrong meshes
-    for(int i = 0; i < this->textures.size(); i++)
+    for (int i = 0; i < this->textures.size(); i++)
     {
         int uloc = 0;
         int use_uloc = 0;
@@ -120,7 +120,7 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 void Mesh::Cleanup()
 {
     glBindTexture(GL_TEXTURE_2D, 0);
-    for(int i = 0; i < this->textures.size(); i++)
+    for (int i = 0; i < this->textures.size(); i++)
     {
         glDeleteTextures(1, &this->textures[i]->id);
     }

@@ -15,7 +15,7 @@ public:
         this->mProjection = glm::mat4();
     }
 
-    Camera(glm::fmat4 projection){
+    Camera(glm::fmat4 projection) {
         mTransform = Transform();
         this->mProjection = projection;
     }
@@ -31,7 +31,7 @@ public:
             mTransform.GetUp());
     }
 
-    inline glm::fmat4 GetProjection(){
+    inline glm::fmat4 GetProjection() {
         return mProjection;
     }
 
@@ -41,7 +41,7 @@ public:
 
     inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
 
-    inline void LookAt(const glm::fvec3 &target) {
+    inline void LookAt(const glm::fvec3& target) {
         mTransform.LookAt(target);
     }
 

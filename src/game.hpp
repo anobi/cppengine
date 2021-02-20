@@ -18,7 +18,7 @@ enum gameState_t
     GAMESTATE_STOPPED
 };
 
-class Game 
+class Game
 {
 
 
@@ -29,7 +29,7 @@ public:
     std::string workingDirectory;
 
     void SetScene(std::shared_ptr<Scene> scene) { this->_scene = scene; }
-    inline std::shared_ptr<Scene> GetScene() { return this->_scene;  }
+    inline std::shared_ptr<Scene> GetScene() { return this->_scene; }
 
     void AddEntity(std::shared_ptr<Entity> entity);
     std::shared_ptr<Entity> GetEntity(const std::string name);
@@ -39,7 +39,7 @@ public:
     void Start();
     void Shutdown();
     void Loop();
-    void Quit();	
+    void Quit();
 
     // :::::::::::::::::::::::::: Temp stuff :::::::::::::::::::::::::::::::
 

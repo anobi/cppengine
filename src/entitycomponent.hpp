@@ -12,7 +12,7 @@ public:
     virtual ~EntityComponent() {}
 
     virtual void Update() {}
-    virtual void Render(Renderer &renderer){}
+    virtual void Render(Renderer& renderer) {}
     virtual void AddToParent(Entity* parent) { mParent = parent; }
 
     Entity* GetParent() { return this->mParent; }

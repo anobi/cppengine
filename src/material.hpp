@@ -8,7 +8,7 @@
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
 
-enum TextureType 
+enum TextureType
 {
     NONE = 0,
     DIFFUSE_MAP = 1,
@@ -26,7 +26,7 @@ struct Texture
     GLuint id;
 };
 
-class Material : public EntityComponent 
+class Material : public EntityComponent
 {
 
 public:
@@ -51,7 +51,7 @@ private:
     float specularStrength;
     float emissiveStrength;
     float heightStrength;
-    
+
     glm::fvec3 diffuse;
     glm::fvec3 specular;
     glm::fvec3 emissive;

@@ -7,13 +7,13 @@ Entity::~Entity() {
     }
 }
 
-void Entity::Render(Renderer &renderer){
+void Entity::Render(Renderer& renderer) {
     for (unsigned int i = 0; i < mComponents.size(); i++) {
         mComponents[i]->Render(renderer);
     }
 }
 
-void Entity::Update(){}
+void Entity::Update() {}
 
 void Entity::AddComponent(std::shared_ptr<EntityComponent> component) {
     component->SetParent(this);

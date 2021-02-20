@@ -62,7 +62,7 @@ void Renderer::Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shad
     glm::fmat4 projection = scene->GetCamera()->GetProjection();
     glm::fvec3 eyePos = scene->GetCamera()->GetPosition();
 
-    for(int i = 0; i < models.size(); i++)
+    for (int i = 0; i < models.size(); i++)
     {
         // Update uniforms
         glm::fmat4 model = models[i]->GetTransform().GetModel();

@@ -2,11 +2,11 @@
 #define G_INPUT_H
 
 class Input {
-    
+
 public:
     Input();
-    ~Input(){};
-    
+    ~Input() {};
+
     bool Init();
     void Update();
     void Shutdown();

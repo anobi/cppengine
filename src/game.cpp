@@ -17,7 +17,7 @@
 
 Game::Game()
 {
-    gameState = GAMESTATE_STOPPED; 
+    gameState = GAMESTATE_STOPPED;
 }
 
 int selected_entity = 0;
@@ -28,16 +28,16 @@ bool Game::Init()
     std::cout << "--------------------" << std::endl;
     std::cout << "* Working directory: " << Configuration::Get().workingDirectory << std::endl;
 
-     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-     {
-         std::cout << "SDL Error: %s\n", SDL_GetError();
-         return false;
-     } 
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        std::cout << "SDL Error: %s\n", SDL_GetError();
+        return false;
+    }
 
     //Display
     std::cout << "* Display: ";
     mDisplay = std::make_unique<Display>();
-    if (!mDisplay->Init(1440, 900)) 
+    if (!mDisplay->Init(1440, 900))
     {
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
@@ -47,21 +47,21 @@ bool Game::Init()
     //Renderer
     std::cout << "* Renderer: ";
     mRenderer = std::make_unique<Renderer>();
-    if (!mRenderer->Init()) 
+    if (!mRenderer->Init())
     {
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
     }
     else std::cout << "done" << std::endl;
-    
+
     //Input system
     std::cout << "* Input: ";
     mInput = std::make_unique<Input>();
-    if(!mInput->Init())
+    if (!mInput->Init())
     {
         std::cout << "Error: %s\n", SDL_GetError();
         return false;
-    } 
+    }
     else std::cout << "done" << std::endl;
 
     this->_scene = std::make_unique<Scene>();
@@ -72,7 +72,7 @@ bool Game::Init()
     mControls = std::make_unique<Controls>();
     mControls->SetSensitivity(0.00025f);
     mControls->ResetMousePosition(mDisplay->GetWindow(), mDisplay->GetWidth() / 2, mDisplay->GetHeight() / 2);
-    
+
     std::cout << std::endl;
     return true;
 }
@@ -81,7 +81,7 @@ void Game::Start()
 {
 
     //Init everything
-    if(Init())
+    if (Init())
     {
         mRenderer->UpdateResolution(mDisplay->GetWidth(), mDisplay->GetHeight());
         //Build the scene, a temp solution
@@ -90,8 +90,8 @@ void Game::Start()
         //Start the game loop
         gameState = GAMESTATE_RUNNING;
         Loop();
-    } 
-    else 
+    }
+    else
     {
         std::cout << "  !! ERROR: Failed to initialize game" << std::endl;
         exit(EXIT_FAILURE);
@@ -108,9 +108,9 @@ void Game::Loop()
     float counter = 0.0f;
     SDL_Event event;
 
-    while(gameState == GAMESTATE_RUNNING) 
+    while (gameState == GAMESTATE_RUNNING)
     {
-        
+
         /*************************
         * Update clock and so on *
         **************************/
@@ -127,43 +127,43 @@ void Game::Loop()
         * Handle controls and events *
         ******************************/
 
-        while(SDL_PollEvent(&event))
+        while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT) 
+            if (event.type == SDL_QUIT)
             {
                 Quit();
             }
 
-            if (event.type == SDL_KEYDOWN) 
+            if (event.type == SDL_KEYDOWN)
             {
-                switch (event.key.keysym.sym) 
+                switch (event.key.keysym.sym)
                 {
-                    case SDLK_ESCAPE:
-                        Quit();
-                        break;
+                case SDLK_ESCAPE:
+                    Quit();
+                    break;
 
-                    case SDLK_LALT:
-                        menu = !menu;
-                        SDL_SetRelativeMouseMode((SDL_bool)!menu);
-                        mControls->ResetMousePosition(mDisplay->GetWindow(), mDisplay->GetWidth() / 2, mDisplay->GetHeight() / 2);
-                        SDL_ShowCursor(menu);
-                        break;
+                case SDLK_LALT:
+                    menu = !menu;
+                    SDL_SetRelativeMouseMode((SDL_bool)!menu);
+                    mControls->ResetMousePosition(mDisplay->GetWindow(), mDisplay->GetWidth() / 2, mDisplay->GetHeight() / 2);
+                    SDL_ShowCursor(menu);
+                    break;
 
-                    case SDLK_F1:
-                        debug_ui = !debug_ui;
-                        break;
+                case SDLK_F1:
+                    debug_ui = !debug_ui;
+                    break;
                 }
             }
 
-            if(event.type == SDL_WINDOWEVENT)
+            if (event.type == SDL_WINDOWEVENT)
             {
-                switch(event.window.event)
+                switch (event.window.event)
                 {
-                    case SDL_WINDOWEVENT_RESIZED:
-                        mDisplay->SetResolution(event.window.data1, event.window.data2, true);
-                        mRenderer->UpdateResolution(mDisplay->GetWidth(), mDisplay->GetHeight());
-                        this->_scene->GetCamera()->SetAspectRatio(45.0f, mDisplay->GetAspectRatio());
-                        break;
+                case SDL_WINDOWEVENT_RESIZED:
+                    mDisplay->SetResolution(event.window.data1, event.window.data2, true);
+                    mRenderer->UpdateResolution(mDisplay->GetWidth(), mDisplay->GetHeight());
+                    this->_scene->GetCamera()->SetAspectRatio(45.0f, mDisplay->GetAspectRatio());
+                    break;
                 }
             }
         }
@@ -201,7 +201,7 @@ void Game::Loop()
     Shutdown();
 }
 
-void Game::Shutdown() 
+void Game::Shutdown()
 {
     std::cout << "Shutting down...\n";
     std::cout << "--------------------" << std::endl;
@@ -231,18 +231,18 @@ std::vector<std::shared_ptr<Entity>> Game::GetEntities()
     return entities;
 };
 
-void Game::AddEntity(std::shared_ptr<Entity> entity) 
+void Game::AddEntity(std::shared_ptr<Entity> entity)
 {
     this->entities.push_back(entity);
 }
 
-std::shared_ptr<Entity> Game::GetEntity(const std::string name) 
+std::shared_ptr<Entity> Game::GetEntity(const std::string name)
 {
     std::shared_ptr<Entity> entity = NULL;
 
     for (unsigned int i = 0; i < entities.size(); i++)
     {
-        if (entities[i]->GetName() == name) 
+        if (entities[i]->GetName() == name)
         {
             entity = entities[i];
             break;
@@ -256,9 +256,9 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 {
     auto& vector = *static_cast<std::vector<std::string>*>(vec);
 
-    if (idx < 0 || idx >= static_cast<int>(vector.size())) 
-    { 
-        return false; 
+    if (idx < 0 || idx >= static_cast<int>(vector.size()))
+    {
+        return false;
     }
 
     *out_text = vector.at(idx).c_str();
@@ -271,9 +271,9 @@ void Game::UpdateUI()
     glm::fvec3 cPos = this->_scene->GetCamera()->GetPosition();
     glm::fvec3 cRot = this->_scene->GetCamera()->mTransform.GetRotation();
 
-    std::vector<std::string> entity_list;	
-    
-    for (int i = 0; i < entities.size(); i++) 
+    std::vector<std::string> entity_list;
+
+    for (int i = 0; i < entities.size(); i++)
     {
         std::shared_ptr<Entity> e = entities[i];
         glm::fvec3 pos = e->GetTransform().GetPosition();
@@ -313,7 +313,7 @@ void Game::UpdateUI()
     ImGui::End();
 }
 
-void Game::ConstructScene() 
+void Game::ConstructScene()
 {
     this->SetScene(std::make_shared<Scene>(Scene()));
 

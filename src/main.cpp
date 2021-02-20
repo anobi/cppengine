@@ -13,7 +13,7 @@ int CALLBACK WinMain(
     _In_ HINSTANCE hPrevInstance,
     _In_ LPSTR     lpCmdLine,
     _In_ int       nCmdShow
-    ) 
+)
 {
     Game game;
     game.Start();
@@ -24,11 +24,11 @@ int CALLBACK WinMain(
 
 std::string GetWorkingDirectory(char* executable_path)
 {
-    std::string::size_type pos = std::string(executable_path).find_last_of( "\\/" );
-    return std::string(executable_path).substr( 0, pos);
+    std::string::size_type pos = std::string(executable_path).find_last_of("\\/");
+    return std::string(executable_path).substr(0, pos);
 }
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
     std::unique_ptr<Game> game = std::make_unique<Game>();
 

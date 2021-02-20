@@ -16,17 +16,17 @@ public:
     }
 
     glm::fmat4 GetModel() {
-        glm::fmat4 positionMatrix	= glm::translate(glm::fmat4(1.0f), position);
-        glm::fmat4 scaleMatrix		= glm::scale(glm::fmat4(1.0f), scale);
-        glm::fmat4 rotationX		= glm::rotate(glm::fmat4(1.0f), rotation.x, glm::fvec3(1.0, 0.0, 0.0));
-        glm::fmat4 rotationY		= glm::rotate(glm::fmat4(1.0f), rotation.y, glm::fvec3(0.0, 1.0, 0.0));
-        glm::fmat4 rotationZ		= glm::rotate(glm::fmat4(1.0f), rotation.z, glm::fvec3(0.0, 0.0, 1.0));
-        glm::fmat4 rotationMatrix	= rotationX * rotationY * rotationZ;
+        glm::fmat4 positionMatrix = glm::translate(glm::fmat4(1.0f), position);
+        glm::fmat4 scaleMatrix = glm::scale(glm::fmat4(1.0f), scale);
+        glm::fmat4 rotationX = glm::rotate(glm::fmat4(1.0f), rotation.x, glm::fvec3(1.0, 0.0, 0.0));
+        glm::fmat4 rotationY = glm::rotate(glm::fmat4(1.0f), rotation.y, glm::fvec3(0.0, 1.0, 0.0));
+        glm::fmat4 rotationZ = glm::rotate(glm::fmat4(1.0f), rotation.z, glm::fvec3(0.0, 0.0, 1.0));
+        glm::fmat4 rotationMatrix = rotationX * rotationY * rotationZ;
 
         return positionMatrix * rotationMatrix * scaleMatrix;
     }
 
-    glm::fmat4 GetModelViewProjection(const glm::fmat4 &viewProjection) {
+    glm::fmat4 GetModelViewProjection(const glm::fmat4& viewProjection) {
         glm::fmat4 model = GetModel();
         return viewProjection * model;
     }
@@ -53,10 +53,10 @@ public:
             cos(rotation.y) * cos(rotation.x));
     }
 
-    inline void SetPosition(const glm::fvec3 &position) { this->position = position; }
-    inline void SetRotation(const glm::fvec3 &rotation) { this->rotation = rotation; }
-    inline void SetScale(const glm::fvec3 &scale) { this->scale = scale; }
-    inline void LookAt(const glm::fvec3 &target) {
+    inline void SetPosition(const glm::fvec3& position) { this->position = position; }
+    inline void SetRotation(const glm::fvec3& rotation) { this->rotation = rotation; }
+    inline void SetScale(const glm::fvec3& scale) { this->scale = scale; }
+    inline void LookAt(const glm::fvec3& target) {
         glm::mat4 translation = glm::lookAt(this->position, target, this->up);
     }
 

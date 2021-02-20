@@ -1,6 +1,6 @@
 #include "material.hpp"
 
-Material::Material() : EntityComponent() 
+Material::Material() : EntityComponent()
 {
     diffuse = glm::fvec3(0.8f);
 
@@ -13,7 +13,7 @@ Material::Material() : EntityComponent()
     heightStrength = 1.0f;
 }
 
-Material::~Material() 
+Material::~Material()
 {
     // Don't delete the textures here, do it on renderer's destructor IMO
     // If the textures are stored as pointers, we can skip reloading them
@@ -22,12 +22,12 @@ Material::~Material()
 
 void Material::Cleanup()
 {
-    for(int i = 0; i < this->textures.size(); i++)
+    for (int i = 0; i < this->textures.size(); i++)
     {
         glDeleteTextures(1, &this->textures[i]->id);
     }
 }
 
-void Material::Render(Renderer & renderer) 
+void Material::Render(Renderer& renderer)
 {
 }

@@ -25,7 +25,7 @@ public:
     ~Entity();
 
     void Update();
-    void Render(Renderer &renderer);
+    void Render(Renderer& renderer);
 
     void SetName(const std::string name) { this->mEntityName = name; };
     const std::string GetName() const { return this->mEntityName; }

@@ -22,7 +22,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
     std::cout << "* Loading model: " << path << std::endl;
 
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path,
+    const aiScene* scene = importer.ReadFile(path,
         aiProcess_ValidateDataStructure
         | aiProcess_Triangulate
         | aiProcess_FindInstances
@@ -37,7 +37,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace);
 
-    if (scene == NULL) 
+    if (scene == NULL)
     {
         std::cerr << "  !! ERROR: Unable to load model:" << path << std::endl;
         return;
@@ -64,9 +64,9 @@ void Model::Cleanup()
     }
 }
 
-void Model::Render(std::shared_ptr<Shader> shader) 
+void Model::Render(std::shared_ptr<Shader> shader)
 {
-    for (int i = 0; i < this->meshes.size(); i++) 
+    for (int i = 0; i < this->meshes.size(); i++)
     {
         this->meshes[i]->Draw(shader);
     }
@@ -136,7 +136,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     {
         for (unsigned int j = 0; j < mesh->mNumFaces; j++)
         {
-            const aiFace &face = mesh->mFaces[j];
+            const aiFace& face = mesh->mFaces[j];
             for (unsigned int k = 0; k < face.mNumIndices; k++)
             {
                 indices.push_back(face.mIndices[k]);
@@ -145,7 +145,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     std::shared_ptr<Material> material = std::make_shared<Material>();
-    if (mesh->mMaterialIndex >= 0) 
+    if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         aiString matName;
@@ -163,7 +163,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         }
 
         // Material not in cache, load it
-        if (!skip) 
+        if (!skip)
         {
             material = ProcessMaterials(aiMat);
             materials.push_back(material);
@@ -189,7 +189,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
         auto texture = LoadCachedTexture(texFile.C_Str(), DIFFUSE_MAP);
-        if(texture)
+        if (texture)
         {
             material->textures.push_back(texture);
         }
@@ -200,7 +200,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
         aiString texFile;
         aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
         auto texture = LoadCachedTexture(texFile.C_Str(), SPECULAR_MAP);
-        if(texture)
+        if (texture)
         {
             material->textures.push_back(texture);
         }
@@ -211,7 +211,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
         aiString texFile;
         aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
         auto texture = LoadCachedTexture(texFile.C_Str(), NORMAL_MAP);
-        if(texture)
+        if (texture)
         {
             material->textures.push_back(texture);
         }
@@ -222,7 +222,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DISPLACEMENT, i, &texFile);
         auto texture = LoadCachedTexture(texFile.C_Str(), HEIGHT_MAP);
-        if(texture)
+        if (texture)
         {
             material->textures.push_back(texture);
         }
@@ -233,7 +233,7 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
         aiString texFile;
         aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
         auto texture = LoadCachedTexture(texFile.C_Str(), ALPHA_MAP);
-        if(texture)
+        if (texture)
         {
             material->textures.push_back(texture);
         }
@@ -256,7 +256,7 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
     std::ostringstream oss;
     oss << Configuration::Get().workingDirectory << textures_dir << texFile.c_str();
     std::string path = oss.str();
-    
+
     // Try fetching a cached texture
     for (int j = 0; j < materials.size(); j++)
     {
