@@ -1,7 +1,7 @@
 #version 330 core
 
 out VertexOut {
-	vec2 texCoords;
+    vec2 texCoords;
 } vs_out;
 
 layout (location = 0) in vec3 position;
@@ -15,5 +15,5 @@ uniform mat4 ProjectionMatrix;
 void main() 
 {
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(position, 1.0f);
-	vs_out.texCoords = texCoord;
+    vs_out.texCoords = texCoord;
 }

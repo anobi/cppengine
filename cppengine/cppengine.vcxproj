@@ -147,6 +147,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="..\makefile" />
+    <None Include="..\README.md" />
     <None Include="..\res\Barrel.blend">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
@@ -175,11 +177,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\boxcollider.cpp" />
     <ClCompile Include="..\src\controls.cpp" />
     <ClCompile Include="..\src\display.cpp" />
     <ClCompile Include="..\src\entity.cpp" />
-    <ClCompile Include="..\src\frustum.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\input.cpp" />
     <ClCompile Include="..\src\lib\imgui.cpp" />
@@ -193,13 +193,11 @@
     <ClCompile Include="..\src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\boxcollider.hpp" />
     <ClInclude Include="..\src\camera.hpp" />
     <ClInclude Include="..\src\controls.hpp" />
     <ClInclude Include="..\src\display.hpp" />
     <ClInclude Include="..\src\entity.hpp" />
     <ClInclude Include="..\src\entitycomponent.hpp" />
-    <ClInclude Include="..\src\frustum.hpp" />
     <ClInclude Include="..\src\game.hpp" />
     <ClInclude Include="..\src\input.hpp" />
     <ClInclude Include="..\src\lib\imconfig.h" />
@@ -219,7 +217,6 @@
     <ClInclude Include="..\src\scene.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />
-    <ClInclude Include="..\src\types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\Barrel.Height.png">

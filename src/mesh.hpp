@@ -12,32 +12,32 @@
 
 struct Vertex
 {
-	glm::fvec3 position;
-	glm::fvec3 normal;
-	glm::fvec3 tangent;
-	glm::fvec3 bitangent;
-	glm::fvec2 texCoords;
+    glm::fvec3 position;
+    glm::fvec3 normal;
+    glm::fvec3 tangent;
+    glm::fvec3 bitangent;
+    glm::fvec2 texCoords;
 };
 
 class Mesh
 {
 public:
-	GLuint VAO;
-	std::vector<std::shared_ptr<Texture>> textures;
-	std::vector<Vertex> vertices;
-	std::vector<GLuint> indices;
+    GLuint VAO;
+    std::vector<std::shared_ptr<Texture>> textures;
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<std::shared_ptr<Texture>> textures);
-	~Mesh();
+    Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<std::shared_ptr<Texture>> textures);
+    ~Mesh();
 
-	void Draw(std::shared_ptr<Shader> shader);
-	void Cleanup();
+    void Draw(std::shared_ptr<Shader> shader);
+    void Cleanup();
 
 private:
-	GLuint VBO;
-	GLuint EBO;
+    GLuint VBO;
+    GLuint EBO;
 
-	void SetupMesh();
+    void SetupMesh();
 };
 
 #endif

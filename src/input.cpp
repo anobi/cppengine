@@ -11,7 +11,7 @@ Input::Input(){
 
 bool Input::Init(){
     //init input devices etc
-	SDL_Init(SDL_INIT_EVENTS);
+    SDL_Init(SDL_INIT_EVENTS);
     return true; 
 }
 
@@ -20,6 +20,6 @@ void Input::Update(){
 }
     
 void Input::Shutdown(){
-	std::cout << "* Input\n";
+    std::cout << "* Input\n";
     //deinit shiet 
 }

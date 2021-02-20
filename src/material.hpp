@@ -10,20 +10,20 @@
 
 enum TextureType 
 {
-	NONE = 0,
-	DIFFUSE_MAP = 1,
-	SPECULAR_MAP = 2,
-	EMISSIVE_MAP = 4,
-	HEIGHT_MAP = 5,
-	NORMAL_MAP = 6,
-	ALPHA_MAP = 7
+    NONE = 0,
+    DIFFUSE_MAP = 1,
+    SPECULAR_MAP = 2,
+    EMISSIVE_MAP = 4,
+    HEIGHT_MAP = 5,
+    NORMAL_MAP = 6,
+    ALPHA_MAP = 7
 };
 
 struct Texture
 {
-	TextureType type;
-	std::string filename;
-	GLuint id;
+    TextureType type;
+    std::string filename;
+    GLuint id;
 };
 
 class Material : public EntityComponent 
@@ -31,30 +31,30 @@ class Material : public EntityComponent
 
 public:
 
-	Material();
-	~Material();
+    Material();
+    ~Material();
 
-	std::vector<std::shared_ptr<Texture>> textures;
-	std::string name;
+    std::vector<std::shared_ptr<Texture>> textures;
+    std::string name;
 
-	void Render(Renderer& renderer);
-	void Cleanup();
+    void Render(Renderer& renderer);
+    void Cleanup();
 
 private:
-	bool useDiffuseMap;
-	bool useSpecularMap;
-	bool useNormalMap;
-	bool useHeightMap;
-	bool useEmissiveMap;
-	bool useAplhaMap;
+    bool useDiffuseMap;
+    bool useSpecularMap;
+    bool useNormalMap;
+    bool useHeightMap;
+    bool useEmissiveMap;
+    bool useAplhaMap;
 
-	float specularStrength;
-	float emissiveStrength;
-	float heightStrength;
-	
-	glm::fvec3 diffuse;
-	glm::fvec3 specular;
-	glm::fvec3 emissive;
+    float specularStrength;
+    float emissiveStrength;
+    float heightStrength;
+    
+    glm::fvec3 diffuse;
+    glm::fvec3 specular;
+    glm::fvec3 emissive;
 };
 
 #endif

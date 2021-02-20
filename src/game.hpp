@@ -14,8 +14,8 @@
 
 enum gameState_t
 {
-	GAMESTATE_RUNNING,
-	GAMESTATE_STOPPED
+    GAMESTATE_RUNNING,
+    GAMESTATE_STOPPED
 };
 
 class Game 
@@ -23,46 +23,46 @@ class Game
 
 
 public:
-	Game();
+    Game();
 
-	gameState_t gameState;
-	std::string workingDirectory;
+    gameState_t gameState;
+    std::string workingDirectory;
 
-	void SetScene(std::shared_ptr<Scene> scene) { this->_scene = scene; }
-	inline std::shared_ptr<Scene> GetScene() { return this->_scene;  }
+    void SetScene(std::shared_ptr<Scene> scene) { this->_scene = scene; }
+    inline std::shared_ptr<Scene> GetScene() { return this->_scene;  }
 
-	void AddEntity(std::shared_ptr<Entity> entity);
-	std::shared_ptr<Entity> GetEntity(const std::string name);
-	std::vector<std::shared_ptr<Entity>> GetEntities();
+    void AddEntity(std::shared_ptr<Entity> entity);
+    std::shared_ptr<Entity> GetEntity(const std::string name);
+    std::vector<std::shared_ptr<Entity>> GetEntities();
 
-	bool Init();
-	void Start();
-	void Shutdown();
-	void Loop();
-	void Quit();	
+    bool Init();
+    void Start();
+    void Shutdown();
+    void Loop();
+    void Quit();	
 
-	// :::::::::::::::::::::::::: Temp stuff :::::::::::::::::::::::::::::::
+    // :::::::::::::::::::::::::: Temp stuff :::::::::::::::::::::::::::::::
 
-	// TODO: Move to model or texture or whatever should have the shader info.
-	// Overridable by shader set in render pass.
-	std::shared_ptr<Shader> shader;
+    // TODO: Move to model or texture or whatever should have the shader info.
+    // Overridable by shader set in render pass.
+    std::shared_ptr<Shader> shader;
 
-	// ::::::::::::::::::::::: End of temp stuff :::::::::::::::::::::::::::
+    // ::::::::::::::::::::::: End of temp stuff :::::::::::::::::::::::::::
 
 private:
-	std::unique_ptr<Input> mInput;
-	std::unique_ptr<Controls> mControls;
-	std::unique_ptr<Display> mDisplay;
-	std::unique_ptr<Renderer> mRenderer;
+    std::unique_ptr<Input> mInput;
+    std::unique_ptr<Controls> mControls;
+    std::unique_ptr<Display> mDisplay;
+    std::unique_ptr<Renderer> mRenderer;
 
-	std::shared_ptr<Scene> _scene;
-	std::vector<std::shared_ptr<Entity>> entities;
+    std::shared_ptr<Scene> _scene;
+    std::vector<std::shared_ptr<Entity>> entities;
 
-	void UpdateUI();
-	void ConstructScene();
+    void UpdateUI();
+    void ConstructScene();
 
-	bool menu = false;
-	bool debug_ui = true;
+    bool menu = false;
+    bool debug_ui = true;
 };
 
 #endif

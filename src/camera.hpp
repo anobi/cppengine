@@ -10,45 +10,45 @@
 
 class Camera {
 public:
-	Camera() {
-		mTransform = Transform();
-		this->mProjection = glm::mat4();
-	}
+    Camera() {
+        mTransform = Transform();
+        this->mProjection = glm::mat4();
+    }
 
-	Camera(glm::fmat4 projection){
-		mTransform = Transform();
-		this->mProjection = projection;
-	}
+    Camera(glm::fmat4 projection){
+        mTransform = Transform();
+        this->mProjection = projection;
+    }
 
-	inline void SetAspectRatio(float fov, float aspectRatio) {
-		this->mProjection = glm::perspective(
-			fov, aspectRatio, 0.1f, 1000.0f);
-	}
+    inline void SetAspectRatio(float fov, float aspectRatio) {
+        this->mProjection = glm::perspective(
+            fov, aspectRatio, 0.1f, 1000.0f);
+    }
 
-	inline glm::fmat4 GetView() {
-		return glm::lookAt(mTransform.GetPosition(),
-			mTransform.GetPosition() + mTransform.GetDirection(),
-			mTransform.GetUp());
-	}
+    inline glm::fmat4 GetView() {
+        return glm::lookAt(mTransform.GetPosition(),
+            mTransform.GetPosition() + mTransform.GetDirection(),
+            mTransform.GetUp());
+    }
 
-	inline glm::fmat4 GetProjection(){
-		return mProjection;
-	}
+    inline glm::fmat4 GetProjection(){
+        return mProjection;
+    }
 
-	inline glm::fmat4 GetViewProjection() {
-		return mProjection * GetView();
-	}
+    inline glm::fmat4 GetViewProjection() {
+        return mProjection * GetView();
+    }
 
-	inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
+    inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
 
-	inline void LookAt(const glm::fvec3 &target) {
-		mTransform.LookAt(target);
-	}
+    inline void LookAt(const glm::fvec3 &target) {
+        mTransform.LookAt(target);
+    }
 
-	Transform mTransform;
+    Transform mTransform;
 
 private:
-	glm::fmat4 mProjection;
+    glm::fmat4 mProjection;
 
 
 };

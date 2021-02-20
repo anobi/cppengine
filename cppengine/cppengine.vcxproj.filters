@@ -71,6 +71,8 @@
     <None Include="..\res\Wood.png">
       <Filter>res</Filter>
     </None>
+    <None Include="..\makefile" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shaders">
@@ -87,9 +89,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\boxcollider.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\controls.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -132,14 +131,8 @@
     <ClCompile Include="..\src\model.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\frustum.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\boxcollider.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\camera.hpp">
       <Filter>src</Filter>
     </ClInclude>
@@ -182,9 +175,6 @@
     <ClInclude Include="..\src\transform.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\types.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\lib\imconfig.h">
       <Filter>src\lib</Filter>
     </ClInclude>
@@ -210,9 +200,6 @@
       <Filter>src\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\model.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\frustum.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\scene.hpp">
