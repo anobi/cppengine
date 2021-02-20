@@ -5,8 +5,8 @@ BIN = game
 
 SRC = src
 LIBDIR = src/lib
-OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/scene.o $(OBJDIR)/entity.o $(OBJDIR)/mesh.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/material.o $(OBJDIR)/main.o
 OBJDIR = obj
+OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/entity.o $(OBJDIR)/mesh.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/material.o $(OBJDIR)/main.o
 
 CFLAGS = -Wall -std=c++14
 LIBS = -lSDL2 -lassimp
@@ -58,9 +58,6 @@ $(OBJDIR)/input.o: $(SRC)/input.cpp
 $(OBJDIR)/controls.o: $(SRC)/controls.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/scene.o: $(SRC)/scene.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(OBJDIR)/entity.o: $(SRC)/entity.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -81,3 +78,6 @@ run: $(OBJ)
 
 clean: $(OBJ)
 	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)
+
+test: $(OBJS)
+	$(CC) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp

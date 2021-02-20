@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppengine", "cppengine\cppengine.vcxproj", "{7CCDDBF8-F68B-4C18-BE3B-E4E1F3EF6674}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppengine_tests", "cppengine_tests\cppengine_tests.vcxproj", "{1ACD4853-D2FE-47BF-9481-6749400F9745}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,19 @@ Global
 		{7CCDDBF8-F68B-4C18-BE3B-E4E1F3EF6674}.Release|x64.Build.0 = Release|x64
 		{7CCDDBF8-F68B-4C18-BE3B-E4E1F3EF6674}.Release|x86.ActiveCfg = Release|Win32
 		{7CCDDBF8-F68B-4C18-BE3B-E4E1F3EF6674}.Release|x86.Build.0 = Release|Win32
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Debug|x64.ActiveCfg = Debug|x64
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Debug|x64.Build.0 = Debug|x64
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Debug|x86.ActiveCfg = Debug|Win32
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Debug|x86.Build.0 = Debug|Win32
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Release|x64.ActiveCfg = Release|x64
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Release|x64.Build.0 = Release|x64
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Release|x86.ActiveCfg = Release|Win32
+		{1ACD4853-D2FE-47BF-9481-6749400F9745}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {181D0B00-DD99-4EE3-8E35-F3DFFFB7AE65}
 	EndGlobalSection
 EndGlobal
