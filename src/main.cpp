@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     char* exe = argv[0];
     Configuration::Get().workingDirectory = GetWorkingDirectory(exe);
 
-    game->Start();
+    game.Start();
 
     std::cout << "* Exiting... Bye bye!" << std::endl;
     return EXIT_SUCCESS;

@@ -333,10 +333,12 @@ PointLight pl4;
 
 void Game::ConstructScene()
 {
-    this->scene = &defaultScene;
-
     std::cout << "Loading game content..." << std::endl;
     std::cout << "--------------------" << std::endl;
+
+    defaultScene = Scene();
+    this->scene = &defaultScene;
+
     defaultShader = Shader("default");
     this->shader = &defaultShader;
 
