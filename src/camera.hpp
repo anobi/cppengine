@@ -11,46 +11,45 @@
 class Camera {
 public:
     Camera() {
-        mTransform = Transform();
-        this->mProjection = glm::mat4();
+        this->transform = Transform();
+        this->projection = glm::mat4();
     }
 
-    Camera(glm::fmat4 projection) {
-        mTransform = Transform();
-        this->mProjection = projection;
+    Camera(float fov, float near, float far) {
+        this->fov = fov;
+        this->near = near;
+        this->far = far;
+        this->transform = Transform();
+        this->projection = glm::mat4();
     }
 
-    inline void SetAspectRatio(float fov, float aspectRatio) {
-        this->mProjection = glm::perspective(
-            fov, aspectRatio, 0.1f, 1000.0f);
+    inline void SetAspectRatio(float aspectRatio) {
+        this->projection = glm::perspective(
+            this->fov,
+            aspectRatio,
+            this->near,
+            this->far
+        );
     }
 
     inline glm::fmat4 GetView() {
-        return glm::lookAt(mTransform.GetPosition(),
-            mTransform.GetPosition() + mTransform.GetDirection(),
-            mTransform.GetUp());
+        return glm::lookAt(
+            this->transform.GetPosition(),
+            this->transform.GetPosition() + this->transform.GetDirection(),
+            this->transform.GetUp()
+        );
     }
 
-    inline glm::fmat4 GetProjection() {
-        return mProjection;
-    }
+    inline glm::fmat4 GetProjection() { return projection; }
+    inline glm::fmat4 GetViewProjection() { return projection * GetView(); }
+    inline void LookAt(const glm::fvec3& target) { this->transform.LookAt(target); }
 
-    inline glm::fmat4 GetViewProjection() {
-        return mProjection * GetView();
-    }
+    Transform transform;
+    glm::fmat4 projection;
 
-    inline glm::fvec3 GetPosition() { return mTransform.GetPosition(); }
-
-    inline void LookAt(const glm::fvec3& target) {
-        mTransform.LookAt(target);
-    }
-
-    Transform mTransform;
-
-private:
-    glm::fmat4 mProjection;
-
-
+    float fov   = 45.0;
+    float near  = 0.1;
+    float far   = 100.0;
 };
 
 #endif

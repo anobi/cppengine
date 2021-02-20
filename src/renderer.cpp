@@ -60,7 +60,7 @@ void Renderer::Render(Scene* scene, Shader* shader)
     glm::fvec2 resolution = this->GetResolution();
     glm::fmat4 view = scene->camera->GetView();
     glm::fmat4 projection = scene->camera->GetProjection();
-    glm::fvec3 eyePos = scene->camera->GetPosition();
+    glm::fvec3 eyePos = scene->camera->transform.GetPosition();
 
     for (int i = 0; i < models.size(); i++)
     {

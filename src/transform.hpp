@@ -5,6 +5,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+
+// TODO: Shouldn't this be translation or something?
+// Also, this might be too complicated. 
+// Just save the position & rotation in objects and m ake some helpers where they are needed.
 class Transform {
 public:
     Transform() {

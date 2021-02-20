@@ -156,7 +156,7 @@ void Game::Loop()
                 case SDL_WINDOWEVENT_RESIZED:
                     this->display.SetResolution(event.window.data1, event.window.data2, true);
                     this->renderer.UpdateResolution(this->display.width, this->display.height);
-                    this->scene->camera->SetAspectRatio(45.0f, this->display.GetAspectRatio());
+                    this->scene->camera->SetAspectRatio(this->display.GetAspectRatio());
                     break;
                 }
             }
@@ -262,8 +262,8 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 
 void Game::UpdateUI()
 {
-    glm::fvec3 cPos = this->scene->camera->GetPosition();
-    glm::fvec3 cRot = this->scene->camera->mTransform.GetRotation();
+    glm::fvec3 cPos = this->scene->camera->transform.GetPosition();
+    glm::fvec3 cRot = this->scene->camera->transform.GetRotation();
 
     std::vector<std::string> entity_list;
 
@@ -342,16 +342,16 @@ void Game::ConstructScene()
     defaultShader = Shader("default");
     this->shader = &defaultShader;
 
-    camera = Camera(Camera(glm::perspective(
-        45.0f, //FOV
-        this->display.GetAspectRatio(), //duh
-        0.1f, //depth aka znear
-        100.0f))); //zFar
+    // TODO: Figure out why the FOV acts all funny if it's set to anything other than 45.0
+    camera = Camera(
+        45.0f,  //FOV
+        0.1f,   // zNear
+        100.0f  // zFar
+    );
 
-    // TODO: Make a scene object that contains cameras and shite
-    // They don't belong in renderer
-    camera.mTransform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));
-    camera.mTransform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
+    camera.transform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));
+    camera.transform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
+    camera.SetAspectRatio(this->display.GetAspectRatio());
     this->scene->camera = &camera;
 
     /*
