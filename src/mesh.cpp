@@ -11,8 +11,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vecto
 
 Mesh::~Mesh()
 {
-    //glDeleteBuffers(1, &this->VBO);
-    //glDeleteVertexArrays(1, &this->VAO);
 }
 
 void Mesh::SetupMesh()
@@ -47,7 +45,7 @@ void Mesh::SetupMesh()
     glBindVertexArray(0);
 }
 
-void Mesh::Draw(std::shared_ptr<Shader> shader)
+void Mesh::Draw(Shader* shader)
 {
     for (int i = 0; i < this->textures.size(); i++)
     {

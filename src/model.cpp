@@ -35,7 +35,8 @@ Model::Model(const std::string fileName) : EntityComponent() {
         | aiProcess_GenUVCoords
         | aiProcess_GenSmoothNormals
         | aiProcess_FlipUVs
-        | aiProcess_CalcTangentSpace);
+        | aiProcess_CalcTangentSpace
+    );
 
     if (scene == NULL)
     {
@@ -44,11 +45,6 @@ Model::Model(const std::string fileName) : EntityComponent() {
     }
 
     this->ProcessNode(scene->mRootNode, scene);
-}
-
-Model::~Model()
-{
-    // this->Cleanup();
 }
 
 void Model::Cleanup()
@@ -64,7 +60,7 @@ void Model::Cleanup()
     }
 }
 
-void Model::Render(std::shared_ptr<Shader> shader)
+void Model::Render(Shader* shader)
 {
     for (int i = 0; i < this->meshes.size(); i++)
     {

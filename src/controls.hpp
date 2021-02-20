@@ -14,7 +14,7 @@ public:
     };
     ~Controls() {};
 
-    void Update(SDL_Event& sdlEvent, std::shared_ptr<Camera> camera, const long deltaTime);
+    void Update(SDL_Event& sdlEvent, Camera* camera, const long deltaTime);
     void ResetMousePosition(SDL_Window* window, int center_x, int center_y);
 
     inline void SetMovementSpeed(const float speed) { this->mSpeed = speed; }

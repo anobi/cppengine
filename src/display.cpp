@@ -19,7 +19,6 @@ bool Display::Init(const int w, const int h) {
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -56,7 +55,7 @@ void Display::SetResolution(const int w, const int h, bool fullScreen){
     displayMode.w = w;
     displayMode.h = h;
     SDL_SetWindowDisplayMode(_window, &displayMode);
-    //SDL_GL_MakeCurrent(_window, _context);
+    SDL_GL_MakeCurrent(_window, _context);
 
     glViewport(0, 0, this->width, this->height);
     resizing = false;
@@ -67,8 +66,8 @@ void Display::Shutdown()
     SDL_GL_DeleteContext(_context);
     SDL_DestroyWindow(_window);
 
-    _context = NULL;
-    _window = NULL;
+    _context = 0;
+    _window = 0;
 }
 
 void Display::InitGL() {

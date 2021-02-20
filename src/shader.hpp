@@ -39,6 +39,7 @@ public:
     static const unsigned int DLIGHT_UNIFORM_OFFSET = 64;
     static const unsigned int DLIGHT_UNIFORMS = 3;
 
+    Shader() {};
     Shader(const std::string filename);
     ~Shader();
 

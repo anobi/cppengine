@@ -18,7 +18,7 @@ bool Renderer::Init()
     return true;
 }
 
-void Renderer::Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shader)
+void Renderer::Render(Scene* scene, Shader* shader)
 {
     shader->Bind();
 

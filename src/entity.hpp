@@ -30,14 +30,14 @@ public:
     void SetName(const std::string name) { this->mEntityName = name; };
     const std::string GetName() const { return this->mEntityName; }
 
-    void AddComponent(std::shared_ptr<EntityComponent> component);
-    std::shared_ptr<EntityComponent> GetComponent(const std::string componentName);
+    void AddComponent(EntityComponent* component);
+    EntityComponent* GetComponent(const std::string componentName);
 
     Transform& GetTransform() { return mTransform; }
 
 private:
     std::string mEntityName;
-    std::vector<std::shared_ptr<EntityComponent>> mComponents;
+    std::vector<EntityComponent*> components;
     Transform mTransform;
 };
 

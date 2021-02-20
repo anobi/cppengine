@@ -13,10 +13,6 @@ private:
     SDL_Window* _window;
 
     bool resizing;
-
-    int width;
-    int height;
-
     void InitGL();
 
 public:
@@ -34,11 +30,12 @@ public:
     inline SDL_Window* GetWindow() { return this->_window; }
     inline const SDL_Window& GetWindow() const { return *this->_window; }
 
-    inline int GetWidth() { return this->width; }
-    inline int GetHeight() { return this->height; }
     inline float GetAspectRatio() { return (float)this->width / (float)this->height; }
 
     inline bool IsResizing() { return this->resizing; }
+
+    int width;
+    int height;
 };
 
 #endif

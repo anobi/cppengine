@@ -19,12 +19,13 @@
 class Model : public EntityComponent
 {
 public:
+    Model() {};
     Model(const std::string fileName);
-    ~Model();
+    ~Model() {};
 
     void Update() {};
     void Render(Renderer& renderer) {};
-    void Render(std::shared_ptr<Shader> shader);
+    void Render(Shader* shader);
     void Cleanup();
 
 private:

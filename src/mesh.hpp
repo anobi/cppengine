@@ -30,7 +30,7 @@ public:
     Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<std::shared_ptr<Texture>> textures);
     ~Mesh();
 
-    void Draw(std::shared_ptr<Shader> shader);
+    void Draw(Shader* shader);
     void Cleanup();
 
 private:

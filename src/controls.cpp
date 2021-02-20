@@ -10,7 +10,7 @@ void Controls::ResetMousePosition(SDL_Window* window, int center_x, int center_y
     SDL_WarpMouseInWindow(window, center_x, center_y);
 }
 
-void Controls::Update(SDL_Event& sdlEvent, std::shared_ptr<Camera> camera, const long deltaTime) {
+void Controls::Update(SDL_Event& sdlEvent, Camera* camera, const long deltaTime) {
 
     glm::fvec3& cPos = camera->mTransform.GetPosition();
     glm::fvec3& cRot = camera->mTransform.GetRotation();

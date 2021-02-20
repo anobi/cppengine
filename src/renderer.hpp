@@ -23,7 +23,7 @@ public:
     void UpdateResolution(const int w, const int h) { this->resolution = glm::fvec2(w, h); }
     glm::fvec2 GetResolution() { return this->resolution; }
 
-    void Render(std::shared_ptr<Scene> scene, std::shared_ptr<Shader> shader);
+    void Render(Scene* scene, Shader* shader);
     void Shutdown();
 
 private:
@@ -31,7 +31,7 @@ private:
     int m_tick = 0;
     glm::fvec2 resolution;
 
-    std::vector<std::shared_ptr<Shader>> shaders;
+    std::vector<Shader*> shaders;
 };
 
 #endif
