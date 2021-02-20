@@ -28,14 +28,11 @@ bool Game::Init()
     std::cout << "--------------------" << std::endl;
     std::cout << "* Working directory: " << Configuration::Get().workingDirectory << std::endl;
 
-    //init stuff
-    // std::cout << "* SDL: ";
-    // if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    // {
-    //     std::cout << "Error: %s\n", SDL_GetError();
-    //     return false;
-    // } 
-    // else std::cout << "done\n";
+     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+     {
+         std::cout << "SDL Error: %s\n", SDL_GetError();
+         return false;
+     } 
 
     //Display
     std::cout << "* Display: ";
