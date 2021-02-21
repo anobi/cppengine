@@ -126,7 +126,6 @@ void Game::Loop()
     // float target_framerate = 90.0f;
     // float target_framerate = 144.0f;
     float target_framerate = 200.0f;
-
     float target_frame_time = 1000.0f / target_framerate;
     Uint64 loop_start = SDL_GetPerformanceCounter();
 
@@ -174,6 +173,9 @@ void Game::Loop()
                 case SDLK_F1:
                     debug_ui = !debug_ui;
                     break;
+
+                default:
+                    break;
                 }
             }
 
@@ -190,8 +192,7 @@ void Game::Loop()
             }
         }
 
-        //float dd = 1 / delay;
-        if (!menu) {
+        if (!this->menu) {
             this->controls.Update(event, this->scene->camera, delay);
         }
         
@@ -338,7 +339,7 @@ void Game::UpdateUI()
     ImGui::SetNextWindowSize(ImVec2(350, 200), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Settings");
 
-    ImGui::DragFloat("Mouse sensitivity", &this->controls.mouseSensitivity);
+    ImGui::DragFloat("Mouse sensitivity", &this->controls.mouseSensitivity, 0.1f, 0.0f, 10.0f);
 
     ImGui::End();
 }

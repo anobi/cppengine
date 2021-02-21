@@ -10,7 +10,7 @@ class Controls {
 public:
     Controls() {
         this->movementSpeed = 0.02f;
-        this->mouseSensitivity = 0.0002f;
+        this->mouseSensitivity = 3.0f;
     };
     ~Controls() {};
 

@@ -21,9 +21,11 @@ void Controls::Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime
         int x, y;
         SDL_GetRelativeMouseState(&x, &y);
 
+        float realMouseSensitivity = this->mouseSensitivity / 10000.0f;
+
         float yLimit = glm::radians(90.0f);
-        float dx = x * this->mouseSensitivity * deltaTime;
-        float dy = y * this->mouseSensitivity * deltaTime;
+        float dx = x * realMouseSensitivity * deltaTime;
+        float dy = y * realMouseSensitivity * deltaTime;
 
         cRot.x -= dx;
         cRot.y = glm::clamp(cRot.y - dy, -yLimit, yLimit);
