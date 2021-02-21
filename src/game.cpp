@@ -342,9 +342,8 @@ void Game::ConstructScene()
     defaultShader = Shader("default");
     this->shader = &defaultShader;
 
-    // TODO: Figure out why the FOV acts all funny if it's set to anything other than 45.0
     camera = Camera(
-        45.0f,  //FOV
+        60.0f,  // FOV
         0.1f,   // zNear
         100.0f  // zFar
     );

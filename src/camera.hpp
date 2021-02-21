@@ -25,7 +25,7 @@ public:
 
     inline void SetAspectRatio(float aspectRatio) {
         this->projection = glm::perspective(
-            this->fov,
+            glm::radians(this->fov),
             aspectRatio,
             this->near,
             this->far
@@ -47,9 +47,9 @@ public:
     Transform transform;
     glm::fmat4 projection;
 
-    float fov   = 45.0;
-    float near  = 0.1;
-    float far   = 100.0;
+    float fov   = 45.0f;
+    float near  = 0.1f;
+    float far   = 100.0f;
 };
 
 #endif
