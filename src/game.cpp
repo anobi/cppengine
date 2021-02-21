@@ -15,6 +15,31 @@
 #include "model.hpp"
 #include "material.hpp"
 
+
+// TODO: Temp holders. Create new homes for these.
+Scene defaultScene;
+Shader defaultShader;
+Camera camera;
+Entity room;
+
+Model roomModel;
+Model pl1model;
+Model pl2model;
+Model pl3model;
+Model pl4model;
+
+Entity light1;
+Entity light2;
+Entity light3;
+Entity light4;
+
+DirectionalLight pl2;
+
+PointLight pl1;
+PointLight pl3;
+PointLight pl4;
+
+
 Game::Game()
 {
     gameState = GAMESTATE_STOPPED;
@@ -64,7 +89,6 @@ bool Game::Init()
     ImGui_ImplSdlGL3_Init(this->display.GetWindow());
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
-    this->controls.SetSensitivity(0.00025f);
     this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
 
     std::cout << std::endl;
@@ -94,28 +118,32 @@ void Game::Start()
 
 void Game::Loop()
 {
-    using std::chrono::high_resolution_clock;
-    using std::chrono::duration_cast;
-    using std::chrono::milliseconds;
-
-    float ticks = 0;
-    float counter = 0.0f;
     SDL_Event event;
+    int frames = 0;
+    int ticks = 0;
+
+    // float target_framerate = 60.0f;
+    // float target_framerate = 90.0f;
+    // float target_framerate = 144.0f;
+    float target_framerate = 200.0f;
+
+    float target_frame_time = 1000.0f / target_framerate;
+    Uint64 loop_start = SDL_GetPerformanceCounter();
 
     while (gameState == GAMESTATE_RUNNING)
     {
+        Uint64 loop_end = SDL_GetPerformanceCounter();
+        Uint64 frame_time = loop_end - loop_start;
+        loop_start = loop_end;
 
-        /*************************
-        * Update clock and so on *
-        **************************/
+        float elapsed = frame_time / (float)SDL_GetPerformanceFrequency();
+        float delay = target_frame_time - elapsed;
+        if (elapsed >= 0) {
+            SDL_Delay(delay);
+        }
+
+        ticks++;
         this->renderer.UpdateTick(ticks);
-
-        auto loop_start = high_resolution_clock::now();
-        auto loop_end = high_resolution_clock::now();
-        auto elapsed = duration_cast<milliseconds>(loop_end - loop_start);
-        auto delay = ((milliseconds)1000 / 60 - elapsed).count();
-
-        // if(delay >= 0) SDL_Delay(delay);
 
         /*****************************
         * Handle controls and events *
@@ -162,19 +190,21 @@ void Game::Loop()
             }
         }
 
+        //float dd = 1 / delay;
         if (!menu) {
             this->controls.Update(event, this->scene->camera, delay);
         }
-
-        /*****************************
-        * Update entities and render *
-        ******************************/
-
-        GetEntity("Fireball")->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, glm::cos(counter * 25) * 15));
-        GetEntity("Lightningball")->GetTransform().SetPosition(glm::fvec3(7.5f, 2.5f, glm::cos(counter * 10) * -15));
+        
+        // Animate the light cubes
+        float dt = 1.0f / target_framerate;
+        float e1_speed = 0.25f;
+        float e2_speed = 0.10f;
+        float e1_pos = glm::cos((ticks + e1_speed) * dt) * 15;
+        float e2_pos = glm::cos((ticks + e2_speed) * dt) * 15;
+        GetEntity("Fireball")->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, e1_pos));
+        GetEntity("Lightningball")->GetTransform().SetPosition(glm::fvec3(7.5f, 2.5f, e2_pos));
 
         //TODO: figure out where to put this shit
-        glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         this->renderer.Render(this->scene, this->shader);
@@ -187,9 +217,6 @@ void Game::Loop()
         }
 
         this->display.Update();
-
-        counter += 0.001f;
-        ticks += 1;
     }
 
     Shutdown();
@@ -305,31 +332,16 @@ void Game::UpdateUI()
     entities[selected_entity]->GetTransform().SetPosition(e_pos);
 
     ImGui::End();
+
+    // Settings window
+    ImGui::SetNextWindowPos(ImVec2(10, 1000), ImGuiSetCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(350, 200), ImGuiSetCond_FirstUseEver);
+    ImGui::Begin("Settings");
+
+    ImGui::DragFloat("Mouse sensitivity", &this->controls.mouseSensitivity);
+
+    ImGui::End();
 }
-
-
-// Temp holders
-Scene defaultScene;
-Shader defaultShader;
-Camera camera;
-Entity room;
-
-Model roomModel;
-Model pl1model;
-Model pl2model;
-Model pl3model;
-Model pl4model;
-
-Entity light1;
-Entity light2;
-Entity light3;
-Entity light4;
-
-DirectionalLight pl2;
-
-PointLight pl1;
-PointLight pl3;
-PointLight pl4;
 
 void Game::ConstructScene()
 {
@@ -345,7 +357,7 @@ void Game::ConstructScene()
     camera = Camera(
         60.0f,  // FOV
         0.1f,   // zNear
-        100.0f  // zFar
+        1000.0f  // zFar
     );
 
     camera.transform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));

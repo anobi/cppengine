@@ -16,17 +16,17 @@ bool Display::Init(const int w, const int h) {
     this->height = h;
     
     SDL_Init(SDL_INIT_VIDEO);
-
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    _window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height,
-                               SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    
+    Uint32 window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+    _window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height, window_flags);
     _context = SDL_GL_CreateContext(_window);
-
     std::cout << glGetString(GL_VERSION) << " : ";
+
+    SDL_GL_SetSwapInterval(0);  // 0: immediate, 1: vsync, -1: adaptive vsync
 
     InitGL();
 
@@ -70,13 +70,14 @@ void Display::Shutdown()
     _window = 0;
 }
 
-void Display::InitGL() {
+void Display::InitGL() 
+{
 
     glewExperimental = GL_TRUE;
     glewInit();
     
     glViewport(0, 0, this->width, this->height);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
     glClearDepth(1.0f);
 
     glEnable(GL_CULL_FACE);

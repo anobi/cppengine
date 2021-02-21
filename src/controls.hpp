@@ -9,20 +9,16 @@
 class Controls {
 public:
     Controls() {
-        this->mSpeed = 0.02f;
-        this->mSensitivity = 0.001f;
+        this->movementSpeed = 0.02f;
+        this->mouseSensitivity = 0.0002f;
     };
     ~Controls() {};
 
-    void Update(SDL_Event& sdlEvent, Camera* camera, const long deltaTime);
+    void Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime);
     void ResetMousePosition(SDL_Window* window, int center_x, int center_y);
 
-    inline void SetMovementSpeed(const float speed) { this->mSpeed = speed; }
-    inline void SetSensitivity(const float sensitivity) { this->mSensitivity = sensitivity; }
-
-private:
-    float mSpeed;
-    float mSensitivity;
+    float movementSpeed;
+    float mouseSensitivity;
 };
 
 #endif
