@@ -1,8 +1,5 @@
 # cppengine
-* Wat: C++ and OpenGL newbie learns to make a game engine.
-* Why: Because graphics programming is shiny.
-
-Completion ETA: about 20 years.
+Just a playground to figure out how to make game engines in c++.
 
 ### Dependencies
 * OpenGL 3+

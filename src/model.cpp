@@ -1,4 +1,5 @@
-#include <sstream>
+#include <string.h>
+#include <cstdio>
 
 #include "configuration.hpp"
 #include "model.hpp"
@@ -6,20 +7,26 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "lib/stb_image.h"
 
-Model::Model(const std::string fileName) : EntityComponent() {
+// TODO: move to some tyoe definitions file or something
+// Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
+constexpr unsigned int MAX_PATH_LENGTH = 4096;
 
-    this->SetName("Mesh");
+Model::Model(const char* fileName) : EntityComponent() {
+
+    this->name = "Mesh";
 
 #ifdef _WIN32 
-    std::string resources_dir = "res/";
+    const char* resources_dir = "res/";
 #else
-    std::string resources_dir = "/res/";
+    const char* resources_dir = "/res/";
 #endif
 
-    std::ostringstream oss;
-    oss << Configuration::Get().workingDirectory << resources_dir << fileName;
-    std::string path = oss.str();
-    std::cout << "* Loading model: " << path << std::endl;
+    
+    char path[MAX_PATH_LENGTH];
+    const char* cwd = Configuration::Get().workingDirectory.c_str();
+    snprintf(path, MAX_PATH_LENGTH, "%s%s%s", cwd, resources_dir, fileName);
+
+    printf("* Loading model: %s \n", path);
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path,
@@ -40,7 +47,7 @@ Model::Model(const std::string fileName) : EntityComponent() {
 
     if (scene == NULL)
     {
-        std::cerr << "  !! ERROR: Unable to load model:" << path << std::endl;
+        printf("  !! ERROR: Unable to load model: %s \n", path);
         return;
     }
 
@@ -238,20 +245,22 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
     return material;
 }
 
-std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, TextureType type)
+std::shared_ptr<Texture> Model::LoadCachedTexture(const char* texFile, TextureType type)
 {
     std::shared_ptr<Texture> texture;
     bool skip = false;
 
 #ifdef _WIN32 
-    std::string textures_dir = "res/textures/";
+    const char* textures_dir = "res/textures/";
 #else
-    std::string textures_dir = "/res/textures/";
+    const char* textures_dir = "/res/textures/";
 #endif
 
-    std::ostringstream oss;
-    oss << Configuration::Get().workingDirectory << textures_dir << texFile.c_str();
-    std::string path = oss.str();
+    // TODO: move to some tyoe definitions file or something
+    // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
+    char path[4096];
+    const char* cwd = Configuration::Get().workingDirectory.c_str();
+    snprintf(path, 4096, "%s%s%s", cwd, textures_dir, texFile);
 
     // Try fetching a cached texture
     for (int j = 0; j < materials.size(); j++)
@@ -275,16 +284,16 @@ std::shared_ptr<Texture> Model::LoadCachedTexture(const std::string texFile, Tex
     return texture;
 }
 
-std::shared_ptr<Texture> Model::LoadTexture(const std::string filename, TextureType type)
+std::shared_ptr<Texture> Model::LoadTexture(const char* filename, TextureType type)
 {
     int width, height, numComponents;
     std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-    unsigned char* data = stbi_load((filename).c_str(), &width, &height, &numComponents, 4);
+    unsigned char* data = stbi_load(filename, &width, &height, &numComponents, 4);
 
     if (!data)
     {
         // TODO: Load some ugly generated default texture that doesn't require any files?
-        std::cerr << "  !! ERROR: Unable to load texture:" << filename << std::endl;
+        printf("  !! ERROR: Unable to load texture: %s \n", filename);
         return NULL;
     }
 

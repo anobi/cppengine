@@ -13,19 +13,16 @@ public:
 
     virtual void Update() {}
     virtual void Render(Renderer& renderer) {}
-    virtual void AddToParent(Entity* parent) { mParent = parent; }
+    virtual void AddToParent(Entity* parent) { SetParent(parent); }
 
-    Entity* GetParent() { return this->mParent; }
-    void SetParent(Entity* parent) { this->mParent = parent; }
-    void SetName(const std::string name) { this->mComponentName = name; }
+    void SetParent(Entity* parent) { 
+        this->parent = parent;
+        this->transform = &parent->transform;
+    }
 
-    const std::string GetName() const { return this->mComponentName; }
-    Transform& GetTransform() { return mParent->GetTransform(); }
-
-
-private:
-    std::string mComponentName;
-    Entity* mParent;
+    std::string name;
+    Entity* parent;
+    Transform* transform;
 };
 
 #endif

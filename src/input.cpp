@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cstdio>
 #include <SDL2/SDL.h>
 #include "game.hpp"
 #include "input.hpp"
@@ -20,6 +20,6 @@ void Input::Update() {
 }
 
 void Input::Shutdown() {
-    std::cout << "* Input\n";
+    printf("* Input\n");
     //deinit shiet 
 }

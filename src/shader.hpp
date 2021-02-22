@@ -1,9 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <iostream>
 #include <vector>
-#include <string>
 
 #include <glm/glm.hpp>
 
@@ -40,7 +38,7 @@ public:
     static const unsigned int DLIGHT_UNIFORMS = 3;
 
     Shader() {};
-    Shader(const std::string filename);
+    Shader(const char* filename);
     ~Shader();
 
     std::string name;
@@ -54,8 +52,8 @@ public:
     void Cleanup();
 
 private:
-    GLuint CreateShader(const std::string source, unsigned int type);
-    std::string ReadFile(const std::string filename);
+    GLuint CreateShader(const char* source, unsigned int type);
+    std::string ReadFile(const char* filename);
     void GetShaderStatus(GLuint program);
 };
 

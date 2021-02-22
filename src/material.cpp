@@ -15,9 +15,6 @@ Material::Material() : EntityComponent()
 
 Material::~Material()
 {
-    // Don't delete the textures here, do it on renderer's destructor IMO
-    // If the textures are stored as pointers, we can skip reloading them
-    // and reuse if necessary
 }
 
 void Material::Cleanup()

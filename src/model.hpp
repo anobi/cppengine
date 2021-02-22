@@ -6,7 +6,6 @@
 #include <assimp/postprocess.h>
 
 #include <memory>
-#include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -20,7 +19,7 @@ class Model : public EntityComponent
 {
 public:
     Model() {};
-    Model(const std::string fileName);
+    Model(const char* fileName);
     ~Model() {};
 
     void Update() {};
@@ -36,8 +35,8 @@ private:
     void ProcessMesh(aiMesh* mesh, const aiScene* scene);
     void ProcessNode(aiNode* node, const aiScene* scene);
     std::shared_ptr<Material> ProcessMaterials(aiMaterial* aiMat);
-    std::shared_ptr<Texture> LoadCachedTexture(const std::string texFile, TextureType type);
-    std::shared_ptr<Texture> LoadTexture(const std::string filename, TextureType type);
+    std::shared_ptr<Texture> LoadCachedTexture(const char* texFile, TextureType type);
+    std::shared_ptr<Texture> LoadTexture(const char* filename, TextureType type);
 };
 
 #endif

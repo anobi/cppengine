@@ -1,7 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -19,26 +18,18 @@ class Entity;
 class Entity {
 public:
     Entity() {}
-    Entity(const std::string name) {
-        this->mEntityName = name;
-    }
+    Entity(const char* name) { this->name = name; }
     ~Entity();
 
     void Update();
     void Render(Renderer& renderer);
 
-    void SetName(const std::string name) { this->mEntityName = name; };
-    const std::string GetName() const { return this->mEntityName; }
-
     void AddComponent(EntityComponent* component);
-    EntityComponent* GetComponent(const std::string componentName);
+    EntityComponent* GetComponent(const char* componentName);
 
-    Transform& GetTransform() { return mTransform; }
-
-private:
-    std::string mEntityName;
+    const char* name;
     std::vector<EntityComponent*> components;
-    Transform mTransform;
+    Transform transform;
 };
 
 #endif

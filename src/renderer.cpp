@@ -32,7 +32,7 @@ void Renderer::Render(Scene* scene, Shader* shader)
     unsigned int loc = 32; // PointLight uniform offset
     for (unsigned int i = 0; i < point_lights.size(); i++)
     {
-        glm::fvec3 lPos = point_lights[i]->GetTransform().GetPosition();
+        glm::fvec3 lPos = point_lights[i]->transform->GetPosition();
 
         glUniform3fv(shader->uniforms[loc + 0], 1, &lPos[0]);
         glUniform3fv(shader->uniforms[loc + 1], 1, &point_lights[i]->GetColor()[0]);
@@ -46,7 +46,7 @@ void Renderer::Render(Scene* scene, Shader* shader)
     unsigned int dloc = 64; // PointLight uniform offset
     for (unsigned int i = 0; i < dir_lights.size(); i++)
     {
-        glUniform3fv(shader->uniforms[dloc + 0], 1, &dir_lights[i]->GetTransform().GetPosition()[0]);
+        glUniform3fv(shader->uniforms[dloc + 0], 1, &dir_lights[i]->transform->GetPosition()[0]);
         glUniform3fv(shader->uniforms[dloc + 1], 1, &dir_lights[i]->GetColor()[0]);
         glUniform1f(shader->uniforms[dloc + 2], dir_lights[i]->GetIntensity());
 
@@ -65,7 +65,7 @@ void Renderer::Render(Scene* scene, Shader* shader)
     for (int i = 0; i < models.size(); i++)
     {
         // Update uniforms
-        glm::fmat4 model = models[i]->GetTransform().GetModel();
+        glm::fmat4 model = models[i]->transform->GetModel();
 
         glm::fmat3 normalMatrix = glm::inverse(glm::fmat3(model));
         glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &model[0][0]);

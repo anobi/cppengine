@@ -1,29 +1,42 @@
 #include <fstream>
 #include <sstream>
+#include <string.h>
+#include <cstdio>
+#include <algorithm>
 
 #include "configuration.hpp"
 #include "shader.hpp"
 
-Shader::Shader(const std::string fileName)
+constexpr unsigned int MAX_PATH_LENGTH = 4096;
+constexpr unsigned int MAX_UNIFORM_LENGTH = 4096;
+constexpr unsigned int MAX_SHADER_LENGTH = 32768;
+
+Shader::Shader(const char* fileName)
 {
-    std::cout << "* Loading shader: " << fileName << std::endl;
-    this->name = fileName;
+    printf("* Loading shader: %s \n", fileName);
+    this->name = (char*) fileName;
 
     program = glCreateProgram();
 
-    std::string vertex_shader_data = ReadFile(fileName + ".vert");
-    std::string fragment_shader_data = ReadFile(fileName + ".frag");
+    char vertex_shader_file[MAX_PATH_LENGTH];
+    char fragment_shader_file[MAX_PATH_LENGTH];
+    snprintf(vertex_shader_file, MAX_PATH_LENGTH, "%s.vert", fileName);
+    snprintf(fragment_shader_file, MAX_PATH_LENGTH, "%s.frag", fileName);
+
+    std::string vertex_shader_data = this->ReadFile(vertex_shader_file);
     if (vertex_shader_data.size() == 0) {
-        std::cerr << "No vertex shader data!";
-        return;
-    }
-    if (fragment_shader_data.size() == 0) {
-        std::cerr << "No fragment shader data!";
+        printf("No vertex shader data!");
         return;
     }
 
-    shaders[0] = CreateShader(vertex_shader_data, GL_VERTEX_SHADER);
-    shaders[1] = CreateShader(ReadFile(fileName + ".frag"), GL_FRAGMENT_SHADER);
+    std::string fragment_shader_data = this->ReadFile(fragment_shader_file);
+    if (fragment_shader_data.size() == 0) {
+        printf("No fragment shader data!");
+        return;
+    }
+
+    shaders[0] = CreateShader(vertex_shader_data.c_str(), GL_VERTEX_SHADER);
+    shaders[1] = CreateShader(fragment_shader_data.c_str(), GL_FRAGMENT_SHADER);
 
     for (unsigned int i = 0; i < NUM_SHADERS; i++) {
         glAttachShader(program, shaders[i]);
@@ -83,14 +96,23 @@ Shader::Shader(const std::string fileName)
     unsigned int loc = POINTLIGHT_UNIFORM_OFFSET;
     for (unsigned int i = 0; i < MAX_POINTLIGHTS; i++)
     {
-        std::stringstream pointlight;
-        pointlight << "pointLights[" << i << "]";
+        char point_light_position[MAX_UNIFORM_LENGTH];
+        char point_light_color[MAX_UNIFORM_LENGTH];
+        char point_light_intensity[MAX_UNIFORM_LENGTH];
+        char point_light_radius[MAX_UNIFORM_LENGTH];
+        char point_light_cutoff[MAX_UNIFORM_LENGTH];
 
-        uniforms[loc + 0] = glGetUniformLocation(program, (pointlight.str() + ".position").c_str());
-        uniforms[loc + 1] = glGetUniformLocation(program, (pointlight.str() + ".color").c_str());
-        uniforms[loc + 2] = glGetUniformLocation(program, (pointlight.str() + ".intensity").c_str());
-        uniforms[loc + 3] = glGetUniformLocation(program, (pointlight.str() + ".radius").c_str());
-        uniforms[loc + 4] = glGetUniformLocation(program, (pointlight.str() + ".cutoff").c_str());
+        snprintf(point_light_position,  MAX_UNIFORM_LENGTH, "pointLights[%i].position",     i);
+        snprintf(point_light_color,     MAX_UNIFORM_LENGTH, "pointLights[%i].color",        i);
+        snprintf(point_light_intensity, MAX_UNIFORM_LENGTH, "pointLights[%i].intensity",    i);
+        snprintf(point_light_radius,    MAX_UNIFORM_LENGTH, "pointLights[%i].radius",       i);
+        snprintf(point_light_cutoff,    MAX_UNIFORM_LENGTH, "pointLights[%i].cutoff",       i);
+
+        uniforms[loc + 0] = glGetUniformLocation(program, point_light_position);
+        uniforms[loc + 1] = glGetUniformLocation(program, point_light_color);
+        uniforms[loc + 2] = glGetUniformLocation(program, point_light_intensity);
+        uniforms[loc + 3] = glGetUniformLocation(program, point_light_radius);
+        uniforms[loc + 4] = glGetUniformLocation(program, point_light_cutoff);
 
         loc += POINTLIGHT_UNIFORMS;
     }
@@ -98,12 +120,17 @@ Shader::Shader(const std::string fileName)
     unsigned int dloc = DLIGHT_UNIFORM_OFFSET;
     for (unsigned int i = 0; i < MAX_DLIGHTS; i++)
     {
-        std::stringstream directionalLight;
-        directionalLight << "directionalLights[" << i << "]";
+        char directional_light_position[MAX_UNIFORM_LENGTH];
+        char directional_light_color[MAX_UNIFORM_LENGTH];
+        char directional_light_intensity[MAX_UNIFORM_LENGTH];
 
-        uniforms[dloc + 0] = glGetUniformLocation(program, (directionalLight.str() + ".position").c_str());
-        uniforms[dloc + 1] = glGetUniformLocation(program, (directionalLight.str() + ".color").c_str());
-        uniforms[dloc + 2] = glGetUniformLocation(program, (directionalLight.str() + ".intensity").c_str());
+        snprintf(directional_light_position,    MAX_UNIFORM_LENGTH, "directionalLights[%i].position",   i);
+        snprintf(directional_light_color,       MAX_UNIFORM_LENGTH, "directionalLights[%i].color",      i);
+        snprintf(directional_light_intensity,   MAX_UNIFORM_LENGTH, "directionalLights[%i].intensity",  i);
+
+        uniforms[dloc + 0] = glGetUniformLocation(program, directional_light_position);
+        uniforms[dloc + 1] = glGetUniformLocation(program, directional_light_color);
+        uniforms[dloc + 2] = glGetUniformLocation(program, directional_light_intensity);
 
         dloc += DLIGHT_UNIFORMS;
     }
@@ -127,14 +154,12 @@ void Shader::Cleanup()
 }
 
 
-GLuint Shader::CreateShader(const std::string source, unsigned int type)
+GLuint Shader::CreateShader(const char* source, unsigned int type)
 {
     GLuint shader = glCreateShader(type);
+    GLint length = strlen(source);
 
-    const char* shaderSrc = source.c_str();
-    GLint length[1];
-    length[0] = source.length();
-    glShaderSource(shader, 1, &shaderSrc, length);
+    glShaderSource(shader, 1, &source, &length);
     glCompileShader(shader);
     GetShaderStatus(shader);
 
@@ -150,7 +175,7 @@ void Shader::Bind()
 ** Helpers
 **/
 
-std::string Shader::ReadFile(const std::string fileName)
+std::string Shader::ReadFile(const char* fileName)
 {
     std::ostringstream oss;
 
@@ -206,21 +231,34 @@ void Shader::GetShaderStatus(GLuint shader)
     GLchar programError[512] = "";
     glGetShaderInfoLog(shader, programLogLength, NULL, &programError[0]);
 
-    if (shaderLogLength > 1) {
-        std::string shaderErrorMessage = "";
-        for (auto c : shaderError)
-            shaderErrorMessage += c;
+    if (shaderLogLength > 1) 
+    {
+        int errorLength = strlen(shaderError);
+        char shaderErrorMessage[1024];
+        memset(shaderErrorMessage, 0, 1024);
 
-        if (!shaderErrorMessage.empty())
-            std::cerr << "  !! Shader error: " << std::endl << shaderErrorMessage << std::endl;
+        int i_len = std::min(1024, errorLength);
+        for (int i = 0; i < strlen(shaderError); i++)
+        {
+            char c = shaderError[i];
+            shaderErrorMessage[i] = c;
+        }
+            
+        if (errorLength > 0) 
+        {
+            printf("  !! Shader error: \n%s\n", shaderErrorMessage);
+        }
     }
 
-    if (programLogLength > 1) {
+    if (programLogLength > 1) 
+    {
         std::string programErrorMessage = "";
         for (auto c : programError)
             programErrorMessage += c;
 
         if (!programErrorMessage.empty())
-            std::cerr << "  !! Program error: " << std::endl << programErrorMessage << std::endl;
+        {
+            printf("  !! Program error: \n%s\n", programErrorMessage);
+        } 
     }
 }

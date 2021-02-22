@@ -11,7 +11,7 @@ public:
     Light() {};
     Light(const glm::fvec3 color, float intensity, float cutoff) : EntityComponent()
     {
-        this->SetName("Light");
+        this->name = "Light";
         this->mColor = color;
         this->mIntensity = intensity;
         this->mCutoff = cutoff;
@@ -38,7 +38,7 @@ public:
     DirectionalLight() {};
     DirectionalLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
     {
-        this->SetName("DirectionalLight");
+        this->name = "DirectionalLight";
     };
 
     ~DirectionalLight() {};
@@ -51,7 +51,7 @@ public:
     PointLight() {};
     PointLight(const glm::fvec3 color, float intensity, float cutoff, float radius) : Light(color, intensity, cutoff)
     {
-        this->SetName("PointLight");
+        this->name = "PointLight";
         this->SetRadius(radius);
     };
     ~PointLight() {};
@@ -68,14 +68,12 @@ public:
     SpotLight() {};
     SpotLight(const glm::fvec3 color, float intensity, float maxDistance) : Light(color, intensity, maxDistance)
     {
-        this->SetName("SpotLight");
+        this->name = "SpotLight";
     };
-    ~SpotLight();
+    ~SpotLight() {};
 
     float angle;
     glm::fvec3 direction;
-private:
-
 };
 
 #endif

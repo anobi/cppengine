@@ -1,4 +1,5 @@
-#include <iostream>
+//#include <iostream>
+#include <cstdio>
 #include <chrono>
 #include <SDL2/SDL.h>
 
@@ -49,49 +50,50 @@ int selected_entity = 0;
 
 bool Game::Init()
 {
-    std::cout << "Initializing game..." << std::endl;
-    std::cout << "--------------------" << std::endl;
-    std::cout << "* Working directory: " << Configuration::Get().workingDirectory << std::endl;
+    const char* cwd = Configuration::Get().workingDirectory.c_str();
+    printf("Initializing game... \n");
+    printf("-------------------- \n");
+    printf("* Working directory: %s \n", cwd);
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        std::cout << "SDL Error: %s\n", SDL_GetError();
+        printf("SDL Error: %s \n", SDL_GetError());
         return false;
     }
 
     //Display
-    std::cout << "* Display: ";
+    printf("* Display: ");
     if (!this->display.Init(1440, 900))
     {
-        std::cout << "Error: %s\n", SDL_GetError();
+        printf("Error: %s \n", SDL_GetError());
         return false;
     }
-    else std::cout << "done" << std::endl;
+    else printf("done \n");
 
     //Renderer
-    std::cout << "* Renderer: ";
+    printf("* Renderer: ");
     if (!this->renderer.Init())
     {
-        std::cout << "Error: %s\n", SDL_GetError();
+        printf("Error: %s \n", SDL_GetError());
         return false;
     }
-    else std::cout << "done" << std::endl;
+    else printf("done \n");
 
     //Input system
-    std::cout << "* Input: ";
+    printf("* Input: ");
     if (!this->inputs.Init())
     {
-        std::cout << "Error: %s\n", SDL_GetError();
+        printf("Error: %s \n", SDL_GetError());
         return false;
     }
-    else std::cout << "done" << std::endl;
+    else printf("done \n");
 
     ImGui_ImplSdlGL3_Init(this->display.GetWindow());
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
 
-    std::cout << std::endl;
+    printf("\n");
     return true;
 }
 
@@ -111,7 +113,7 @@ void Game::Start()
     }
     else
     {
-        std::cout << "  !! ERROR: Failed to initialize game" << std::endl;
+        printf("  !! ERROR: Failed to initialize game \n");
         exit(EXIT_FAILURE);
     }
 }
@@ -135,6 +137,7 @@ void Game::Loop()
         Uint64 frame_time = loop_end - loop_start;
         loop_start = loop_end;
 
+        // TODO: Replace the delay with a spinlock
         float elapsed = frame_time / (float)SDL_GetPerformanceFrequency();
         float delay = target_frame_time - elapsed;
         if (elapsed >= 0) {
@@ -202,8 +205,8 @@ void Game::Loop()
         float e2_speed = 0.10f;
         float e1_pos = glm::cos((ticks + e1_speed) * dt) * 15;
         float e2_pos = glm::cos((ticks + e2_speed) * dt) * 15;
-        GetEntity("Fireball")->GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, e1_pos));
-        GetEntity("Lightningball")->GetTransform().SetPosition(glm::fvec3(7.5f, 2.5f, e2_pos));
+        GetEntity("Fireball")->transform.SetPosition(glm::fvec3(-7.5f, 10.0f, e1_pos));
+        GetEntity("Lightningball")->transform.SetPosition(glm::fvec3(7.5f, 2.5f, e2_pos));
 
         //TODO: figure out where to put this shit
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -225,18 +228,18 @@ void Game::Loop()
 
 void Game::Shutdown()
 {
-    std::cout << "Shutting down...\n";
-    std::cout << "--------------------" << std::endl;
+    printf("Shutting down... \n");
+    printf("-------------------- \n");
 
     ImGui::Shutdown();
 
-    std::cout << "* Input\n";
+    printf("* Input \n");
     this->inputs.Shutdown();
 
-    std::cout << "* Renderer\n";
+    printf("* Renderer \n");
     this->renderer.Shutdown();
 
-    std::cout << "* Display\n";
+    printf("* Display \n");
     this->display.Shutdown();
 
     SDL_Quit();
@@ -244,7 +247,7 @@ void Game::Shutdown()
 
 void Game::Quit()
 {
-    std::cout << "QUIT\n";
+    printf("QUIT \n");
     gameState = GAMESTATE_STOPPED;
 }
 
@@ -264,7 +267,7 @@ Entity* Game::GetEntity(const std::string name)
 
     for (unsigned int i = 0; i < entities.size(); i++)
     {
-        if (entities[i]->GetName() == name)
+        if (entities[i]->name == name)
         {
             entity = entities[i];
             break;
@@ -298,10 +301,10 @@ void Game::UpdateUI()
     for (int i = 0; i < entities.size(); i++)
     {
         Entity* e = entities[i];
-        glm::fvec3 pos = e->GetTransform().GetPosition();
+        glm::fvec3 pos = e->transform.GetPosition();
 
         char buf[256];
-        snprintf(buf, 256, "%s", e->GetName().c_str(), pos.x, pos.y, pos.z);
+        snprintf(buf, 256, "%s", e->name, pos.x, pos.y, pos.z);
         entity_list.push_back(buf);
     }
 
@@ -323,14 +326,14 @@ void Game::UpdateUI()
     ImGui::ListBox("##entities", &selected_entity, vector_getter, static_cast<void*>(&entity_list), entity_list.size());
     ImGui::PopItemWidth();
 
-    glm::fvec3 e_pos = entities[selected_entity]->GetTransform().GetPosition();
+    glm::fvec3 e_pos = entities[selected_entity]->transform.GetPosition();
     ImGui::Text("Location x: %.2f y: %.2f z:%.2f", e_pos.x, e_pos.y, e_pos.z);
 
     ImGui::SliderFloat("X", &e_pos.x, -100, 100);
     ImGui::SliderFloat("Y", &e_pos.y, -100, 100);
     ImGui::SliderFloat("Z", &e_pos.z, -100, 100);
 
-    entities[selected_entity]->GetTransform().SetPosition(e_pos);
+    entities[selected_entity]->transform.SetPosition(e_pos);
 
     ImGui::End();
 
@@ -346,8 +349,8 @@ void Game::UpdateUI()
 
 void Game::ConstructScene()
 {
-    std::cout << "Loading game content..." << std::endl;
-    std::cout << "--------------------" << std::endl;
+    printf("Loading game content... \n");
+    printf("-------------------- \n");
 
     defaultScene = Scene();
     this->scene = &defaultScene;
@@ -372,9 +375,9 @@ void Game::ConstructScene()
 
     //Room
     room = Entity(Entity("Room"));
-    room.GetTransform().SetScale(glm::fvec3(0.02f));
-    room.GetTransform().SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
-    room.GetTransform().SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
+    room.transform.SetScale(glm::fvec3(0.02f));
+    room.transform.SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
+    room.transform.SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
     roomModel = Model("sponza.obj");
     room.AddComponent(&roomModel);
 
@@ -388,7 +391,7 @@ void Game::ConstructScene()
     //cool background light
     light2 = Entity("Skylight");
     pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
-    light2.GetTransform().SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
+    light2.transform.SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
     light2.AddComponent(&pl2);
     AddEntity(&light2);
     this->scene->AddDirectionalLight(&pl2);
@@ -397,8 +400,8 @@ void Game::ConstructScene()
     light3 = Entity("Fireball");
     pl3 = PointLight(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
     pl3model = Model("uvcube.obj");
-    light3.GetTransform().SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
-    light3.GetTransform().SetScale(glm::fvec3(0.1f));
+    light3.transform.SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
+    light3.transform.SetScale(glm::fvec3(0.1f));
     light3.AddComponent(&pl3);
     light3.AddComponent(&pl3model);
 
@@ -410,8 +413,8 @@ void Game::ConstructScene()
     light4 = Entity("Lightningball");
     pl4 = PointLight(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
     pl4model = Model("uvcube.obj");
-    light4.GetTransform().SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
-    light4.GetTransform().SetScale(glm::fvec3(0.1f));
+    light4.transform.SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
+    light4.transform.SetScale(glm::fvec3(0.1f));
     light4.AddComponent(&pl4);
     light4.AddComponent(&pl4model);
 
@@ -423,5 +426,5 @@ void Game::ConstructScene()
     assert(this->scene->camera);
 
     // Done loading, print empty line
-    std::cout << std::endl;
+    printf("\n");
 }
