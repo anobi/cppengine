@@ -1,3 +1,4 @@
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string.h>
@@ -241,7 +242,7 @@ void Shader::GetShaderStatus(GLuint shader)
             
         if (!shaderErrorMessage.empty())
         {
-            printf("  !! Shader error: \n%s\n", shaderErrorMessage);
+            std::cerr << "  !! Shader error: " << std::endl << shaderErrorMessage << std::endl;
         }
     }
 
@@ -253,7 +254,7 @@ void Shader::GetShaderStatus(GLuint shader)
 
         if (!programErrorMessage.empty())
         {
-            printf("  !! Program error: \n%s\n", programErrorMessage);
+            std::cerr << "  !! Program error: " << std::endl << programErrorMessage << std::endl;
         } 
     }
 }
