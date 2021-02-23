@@ -95,7 +95,7 @@ vec3 addPointLight(int index, vec2 texCoords, vec3 lightDir, vec3 viewDir, vec3 
 {
     pointLight light = pointLights[index];
 
-    //attenuation
+    // Attenuation
     float d = distance(tPLightPos[index], vs_in.tFragPos);
     float dr = (max(d - light.radius, 0.0f) / light.radius) + 1.0f;
     float attenuation = 1.0f / (dr * dr);
@@ -155,9 +155,13 @@ void main(void)
     vec3 viewDir = normalize(vs_in.tViewPos - vs_in.tFragPos);
     vec2 texCoords = vs_in.texCoords;
 
+
     //////////////////////
     //   Texture Maps   //
     //////////////////////
+
+    vec3 ambient = vec3(0.1f, 0.1f, 0.1f);
+    vec3 normal = normalize(vs_in.normal);
 
     if(use_alphaMap == 1)
     {
@@ -167,25 +171,25 @@ void main(void)
             discard;
         }
     }
-
-    vec3 ambient = vec3(0.1f, 0.1f, 0.1f);
+    
     if(use_diffuseMap == 1)
     {
         ambient *= texture(diffuseMap, texCoords).rgb;
     }
-
-    vec3 normal = normalize(vs_in.normal);
+    
     if(use_normalMap == 1)
     {
         normal = normalize(texture(normalMap, vs_in.texCoords).rgb * 2.0f - 1.0f);
     }
 
+
     //////////////////////
     // Calculate lights //
     //////////////////////
 
-    // Directional lights
     vec3 light_accumulator = vec3(0.0f);
+
+    // Directional lights
     for(int i = 0; i < numDLights; i++)
     {
         vec3 lightDir = normalize(tDLightPos[i]);
@@ -198,6 +202,7 @@ void main(void)
         vec3 lightDir = normalize(tPLightPos[i] - vs_in.tFragPos);
         light_accumulator += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
     }
+
 
     vec3 color = ambient + light_accumulator;
     fragColor = vec4(color, 1.0f);
