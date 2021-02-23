@@ -30,6 +30,7 @@ all: $(BIN)
 
 $(BIN): $(OBJS)
 	$(CC) $(LIBS) -o bin/$@ $^
+	cp shaders/* $(BUILDDIR)/shaders/
 
 $(OBJDIR)/imgui.o: $(LIBDIR)/imgui.cpp
 	$(CC) $(CFLAGS) -c $< -o $@

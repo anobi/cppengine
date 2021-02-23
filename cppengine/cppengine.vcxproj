@@ -72,22 +72,30 @@
     <OutDir>..\bin\</OutDir>
     <IncludePath>C:\dev\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\dev\lib32;$(LibraryPath)</LibraryPath>
+	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\dev\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\dev\lib32;$(LibraryPath)</LibraryPath>
     <OutDir>..\bin\</OutDir>
+	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\dev\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>C:\dev\lib64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <OutDir>..\bin\</OutDir>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\dev\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>C:\dev\lib64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <OutDir>..\bin\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,6 +110,12 @@
       </EntryPointSymbol>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)shaders\*" "$(SolutionDir)bin\shaders\" /Y /I</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy shaders</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -113,6 +127,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp.lib;opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Message>Copy shaders</Message>
+      <Command>xcopy "$(SolutionDir)shaders\*" "$(SolutionDir)bin\shaders\" /Y /I</Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -129,6 +154,12 @@
       <AdditionalDependencies>assimp.lib;opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)shaders\*" "$(SolutionDir)bin\shaders\" /Y /I</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy shaders</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,6 +175,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>assimp.lib;opengl32.lib;glew32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)shaders\*" "$(SolutionDir)bin\shaders\" /Y /I</Command>
+      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy shaders</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

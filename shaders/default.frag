@@ -66,24 +66,20 @@ float diffuse(vec3 light_dir, vec3 normal)
 
 vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir) 
 {
-    vec3 value = vec3(0.0f);
-    vec3 specularity = vec3(1.0f, 1.0f, 1.0f);
-    float specular_intensity = 1.0f;
+    vec3 specularity = vec3(0.5f);
+    if(use_specularMap == 1) {
+       specularity = texture(specularMap, vs_in.texCoords).rgb;
+    }
+    
     float shininess = 32.0f;
-
     if(shininess < 255.0f)
     {
         vec3 reflect_dir = reflect(-light_dir, normal);
         float spec = pow(max(dot(view_dir, reflect_dir), 0.0f), shininess);
-        value = specularity * spec;
+        specularity = specularity * spec;
     }
 
-    if(use_specularMap == 1)
-	{
-		value *= texture(specularMap, vs_in.texCoords).rgb;
-	}
-
-    return value;
+    return specularity;
 }
 
 vec3 addDirectionalLight(int index, vec2 texCoords, vec3 lightDir, vec3 viewDir, vec3 normal)
