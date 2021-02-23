@@ -66,9 +66,8 @@ vec3 diffuse(vec3 light_dir, vec3 normal, vec2 texCoords)
 
 vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir, vec2 texCoords) 
 {
-    vec3 specularity = vec3(0.5f);
+    vec3 specularity = vec3(0.1f);
     float shininess = 25.6f;  // TODO: Get this from material
-
     if(use_specularMap == 1) {
        specularity = texture(specularMap, texCoords).rgb;
     }

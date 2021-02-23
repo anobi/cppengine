@@ -32,6 +32,7 @@ Model::Model(const char* fileName) : EntityComponent() {
     const aiScene* scene = importer.ReadFile(path,
         aiProcess_ValidateDataStructure
         | aiProcess_Triangulate
+        | aiProcess_FindInvalidData
         | aiProcess_FindInstances
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
