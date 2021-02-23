@@ -46,7 +46,7 @@ private:
     bool useNormalMap;
     bool useHeightMap;
     bool useEmissiveMap;
-    bool useAplhaMap;
+    bool useAlphaMap;
 
     float specularStrength;
     float emissiveStrength;

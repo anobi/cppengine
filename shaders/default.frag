@@ -71,17 +71,17 @@ vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir)
     float specular_intensity = 1.0f;
     float shininess = 32.0f;
 
-    if(use_specularMap == 1)
-    {
-        shininess = texture(specularMap, vs_in.texCoords).r * 255.0f;
-    }
-
     if(shininess < 255.0f)
     {
         vec3 reflect_dir = reflect(-light_dir, normal);
         float spec = pow(max(dot(view_dir, reflect_dir), 0.0f), shininess);
         value = specularity * spec;
     }
+
+    if(use_specularMap == 1)
+	{
+		value *= texture(specularMap, vs_in.texCoords).rgb;
+	}
 
     return value;
 }
