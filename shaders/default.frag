@@ -59,36 +59,35 @@ uniform vec3 CameraPosition;
 out vec4 fragColor;
 
 
-float diffuse(vec3 light_dir, vec3 normal)
+vec3 diffuse(vec3 light_dir, vec3 normal, vec2 texCoords)
 {
-    return max(dot(light_dir, normal), 0.0f);
+    return max(dot(normal, light_dir), 0.0f) * texture(diffuseMap, texCoords).rgb;
 }
 
-vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir) 
+vec3 specular(vec3 light_dir, vec3 normal, vec3 view_dir, vec2 texCoords) 
 {
     vec3 specularity = vec3(0.5f);
+    float shininess = 25.6f;  // TODO: Get this from material
+
     if(use_specularMap == 1) {
-       specularity = texture(specularMap, vs_in.texCoords).rgb;
+       specularity = texture(specularMap, texCoords).rgb;
     }
     
-    float shininess = 32.0f;
-    if(shininess < 255.0f)
-    {
-        vec3 reflect_dir = reflect(-light_dir, normal);
-        float spec = pow(max(dot(view_dir, reflect_dir), 0.0f), shininess);
-        specularity = specularity * spec;
-    }
+    vec3 reflect_dir = reflect(-light_dir, normal);
+    float specular_power = pow(max(dot(view_dir, reflect_dir), 0.0f), shininess);
 
-    return specularity;
+    return specularity * specular_power;
 }
 
 vec3 addDirectionalLight(int index, vec2 texCoords, vec3 lightDir, vec3 viewDir, vec3 normal)
 {
     directionalLight light = directionalLights[index];
-    vec3 value = vec3(0.0f);
 
-    value += light.color * diffuse(lightDir, normal);
-    value += light.color * specular(lightDir, normal, viewDir);
+    // TODO: implement light specular color and use that instead of light.color in specular
+    vec3 diff = light.color * diffuse(lightDir, normal, texCoords);
+    vec3 spec = light.color * specular(lightDir, normal, viewDir, texCoords);
+    vec3 value = diff + spec;
+
     return value * light.intensity;
 }
 
@@ -96,17 +95,18 @@ vec3 addPointLight(int index, vec2 texCoords, vec3 lightDir, vec3 viewDir, vec3 
 {
     pointLight light = pointLights[index];
 
-    vec3 value = vec3(0.0f);
+    //attenuation
     float d = distance(tPLightPos[index], vs_in.tFragPos);
     float dr = (max(d - light.radius, 0.0f) / light.radius) + 1.0f;
-
-    //attenuation
     float attenuation = 1.0f / (dr * dr);
     attenuation = (attenuation - light.cutoff) / (1.0f - light.cutoff);
     attenuation = max(attenuation, 0.0f);
 
-    value += light.color * diffuse(lightDir, normal);
-    value += light.color * specular(lightDir, normal, viewDir);
+    // TODO: implement light specular color and use that instead of light.color in specular
+    vec3 diff = light.color * diffuse(lightDir, normal, texCoords);
+    vec3 spec = light.color * specular(lightDir, normal, viewDir, texCoords);
+    vec3 value = diff + spec;
+
     return value * attenuation;
 }
 
@@ -152,10 +152,8 @@ vec2 par(vec2 texCoords, vec3 viewDir)
 
 void main(void)
 {
-    vec4 light = vec4(0.2f, 0.2f, 0.2f, 1.0f);
     vec3 viewDir = normalize(vs_in.tViewPos - vs_in.tFragPos);
     vec2 texCoords = vs_in.texCoords;
-
 
     //////////////////////
     //   Texture Maps   //
@@ -164,13 +162,16 @@ void main(void)
     if(use_alphaMap == 1)
     {
         float value = texture(alphaMap, texCoords).r;
-        if(value < 0.1f) discard;
+        if(value < 0.1f)
+        {
+            discard;
+        }
     }
 
-    vec4 diffuse = vec4(0.8f, 0.8f, 0.8f, 1.0);
+    vec3 ambient = vec3(0.1f, 0.1f, 0.1f);
     if(use_diffuseMap == 1)
     {
-        diffuse = texture(diffuseMap, texCoords);
+        ambient *= texture(diffuseMap, texCoords).rgb;
     }
 
     vec3 normal = normalize(vs_in.normal);
@@ -179,30 +180,25 @@ void main(void)
         normal = normalize(texture(normalMap, vs_in.texCoords).rgb * 2.0f - 1.0f);
     }
 
-    if(use_heightMap == 1)
-    {
-    }
-
-    float parallaxHeight = 1.0f;
-    texCoords = parallaxMapping(texCoords, viewDir, 0.02f, parallaxHeight);
-
     //////////////////////
     // Calculate lights //
     //////////////////////
 
     // Directional lights
+    vec3 light_accumulator = vec3(0.0f);
     for(int i = 0; i < numDLights; i++)
     {
         vec3 lightDir = normalize(tDLightPos[i]);
-        light += vec4(addDirectionalLight(i, texCoords, lightDir, viewDir, normal), 0.0f);
+        light_accumulator += vec3(addDirectionalLight(i, texCoords, lightDir, viewDir, normal));
     }
     
     // Point lights
     for(int i = 0; i < numPLights; i++)
     {
         vec3 lightDir = normalize(tPLightPos[i] - vs_in.tFragPos);
-        light += vec4(addPointLight(i, texCoords, lightDir, viewDir, normal), 0.0f) * pointLights[i].intensity;
+        light_accumulator += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
     }
 
-    fragColor = diffuse * light;
+    vec3 color = ambient + light_accumulator;
+    fragColor = vec4(color, 1.0f);
 }
