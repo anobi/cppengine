@@ -1,6 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <string>
 #include <vector>
 
 #include <glm/glm.hpp>

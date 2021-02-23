@@ -1,6 +1,7 @@
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
 
+#include <string>
 #include <memory>
 
 #include "transform.hpp"

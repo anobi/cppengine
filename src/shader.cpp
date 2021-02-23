@@ -233,18 +233,13 @@ void Shader::GetShaderStatus(GLuint shader)
 
     if (shaderLogLength > 1) 
     {
-        int errorLength = strlen(shaderError);
-        char shaderErrorMessage[1024];
-        memset(shaderErrorMessage, 0, 1024);
-
-        int i_len = std::min(1024, errorLength);
-        for (int i = 0; i < strlen(shaderError); i++)
+        std::string shaderErrorMessage = "";
+        for (auto c : shaderError)
         {
-            char c = shaderError[i];
-            shaderErrorMessage[i] = c;
+            shaderErrorMessage += c;
         }
             
-        if (errorLength > 0) 
+        if (!shaderErrorMessage.empty())
         {
             printf("  !! Shader error: \n%s\n", shaderErrorMessage);
         }
