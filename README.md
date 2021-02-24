@@ -8,4 +8,4 @@ Just a playground to figure out how to make game engines in c++.
 * Assimp
 * GLM
 
-![Screenshot](/screenshots/cppengine.png?raw=true)
+![Screenshot](/screenshots/cppengine.jpg?raw=true)
