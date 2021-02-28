@@ -1,6 +1,10 @@
 #ifndef L_MODEL_LOADER_H
 #define L_MODEL_LOADER_H
 
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+
 #include "../model.hpp"
 #include "../rendering/render_mesh.hpp"
 #include "../rendering/render_material.hpp"

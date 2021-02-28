@@ -373,13 +373,11 @@ void Game::ConstructScene()
     */
 
     //Room
-    room = Entity(Entity("Room"));
+    room = Entity("Room");
     room.transform.SetScale(glm::fvec3(0.02f));
     room.transform.SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
     room.transform.SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 
-    // roomModel = Model("sponza.obj");
-    roomModel = Model();
     loadingState_e room_load = modelLoader.Load("sponza.obj", &roomModel);
     assert(room_load == LOADINGSTATE_VALID);
     room.AddComponent(&roomModel);
@@ -392,6 +390,7 @@ void Game::ConstructScene()
     */
 
     //cool background light
+
     light2 = Entity("Skylight");
     pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
     light2.transform.SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
@@ -399,13 +398,17 @@ void Game::ConstructScene()
     AddEntity(&light2);
     this->scene->AddDirectionalLight(&pl2);
 
-    //awesome spinning FIRE BALL LIGHT YEAH
+
+    // Fiery light cube
+
     light3 = Entity("Fireball");
-    pl3 = PointLight(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
-    pl3model = Model("uvcube.obj");
     light3.transform.SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
     light3.transform.SetScale(glm::fvec3(0.1f));
+
+    pl3 = PointLight(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
     light3.AddComponent(&pl3);
+    
+    modelLoader.Load("uvcube.obj", &pl3model);
     light3.AddComponent(&pl3model);
 
     AddEntity(&light3);
@@ -413,21 +416,25 @@ void Game::ConstructScene()
     this->scene->AddModel(&pl3model);
 
 
+    // Blue light cube
+
     light4 = Entity("Lightningball");
-    pl4 = PointLight(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
-    pl4model = Model("uvcube.obj");
     light4.transform.SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
     light4.transform.SetScale(glm::fvec3(0.1f));
+
+    pl4 = PointLight(glm::fvec3(0.4f, 0.8f, 1.0f), 1.0f, 0.1f, 5.0f);
     light4.AddComponent(&pl4);
+
+    modelLoader.Load("uvcube.obj", &pl4model);
     light4.AddComponent(&pl4model);
 
     AddEntity(&light4);
     this->scene->AddPointLight(&pl4);
     this->scene->AddModel(&pl4model);
 
+
+    // Done loading
     assert(this->scene);
     assert(this->scene->camera);
-
-    // Done loading, print empty line
     printf("\n");
 }

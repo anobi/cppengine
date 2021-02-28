@@ -1,6 +1,7 @@
 #include "model_loader.hpp"
 #include "../configuration.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb_image.h"
 
 // TODO: move to some tyoe definitions file or something
@@ -49,7 +50,6 @@ loadingState_e ModelLoader::Load(const char* modelFile, Model* model)
     }
 
     this->ProcessNode(scene->mRootNode, scene, model);
-    model->useNewStuff = true;
 
     return LOADINGSTATE_VALID;
 }
@@ -134,7 +134,7 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
-        ProcessMaterial(aiMat, &renderMaterial);
+        this->ProcessMaterial(aiMat, &renderMaterial);
     }
 
     model->renderMaterials.push_back(renderMaterial);
@@ -152,28 +152,28 @@ void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* mater
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-        LoadTexture(texFile.C_Str(), material, &material->diffuseMap);
+        this->LoadTexture(texFile.C_Str(), material, &material->diffuseMap);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-        LoadTexture(texFile.C_Str(), material, &material->specularMap);
+        this->LoadTexture(texFile.C_Str(), material, &material->specularMap);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-        LoadTexture(texFile.C_Str(), material, &material->normalMap);
+        this->LoadTexture(texFile.C_Str(), material, &material->normalMap);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
-        LoadTexture(texFile.C_Str(), material, &material->alphaMap);
+        this->LoadTexture(texFile.C_Str(), material, &material->alphaMap);
     }
 }
 
