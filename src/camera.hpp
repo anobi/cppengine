@@ -23,6 +23,8 @@ public:
         this->projection = glm::mat4();
     }
 
+    ~Camera() {};
+
     inline void SetAspectRatio(float aspectRatio) {
         this->projection = glm::perspective(
             glm::radians(this->fov),

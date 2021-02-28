@@ -15,6 +15,7 @@ public:
     virtual void Update() {}
     virtual void Render(Renderer& renderer) {}
     virtual void AddToParent(Entity* parent) { SetParent(parent); }
+    virtual void Cleanup() {};
 
     void SetParent(Entity* parent) { 
         this->parent = parent;

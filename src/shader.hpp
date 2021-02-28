@@ -40,7 +40,7 @@ public:
 
     Shader() {};
     Shader(const char* filename);
-    ~Shader();
+    ~Shader() {};
 
     std::string name;
 

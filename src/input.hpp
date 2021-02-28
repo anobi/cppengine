@@ -4,7 +4,7 @@
 class Input {
 
 public:
-    Input();
+    Input() {};
     ~Input() {};
 
     bool Init();

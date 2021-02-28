@@ -137,11 +137,6 @@ Shader::Shader(const char* fileName)
     }
 }
 
-Shader::~Shader()
-{
-    this->Cleanup();
-}
-
 void Shader::Cleanup()
 {
     glUniform1i(glGetUniformLocation(program, "diffuseMap"), 0);

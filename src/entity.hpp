@@ -19,10 +19,11 @@ class Entity {
 public:
     Entity() {}
     Entity(const char* name) { this->name = name; }
-    ~Entity();
+    ~Entity() {};
 
     void Update();
     void Render(Renderer& renderer);
+    void Cleanup();
 
     void AddComponent(EntityComponent* component);
     EntityComponent* GetComponent(const char* componentName);

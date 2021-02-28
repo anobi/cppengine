@@ -13,8 +13,8 @@
 
 class Renderer {
 public:
-    Renderer();
-    ~Renderer();
+    Renderer() {};
+    ~Renderer() {};
     bool Init();
 
     void UpdateTick(const int tick) { this->m_tick = tick; }
@@ -27,11 +27,8 @@ public:
     void Shutdown();
 
 private:
-
     int m_tick = 0;
     glm::fvec2 resolution;
-
-    std::vector<Shader*> shaders;
 };
 
 #endif

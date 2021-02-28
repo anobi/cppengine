@@ -1,14 +1,6 @@
 #include "opengl.hpp"
 #include "renderer.hpp"
 
-Renderer::Renderer()
-{
-
-}
-Renderer::~Renderer()
-{
-}
-
 void Renderer::Shutdown()
 {
 }

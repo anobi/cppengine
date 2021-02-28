@@ -3,12 +3,6 @@
 #include "game.hpp"
 #include "input.hpp"
 
-Game game;
-
-Input::Input() {
-
-}
-
 bool Input::Init() {
     //init input devices etc
     SDL_Init(SDL_INIT_EVENTS);

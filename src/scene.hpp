@@ -16,6 +16,8 @@ public:
     Scene() {}
     ~Scene() {}
 
+    void Cleanup();
+
     inline void AddModel(Model* model) { this->_models.push_back(model); }
     inline std::vector<Model*> GetModels() { return this->_models; }
 

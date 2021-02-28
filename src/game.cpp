@@ -226,6 +226,13 @@ void Game::Loop()
         this->display.Update();
     }
 
+    // Tear down the scene
+    this->shader->Cleanup();
+    this->shader = 0;
+
+    this->scene->Cleanup();
+    this->scene = 0;
+
     Shutdown();
 }
 

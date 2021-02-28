@@ -20,10 +20,9 @@ enum gameState_t
 
 class Game
 {
-
-
 public:
     Game();
+    ~Game() {};
 
     gameState_t gameState;
     std::string workingDirectory;
