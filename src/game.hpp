@@ -30,21 +30,12 @@ public:
 
     void AddEntity(Entity* entity);
     Entity* GetEntity(const std::string name);
-    std::vector<Entity*> GetEntities();
 
     bool Init();
     void Start();
     void Shutdown();
     void Loop();
     void Quit();
-
-    // :::::::::::::::::::::::::: Temp stuff :::::::::::::::::::::::::::::::
-
-    // TODO: Move to model or texture or whatever should have the shader info.
-    // Overridable by shader set in render pass.
-    
-
-    // ::::::::::::::::::::::: End of temp stuff :::::::::::::::::::::::::::
 
 private:
     Input inputs;

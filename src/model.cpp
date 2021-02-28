@@ -34,6 +34,7 @@ Model::Model(const char* fileName) : EntityComponent() {
         | aiProcess_Triangulate
         | aiProcess_FindInvalidData
         | aiProcess_FindInstances
+        | aiProcess_FindDegenerates
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
         | aiProcess_OptimizeMeshes
@@ -42,6 +43,7 @@ Model::Model(const char* fileName) : EntityComponent() {
         | aiProcess_RemoveRedundantMaterials
         | aiProcess_GenUVCoords
         | aiProcess_GenSmoothNormals
+        | aiProcess_FixInfacingNormals
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace
     );
@@ -57,22 +59,47 @@ Model::Model(const char* fileName) : EntityComponent() {
 
 void Model::Cleanup()
 {
-    for (int i = 0; i < this->meshes.size(); i++)
-    {
-        this->meshes[i]->Cleanup();
-    }
+    // New temp stuff
+    if (this->useNewStuff) {
+        for (int i = 0; i < this->meshes.size(); i++)
+        {
+            this->renderMeshes[i].Cleanup();
+        }
 
-    for (int i = 0; i < this->materials.size(); i++)
-    {
-        this->materials[i]->Cleanup();
+        for (int i = 0; i < this->materials.size(); i++)
+        {
+            this->renderMaterials[i].Cleanup();
+        }
+    }
+    else {
+        for (int i = 0; i < this->meshes.size(); i++)
+        {
+            this->meshes[i]->Cleanup();
+        }
+
+        for (int i = 0; i < this->materials.size(); i++)
+        {
+            this->materials[i]->Cleanup();
+        }
     }
 }
 
 void Model::Render(Shader* shader)
 {
-    for (int i = 0; i < this->meshes.size(); i++)
+    if (this->useNewStuff) 
     {
-        this->meshes[i]->Draw(shader);
+        for (int i = 0; i < this->renderMeshes.size(); i++)
+        {
+            this->renderMaterials[i].Bind(shader);
+            this->renderMeshes[i].Draw();
+            this->renderMaterials[i].Unbind();
+        }
+    }
+    else {
+        for (int i = 0; i < this->meshes.size(); i++)
+        {
+            this->meshes[i]->Draw(shader);
+        }
     }
 }
 
@@ -246,6 +273,8 @@ std::shared_ptr<Material> Model::ProcessMaterials(aiMaterial* aiMat)
     return material;
 }
 
+
+// TODO: This will become useless once we start loading unique textures and assigning them to models
 std::shared_ptr<Texture> Model::LoadCachedTexture(const char* texFile, TextureType type)
 {
     std::shared_ptr<Texture> texture;
@@ -301,6 +330,8 @@ std::shared_ptr<Texture> Model::LoadTexture(const char* filename, TextureType ty
     texture->filename = filename;
     texture->type = type;
 
+
+    // TODO: This will go to RenderMaterial or something
     glGenTextures(1, &texture->id);
     glBindTexture(GL_TEXTURE_2D, texture->id);
 

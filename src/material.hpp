@@ -40,7 +40,6 @@ public:
     void Render(Renderer& renderer);
     void Cleanup();
 
-private:
     bool useDiffuseMap;
     bool useSpecularMap;
     bool useNormalMap;
@@ -55,6 +54,11 @@ private:
     glm::fvec3 diffuse;
     glm::fvec3 specular;
     glm::fvec3 emissive;
+
+    GLuint diffuseMap;
+    GLuint specularMap;
+    GLuint normalMap;
+    GLuint alphaMap;
 };
 
 #endif

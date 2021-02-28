@@ -15,6 +15,7 @@
 #include "shader.hpp"
 #include "model.hpp"
 #include "material.hpp"
+#include "loader/model_loader.hpp"
 
 
 // TODO: Temp holders. Create new homes for these.
@@ -22,6 +23,8 @@ Scene defaultScene;
 Shader defaultShader;
 Camera camera;
 Entity room;
+
+ModelLoader modelLoader;
 
 Model roomModel;
 Model pl1model;
@@ -43,7 +46,7 @@ PointLight pl4;
 
 Game::Game()
 {
-    gameState = GAMESTATE_STOPPED;
+    this->gameState = GAMESTATE_STOPPED;
 }
 
 int selected_entity = 0;
@@ -101,15 +104,16 @@ void Game::Start()
 {
 
     //Init everything
-    if (Init())
+    if (this->Init())
     {
         this->renderer.UpdateResolution(this->display.width, this->display.height);
+
         //Build the scene, a temp solution
-        ConstructScene();
+        this->ConstructScene();
 
         //Start the game loop
-        gameState = GAMESTATE_RUNNING;
-        Loop();
+        this->gameState = GAMESTATE_RUNNING;
+        this->Loop();
     }
     else
     {
@@ -131,7 +135,7 @@ void Game::Loop()
     float target_frame_time = 1000.0f / target_framerate;
     Uint64 loop_start = SDL_GetPerformanceCounter();
 
-    while (gameState == GAMESTATE_RUNNING)
+    while (this->gameState == GAMESTATE_RUNNING)
     {
         Uint64 loop_end = SDL_GetPerformanceCounter();
         Uint64 frame_time = loop_end - loop_start;
@@ -205,8 +209,8 @@ void Game::Loop()
         float e2_speed = 0.10f;
         float e1_pos = glm::cos((ticks + e1_speed) * dt) * 15;
         float e2_pos = glm::cos((ticks + e2_speed) * dt) * 15;
-        GetEntity("Fireball")->transform.SetPosition(glm::fvec3(-7.5f, 10.0f, e1_pos));
-        GetEntity("Lightningball")->transform.SetPosition(glm::fvec3(7.5f, 2.5f, e2_pos));
+        this->GetEntity("Fireball")->transform.SetPosition(glm::fvec3(-7.5f, 10.0f, e1_pos));
+        this->GetEntity("Lightningball")->transform.SetPosition(glm::fvec3(7.5f, 2.5f, e2_pos));
 
         //TODO: figure out where to put this shit
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -251,11 +255,6 @@ void Game::Quit()
     gameState = GAMESTATE_STOPPED;
 }
 
-std::vector<Entity*> Game::GetEntities()
-{
-    return entities;
-};
-
 void Game::AddEntity(Entity* entity)
 {
     this->entities.push_back(entity);
@@ -265,11 +264,11 @@ Entity* Game::GetEntity(const std::string name)
 {
     Entity* entity = NULL;
 
-    for (unsigned int i = 0; i < entities.size(); i++)
+    for (unsigned int i = 0; i < this->entities.size(); i++)
     {
-        if (entities[i]->name == name)
+        if (this->entities[i]->name == name)
         {
-            entity = entities[i];
+            entity = this->entities[i];
             break;
         }
     }
@@ -378,7 +377,11 @@ void Game::ConstructScene()
     room.transform.SetScale(glm::fvec3(0.02f));
     room.transform.SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
     room.transform.SetRotation(glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-    roomModel = Model("sponza.obj");
+
+    // roomModel = Model("sponza.obj");
+    roomModel = Model();
+    loadingState_e room_load = modelLoader.Load("sponza.obj", &roomModel);
+    assert(room_load == LOADINGSTATE_VALID);
     room.AddComponent(&roomModel);
 
     AddEntity(&room);

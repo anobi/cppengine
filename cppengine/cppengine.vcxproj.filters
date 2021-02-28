@@ -78,132 +78,170 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{cd5da8e1-42db-46ca-adec-14f2f9a7fe6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{2f42490d-0658-4d7a-8a28-03db98b2baf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\lib">
-      <UniqueIdentifier>{d47da01a-4afc-4f0d-9ed9-43fd8e74d8c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="res">
       <UniqueIdentifier>{b06c4c40-411a-4242-a2b4-d3c2549e9d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{979c9be2-ef64-4d39-8328-e2034a448c23}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\loader">
+      <UniqueIdentifier>{2b7873cc-fd30-494f-957e-a265e2c25d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{2f42490d-0658-4d7a-8a28-03db98b2baf4}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\lib">
+      <UniqueIdentifier>{d47da01a-4afc-4f0d-9ed9-43fd8e74d8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loader">
+      <UniqueIdentifier>{849bd3ec-7e46-48b3-a21d-351fc8e8844d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering">
+      <UniqueIdentifier>{b4f5735f-26f9-4502-ace6-3d6f0efff722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering">
+      <UniqueIdentifier>{7c0d00a5-7b88-4177-acf8-4476545d2481}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\controls.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\display.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\entity.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\game.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\input.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\material.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mesh.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\renderer.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\shader.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lib\imgui.cpp">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lib\imgui_draw.cpp">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClCompile>
     <ClCompile Include="..\src\model.cpp">
-      <Filter>src</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\loader\model_loader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\render_mesh.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\render_material.cpp">
+      <Filter>Source Files\rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\camera.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\controls.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\display.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\entity.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\entitycomponent.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\game.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\input.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\light.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\material.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\mesh.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\opengl.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\renderer.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\shader.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\transform.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\lib\imconfig.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\imgui.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\imgui_impl_sdl_gl3.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\imgui_internal.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\stb_image.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\stb_rect_pack.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\stb_textedit.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\lib\stb_truetype.h">
-      <Filter>src\lib</Filter>
+      <Filter>Source Files\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\camera.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\controls.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\display.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entitycomponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\input.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\light.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mesh.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\model.hpp">
-      <Filter>src</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\opengl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\shader.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\scene.hpp">
-      <Filter>src</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\transform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\material.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\loader\model_loader.hpp">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\render_mesh.hpp">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\render_material.hpp">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\types.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

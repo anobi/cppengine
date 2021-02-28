@@ -3,26 +3,16 @@
 
 #include <iostream>
 #include <vector>
-#include <glm/glm.hpp>
 
+#include "types.hpp"
 #include "opengl.hpp"
 #include "entitycomponent.hpp"
 #include "material.hpp"
 #include "shader.hpp"
 
-struct Vertex
-{
-    glm::fvec3 position;
-    glm::fvec3 normal;
-    glm::fvec3 tangent;
-    glm::fvec3 bitangent;
-    glm::fvec2 texCoords;
-};
-
 class Mesh
 {
 public:
-    GLuint VAO;
     std::vector<std::shared_ptr<Texture>> textures;
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
@@ -32,12 +22,12 @@ public:
 
     void Draw(Shader* shader);
     void Cleanup();
+    void SetupMesh();
 
-private:
+    // TODO: These belong into a RenderModel class
+    GLuint VAO;
     GLuint VBO;
     GLuint EBO;
-
-    void SetupMesh();
 };
 
 #endif
