@@ -14,7 +14,6 @@
 #include "entity.hpp"
 #include "shader.hpp"
 #include "model.hpp"
-#include "material.hpp"
 #include "loader/model_loader.hpp"
 
 

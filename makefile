@@ -6,7 +6,7 @@ BIN = game
 SRC = src
 LIBDIR = src/lib
 OBJDIR = obj
-OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/entity.o $(OBJDIR)/mesh.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/material.o $(OBJDIR)/main.o
+OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/entity.o $(OBJDIR)/render_mesh.o $(OBJDIR)/render_material.o $(OBJDIR)/model_loader.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/main.o
 
 CFLAGS = -Wall -std=c++14
 LIBS = -lSDL2 -lassimp
@@ -62,16 +62,19 @@ $(OBJDIR)/controls.o: $(SRC)/controls.cpp
 $(OBJDIR)/entity.o: $(SRC)/entity.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/mesh.o: $(SRC)/mesh.cpp
+$(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/render_mesh.o: $(SRC)/rendering/render_mesh.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/model_loader.o: $(SRC)/loader/model_loader.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model.o: $(SRC)/model.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/shader.o: $(SRC)/shader.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/material.o: $(SRC)/material.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(OBJ)
