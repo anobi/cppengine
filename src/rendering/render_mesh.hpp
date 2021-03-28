@@ -6,6 +6,8 @@
 
 #include "../types.hpp"
 
+
+// TODO: This could just be a struct, and the rendering logic should be moved to rendering backend
 class RenderMesh
 {
 public:

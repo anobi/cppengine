@@ -104,6 +104,9 @@
     <Filter Include="Source Files\rendering">
       <UniqueIdentifier>{7c0d00a5-7b88-4177-acf8-4476545d2481}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\containers">
+      <UniqueIdentifier>{cd2dead3-707c-4246-8d21-1354b36a2254}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\controls.cpp">
@@ -233,6 +236,9 @@
     </ClInclude>
     <ClInclude Include="..\src\types.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\containers\array.hpp">
+      <Filter>Source Files\containers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

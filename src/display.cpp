@@ -31,6 +31,8 @@ bool Display::Init(const int w, const int h) {
 
     InitGL();
 
+    this->Update();
+
     resizing = false;
     return true;
 }
@@ -74,12 +76,11 @@ void Display::Shutdown()
 
 void Display::InitGL()
 {
-
     glewExperimental = GL_TRUE;
     glewInit();
 
     glViewport(0, 0, this->width, this->height);
-    glClearColor(0.1f, 0.2f, 0.2f, 0.0f);
+    glClearColor(0.07f, 0.07f, 0.07f, 0.0f);
     glClearDepth(1.0f);
 
     glEnable(GL_CULL_FACE);
@@ -93,4 +94,6 @@ void Display::InitGL()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_MULTISAMPLE);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

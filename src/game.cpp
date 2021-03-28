@@ -16,6 +16,8 @@
 #include "model.hpp"
 #include "loader/model_loader.hpp"
 
+#include "containers/array.hpp"
+
 
 // TODO: Temp holders. Create new homes for these.
 Scene defaultScene;

@@ -87,4 +87,4 @@ clean: $(OBJ)
 	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)
 
 test: $(OBJS)
-	$(CC) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp
+	$(CC) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp
