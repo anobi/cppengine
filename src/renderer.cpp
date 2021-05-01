@@ -77,3 +77,14 @@ void Renderer::Render(Scene* scene, Shader* shader)
 
     // Post processing pass here?
 }
+
+
+// Render the scene using the new render entities
+void Renderer::Render(Shader* shader)
+{
+    for (int i = 0; i < this->rendering_entities.num_render_entities; i++) {
+        glBindVertexArray(this->rendering_entities.VAOs[i]);
+        glDrawElements(GL_TRIANGLES, this->rendering_entities.indices[i], GL_UNSIGNED_INT, (void*)0);
+    }
+    glBindVertexArray(0);
+}

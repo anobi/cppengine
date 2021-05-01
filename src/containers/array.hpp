@@ -1,11 +1,13 @@
-#ifndef C_ARRAY_H
-#define C_ARRAY_H
+#ifndef __CONTAINERS_ARRAY_H__
+#define __CONTAINERS_ARRAY_H__
+
+#include <string.h>
 
 template<class T, size_t S>
 class Array {
 public:
-    Array()     {};
-    ~Array()    {};
+    Array() { memset(this->data, 0, this->Size()); };
+    ~Array() {};
 
     size_t Length() const;
     size_t Size()   const;
@@ -47,4 +49,4 @@ inline T& Array<T, S>::operator[](size_t index) {
     return this->data[index];
 }
 
-#endif  // C_ARRAY_H
+#endif  // __CONTAINERS_ARRAY_H__

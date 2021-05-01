@@ -1,5 +1,5 @@
-#ifndef R_RENDER_MATERIAL_H
-#define R_RENDER_MATERIAL_H
+#ifndef __RENDERING__RENDER_MATERIAL_H__
+#define __RENDERING__RENDER_MATERIAL_H__
 
 #include "../opengl.hpp"
 #include "../shader.hpp"
@@ -24,4 +24,4 @@ public:
     GLuint alphaMap     = 0;
 };
 
-#endif // R_RENDER_MATERIAL_H
+#endif // __RENDERING__RENDER_MATERIAL_H__

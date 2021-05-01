@@ -1,5 +1,5 @@
-#ifndef L_MODEL_LOADER_H
-#define L_MODEL_LOADER_H
+#ifndef __LOADER__MODEL_LOADER_H__
+#define __LOADER__MODEL_LOADER_H__
 
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
@@ -32,4 +32,4 @@ public:
     loadingState_e LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture);
 };
 
-#endif // L_MODEL_LOADER_H
+#endif // __LOADER__MODEL_LOADER_H_

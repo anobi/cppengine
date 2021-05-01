@@ -1,4 +1,3 @@
-//#include <iostream>
 #include <cstdio>
 #include <chrono>
 #include <SDL2/SDL.h>
@@ -14,7 +13,7 @@
 #include "entity.hpp"
 #include "shader.hpp"
 #include "model.hpp"
-#include "loader/model_loader.hpp"
+#include "loading/model_loader.hpp"
 
 #include "containers/array.hpp"
 
@@ -284,41 +283,37 @@ Entity* Game::GetEntity(const std::string name)
     return entity;
 }
 
-static auto vector_getter = [](void* vec, int idx, const char** out_text)
+static auto entity_array_getter = [](void* entities, int idx, const char** out_text)
 {
-    auto& vector = *static_cast<std::vector<std::string>*>(vec);
-
-    if (idx < 0 || idx >= static_cast<int>(vector.size()))
+    Array<char*, MAX_GAME_ENTITIES> entity_list = *static_cast<Array<char*, MAX_GAME_ENTITIES>*>(entities);
+    if (idx < 0 || idx >= static_cast<int>(entity_list.Size()))
     {
         return false;
     }
-
-    *out_text = vector.at(idx).c_str();
-
+    *out_text = entity_list[idx];
     return true;
 };
 
 void Game::UpdateUI()
 {
-    glm::fvec3 cPos = this->scene->camera->transform.GetPosition();
-    glm::fvec3 cRot = this->scene->camera->transform.GetRotation();
+    Array<const char*, MAX_GAME_ENTITIES> entity_list;
+    int num_entities = this->entities.size();
+    if (num_entities > MAX_GAME_ENTITIES) {
+        num_entities = MAX_GAME_ENTITIES;
+    }
 
-    std::vector<std::string> entity_list;
-
-    for (int i = 0; i < entities.size(); i++)
+    for (int i = 0; i < num_entities; i++)
     {
-        Entity* e = entities[i];
-        glm::fvec3 pos = e->transform.GetPosition();
-
-        char buf[256];
-        snprintf(buf, 256, "%s", e->name, pos.x, pos.y, pos.z);
-        entity_list.push_back(buf);
+        entity_list[i] = this->entities[i]->name;
     }
 
     // Debug info window
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Info");
+
+    glm::fvec3 cPos = this->scene->camera->transform.GetPosition();
+    glm::fvec3 cRot = this->scene->camera->transform.GetRotation();
     ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
     ImGui::Text("Player rotation x: %.2f y: %.2f z: %.2f", cRot.x, cRot.y, cRot.z);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -330,17 +325,16 @@ void Game::UpdateUI()
     ImGui::Begin("Entities");
 
     ImGui::PushItemWidth(-1);
-    ImGui::ListBox("##entities", &selected_entity, vector_getter, static_cast<void*>(&entity_list), entity_list.size());
+    ImGui::ListBox("##entities", &selected_entity, entity_array_getter, static_cast<void*>(&entity_list), num_entities);
     ImGui::PopItemWidth();
 
     glm::fvec3 e_pos = entities[selected_entity]->transform.GetPosition();
     ImGui::Text("Location x: %.2f y: %.2f z:%.2f", e_pos.x, e_pos.y, e_pos.z);
-
     ImGui::SliderFloat("X", &e_pos.x, -100, 100);
     ImGui::SliderFloat("Y", &e_pos.y, -100, 100);
     ImGui::SliderFloat("Z", &e_pos.z, -100, 100);
 
-    entities[selected_entity]->transform.SetPosition(e_pos);
+    this->entities[selected_entity]->transform.SetPosition(e_pos);
 
     ImGui::End();
 

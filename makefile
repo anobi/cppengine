@@ -71,7 +71,7 @@ $(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
 $(OBJDIR)/render_mesh.o: $(SRC)/rendering/render_mesh.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/model_loader.o: $(SRC)/loader/model_loader.cpp
+$(OBJDIR)/model_loader.o: $(SRC)/loading/model_loader.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model.o: $(SRC)/model.cpp

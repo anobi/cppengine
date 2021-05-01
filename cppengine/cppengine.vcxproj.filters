@@ -85,18 +85,12 @@
       <UniqueIdentifier>{979c9be2-ef64-4d39-8328-e2034a448c23}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\loader">
-      <UniqueIdentifier>{2b7873cc-fd30-494f-957e-a265e2c25d4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{2f42490d-0658-4d7a-8a28-03db98b2baf4}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Source Files\lib">
       <UniqueIdentifier>{d47da01a-4afc-4f0d-9ed9-43fd8e74d8c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\loader">
-      <UniqueIdentifier>{849bd3ec-7e46-48b3-a21d-351fc8e8844d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\rendering">
       <UniqueIdentifier>{b4f5735f-26f9-4502-ace6-3d6f0efff722}</UniqueIdentifier>
@@ -106,6 +100,12 @@
     </Filter>
     <Filter Include="Source Files\containers">
       <UniqueIdentifier>{cd2dead3-707c-4246-8d21-1354b36a2254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\loading">
+      <UniqueIdentifier>{4c3e95eb-144f-4587-8c7d-a4f9ba21c208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loading">
+      <UniqueIdentifier>{849bd3ec-7e46-48b3-a21d-351fc8e8844d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,9 +145,6 @@
     <ClCompile Include="..\src\model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\loader\model_loader.cpp">
-      <Filter>Source Files\loader</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\rendering\render_mesh.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
@@ -156,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="..\src\scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\loading\model_loader.cpp">
+      <Filter>Source Files\loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,9 +225,6 @@
     <ClInclude Include="..\src\transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\loader\model_loader.hpp">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\rendering\render_mesh.hpp">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
@@ -239,6 +236,12 @@
     </ClInclude>
     <ClInclude Include="..\src\containers\array.hpp">
       <Filter>Source Files\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\render_entities.hpp">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\loading\model_loader.hpp">
+      <Filter>Header Files\loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

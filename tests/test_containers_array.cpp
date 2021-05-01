@@ -7,6 +7,8 @@ TEST_CASE("Test Array initialization", "[Containers::Array]") {
 
     REQUIRE(a.Length() == array_size);
     REQUIRE(a.Size() == array_size * sizeof(int));
+    REQUIRE(a[0] == 0);
+    REQUIRE(a[array_size - 1] == 0);
 }
 
 TEST_CASE("Test Array read & write", "[Containers::Array]") {

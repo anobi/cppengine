@@ -11,6 +11,8 @@
 #include "model.hpp"
 #include "light.hpp"
 
+#include "rendering/render_entities.hpp"
+
 class Renderer {
 public:
     Renderer() {};
@@ -24,11 +26,14 @@ public:
     glm::fvec2 GetResolution() { return this->resolution; }
 
     void Render(Scene* scene, Shader* shader);
+    void Render(Shader* shader);
     void Shutdown();
 
 private:
     int m_tick = 0;
     glm::fvec2 resolution;
+
+    RenderEntities rendering_entities;
 };
 
 #endif

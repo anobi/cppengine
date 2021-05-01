@@ -12,6 +12,8 @@
 #include "renderer.hpp"
 #include "scene.hpp"
 
+constexpr auto MAX_GAME_ENTITIES = 1024;
+
 enum gameState_t
 {
     GAMESTATE_RUNNING,
