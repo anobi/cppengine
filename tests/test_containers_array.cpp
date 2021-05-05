@@ -23,3 +23,24 @@ TEST_CASE("Test Array read & write", "[Containers::Array]") {
     REQUIRE(a[2] == 3);
     REQUIRE(a[4] == 5);
 }
+
+TEST_CASE("Test Array clear function", "[Containers::Array]") {
+    const size_t array_size = 5;
+    Array<int, array_size> a;
+
+    // Init the array with positive, non-zero numbers
+    for (int i = 0; i < array_size; i++) {
+        a[i] = i + 1;
+    }
+
+    // Check that it is in fact filled with positive numbers! Because why not.
+    for (int i = 0; i < array_size; i++) {
+        REQUIRE(a[0] != 0);
+    }
+
+    // Clear it and check that the content is all zeroes
+    a.Clear();
+    for (int i = 0; i < array_size; i++) {
+        REQUIRE(a[0] == 0);
+    }
+}

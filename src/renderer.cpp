@@ -18,6 +18,8 @@ void Renderer::Render(Scene* scene, Shader* shader)
     auto point_lights = scene->GetPointLights();
     auto dir_lights = scene->GetDirectionalLights();
 
+    glUniform1i(shader->uniforms[6], this->GetTick());
+
     //
     // Update dynamic lights
     //
@@ -68,23 +70,21 @@ void Renderer::Render(Scene* scene, Shader* shader)
         glUniform2fv(shader->uniforms[4], 1, &resolution[0]);
         glUniform3fv(shader->uniforms[5], 1, &eyePos[0]);
 
-        // Time
-        glUniform1i(shader->uniforms[6], this->GetTick());
-
         // Render
         models[i]->Render(shader);
     }
-
-    // Post processing pass here?
 }
 
 
 // Render the scene using the new render entities
-void Renderer::Render(Shader* shader)
+void Renderer::Render(World* world, Shader* shader)
 {
-    for (int i = 0; i < this->rendering_entities.num_render_entities; i++) {
-        glBindVertexArray(this->rendering_entities.VAOs[i]);
-        glDrawElements(GL_TRIANGLES, this->rendering_entities.indices[i], GL_UNSIGNED_INT, (void*)0);
+    unsigned int bound_material = 0;
+    for (int i = 0; i < world->_entities_top; i++) {
+        entityHandle_T entity = world->_entity_handles[i];
+
+        glBindVertexArray(world->render_entities.VAOs[entity.slot]);
+        glDrawElements(GL_TRIANGLES, world->render_entities.indices[entity.slot], GL_UNSIGNED_INT, (void*)0);
     }
     glBindVertexArray(0);
 }

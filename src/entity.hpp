@@ -5,6 +5,9 @@
 #include <vector>
 
 #include "transform.hpp"
+#include "entities/entity_handle.hpp"
+#include "entities/entity_transforms.hpp"
+#include "rendering/render_entities.hpp"
 
 /////////////////
 // E N T I T Y //
@@ -14,10 +17,10 @@ class Renderer;
 class Camera;
 class EntityComponent;
 class Entity;
+class Model;
 
 class Entity {
 public:
-    Entity() {}
     Entity(const char* name) { this->name = name; }
     ~Entity() {};
 
@@ -28,9 +31,12 @@ public:
     void AddComponent(EntityComponent* component);
     EntityComponent* GetComponent(const char* componentName);
 
+    entityHandle_T handle;
+
     const char* name;
     std::vector<EntityComponent*> components;
     Transform transform;
+
 };
 
 #endif

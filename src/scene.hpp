@@ -10,9 +10,7 @@
 #include "light.hpp"
 
 class Scene {
-
 public:
-
     Scene() {}
     ~Scene() {}
 
@@ -27,7 +25,7 @@ public:
     inline void AddDirectionalLight(DirectionalLight* light) { this->_directionalLights.push_back(light); }
     inline std::vector<DirectionalLight*> GetDirectionalLights() { return this->_directionalLights; }
 
-    Camera* camera;
+    Camera* camera = 0;
 
 private:
     std::vector<PointLight*> _pointLights;

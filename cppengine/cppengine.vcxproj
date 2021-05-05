@@ -217,6 +217,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\controls.cpp" />
     <ClCompile Include="..\src\display.cpp" />
+    <ClCompile Include="..\src\entities\entity_transforms.cpp" />
     <ClCompile Include="..\src\entity.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\input.cpp" />
@@ -227,16 +228,21 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\model.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
+    <ClCompile Include="..\src\rendering\render_entities.cpp" />
     <ClCompile Include="..\src\rendering\render_material.cpp" />
     <ClCompile Include="..\src\rendering\render_mesh.cpp" />
     <ClCompile Include="..\src\scene.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
+    <ClCompile Include="..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\camera.hpp" />
+    <ClInclude Include="..\src\constants.hpp" />
     <ClInclude Include="..\src\containers\array.hpp" />
     <ClInclude Include="..\src\controls.hpp" />
     <ClInclude Include="..\src\display.hpp" />
+    <ClInclude Include="..\src\entities\entity_handle.hpp" />
+    <ClInclude Include="..\src\entities\entity_transforms.hpp" />
     <ClInclude Include="..\src\entity.hpp" />
     <ClInclude Include="..\src\entitycomponent.hpp" />
     <ClInclude Include="..\src\game.hpp" />
@@ -257,10 +263,12 @@
     <ClInclude Include="..\src\rendering\render_entities.hpp" />
     <ClInclude Include="..\src\rendering\render_material.hpp" />
     <ClInclude Include="..\src\rendering\render_mesh.hpp" />
+    <ClInclude Include="..\src\rendering\render_world.hpp" />
     <ClInclude Include="..\src\scene.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />
     <ClInclude Include="..\src\types.hpp" />
+    <ClInclude Include="..\src\world.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\Barrel.Height.png">

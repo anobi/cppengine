@@ -1,14 +1,20 @@
-#include "render_mesh.hpp"
 #include "../opengl.hpp"
+#include "render_entities.hpp"
 
-void RenderMesh::Setup(const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
+void RenderEntities::Add(entityHandle_T entity)
 {
-    this->numIndices = indices.size();
+    this->_entities[entity.id] = entity;
+    this->_entities_top += 1;
+}
+
+void RenderEntities::LoadModel(entityHandle_T entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
+{
+    this->indices[entity.id] = indices.size();
     unsigned int VBO;
     unsigned int EBO;
 
-    glGenVertexArrays(1, &this->VAO);
-    glBindVertexArray(this->VAO);
+    glGenVertexArrays(1, &this->VAOs[entity.id]);
+    glBindVertexArray(this->VAOs[entity.id]);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
@@ -16,7 +22,7 @@ void RenderMesh::Setup(const std::vector<Vertex> vertices, const std::vector<uns
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->numIndices * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
@@ -46,14 +52,14 @@ void RenderMesh::Setup(const std::vector<Vertex> vertices, const std::vector<uns
     glDeleteBuffers(1, &EBO);
 }
 
-void RenderMesh::Draw()
+void RenderEntities::Cleanup()
 {
-    glBindVertexArray(this->VAO);
-    glDrawElements(GL_TRIANGLES, this->numIndices, GL_UNSIGNED_INT, (void*)0);
-    glBindVertexArray(0);
+    for (int i = 0; i < this->_entities_top; i++) 
+    {
+        glDeleteVertexArrays(1, &this->VAOs[i]);
+    }
+    this->VAOs.Clear();
+    this->indices.Clear();
+    this->_entities.Clear();
 }
 
-void RenderMesh::Cleanup()
-{
-    glDeleteVertexArrays(1, &this->VAO);
-}

@@ -43,7 +43,8 @@ public:
         return glm::fvec3(
             sin(rotation.x - 3.14f / 2.0f),
             0,
-            cos(rotation.x - 3.14f / 2.0f));
+            cos(rotation.x - 3.14f / 2.0f)
+        );
     }
 
     inline glm::fvec3 GetUp() {

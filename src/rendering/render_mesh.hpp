@@ -1,5 +1,5 @@
-#ifndef R_RENDER_MESH_H
-#define R_RENDER_MESH_H
+#ifndef __RENDERING__RENDER_MESH_H__
+#define __RENDERING__RENDER_MESH_H__
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -18,11 +18,9 @@ public:
     void Draw();
     void Cleanup();
 
-    int numVertices;
-    int numIndices;
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
+    unsigned int numVertices    = 0;
+    unsigned int numIndices     = 0;
+    unsigned int VAO            = 0;
 };
 
-#endif // R_RENDER_MESH_H
+#endif  // __RENDERING__RENDER_MESH_H__
