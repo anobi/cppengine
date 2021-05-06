@@ -132,10 +132,9 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     if (entity.id != INVALID_HANDLE_ID) {
         this->world->render_entities.LoadModel(entity, vertices, indices);
     }
-    else {
-        renderMesh.Setup(vertices, indices);
-        model->renderMeshes.push_back(renderMesh);
-    }
+
+    renderMesh.Setup(vertices, indices);
+    model->renderMeshes.push_back(renderMesh);
 
     if (mesh->mMaterialIndex >= 0)
     {

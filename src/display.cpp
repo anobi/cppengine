@@ -80,7 +80,7 @@ void Display::InitGL()
     glewInit();
 
     glViewport(0, 0, this->width, this->height);
-    glClearColor(0.07f, 0.07f, 0.07f, 0.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glClearDepth(1.0f);
 
     glEnable(GL_CULL_FACE);

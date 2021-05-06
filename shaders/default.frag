@@ -202,7 +202,6 @@ void main(void)
         light_accumulator += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
     }
 
-
     vec3 color = ambient + light_accumulator;
     fragColor = vec4(color, 1.0f);
 }

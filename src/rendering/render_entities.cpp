@@ -4,7 +4,12 @@
 void RenderEntities::Add(entityHandle_T entity)
 {
     this->_entities[entity.slot] = entity;
-    this->_entities_top += 1;
+    if (entity.slot > this->_entities_top) {
+        this->_entities_top = entity.slot + 1;
+    }
+    else {
+        this->_entities_top += 1;
+    }
 }
 
 void RenderEntities::LoadModel(entityHandle_T entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)

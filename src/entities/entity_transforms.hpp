@@ -26,6 +26,7 @@ public:
     void Add(entityHandle_T entity);
     void SetPosition(entityHandle_T entity, glm::fvec3 position);
     void SetRotation(entityHandle_T entity, glm::fvec3 rotation);
+    void SetScale(entityHandle_T entity, glm::fvec3 scale);
     void Update(glm::fmat4 view_projection);
 
 private:

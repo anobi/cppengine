@@ -7,7 +7,12 @@
 void EntityTransforms::Add(entityHandle_T entity)
 {
     this->_entities[entity.slot] = entity;
-    this->_entities_top += 1;
+    if (entity.slot > this->_entities_top) {
+        this->_entities_top = entity.slot + 1;
+    }
+    else {
+        this->_entities_top += 1;
+    }
 
     this->positions[entity.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->rotations[entity.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
@@ -17,13 +22,17 @@ void EntityTransforms::Add(entityHandle_T entity)
 void EntityTransforms::Update(glm::fmat4 view_projection)
 {
     for (int i = 0; i < this->_entities_top; i++) {
+        if (this->_entities[i].id == INVALID_HANDLE_ID) {
+            continue;
+        }
+
         glm::fmat4 rotationMatrix = 
             glm::rotate(glm::fmat4(1.0f), this->rotations[i].x, glm::fvec3(1.0, 0.0, 0.0))
           * glm::rotate(glm::fmat4(1.0f), this->rotations[i].y, glm::fvec3(0.0, 1.0, 0.0))
           * glm::rotate(glm::fmat4(1.0f), this->rotations[i].z, glm::fvec3(0.0, 0.0, 1.0));
 
         this->model_matrices[i] =
-            glm::translate(glm::fmat4(1.0f), this->positions[i]) 
+            glm::translate(glm::fmat4(1.0f), this->positions[i])
           * rotationMatrix
           * glm::scale(glm::fmat4(1.0f), this->scales[i]);
 
@@ -43,6 +52,13 @@ void EntityTransforms::SetRotation(entityHandle_T entity, glm::fvec3 rotation)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         this->rotations[entity.slot] = rotation;
+    }
+}
+
+void EntityTransforms::SetScale(entityHandle_T entity, glm::fvec3 scale)
+{
+    if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
+        this->scales[entity.slot] = scale;
     }
 }
 
