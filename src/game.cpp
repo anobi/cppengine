@@ -112,9 +112,7 @@ void Game::Start()
         this->ConstructScene(&modelLoader);
 
         // Even more temp test solution for a data oriented test cube
-        
-        this->world.AddEntity(&test_cube);
-
+        test_cube.handle = this->world.AddEntity(&test_cube);
         modelLoader.Load("uvcube.obj", &test_cube_model, test_cube.handle);
         this->world.render_entities.Add(test_cube.handle);
         this->world.entity_transforms.Add(test_cube.handle);
@@ -380,6 +378,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     camera.transform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
     camera.SetAspectRatio(this->display.GetAspectRatio());
     this->scene->camera = &camera;
+    this->world.camera = &camera;
 
     /*
     Meshes

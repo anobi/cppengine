@@ -3,18 +3,18 @@
 
 void RenderEntities::Add(entityHandle_T entity)
 {
-    this->_entities[entity.id] = entity;
+    this->_entities[entity.slot] = entity;
     this->_entities_top += 1;
 }
 
 void RenderEntities::LoadModel(entityHandle_T entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
 {
-    this->indices[entity.id] = indices.size();
+    this->indices[entity.slot] = indices.size();
     unsigned int VBO;
     unsigned int EBO;
 
-    glGenVertexArrays(1, &this->VAOs[entity.id]);
-    glBindVertexArray(this->VAOs[entity.id]);
+    glGenVertexArrays(1, &this->VAOs[entity.slot]);
+    glBindVertexArray(this->VAOs[entity.slot]);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 

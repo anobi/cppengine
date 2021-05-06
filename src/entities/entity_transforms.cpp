@@ -28,6 +28,7 @@ void EntityTransforms::Update(glm::fmat4 view_projection)
           * glm::scale(glm::fmat4(1.0f), this->scales[i]);
 
         this->mvp_matrices[i] = view_projection * this->model_matrices[i];
+        this->normal_matrices[i] = glm::inverse(glm::fmat3(this->model_matrices[i]));
     }
 }
 

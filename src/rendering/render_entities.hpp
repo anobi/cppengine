@@ -21,7 +21,6 @@ public:
 
     unsigned int _entities_top = 0;
     Array<entityHandle_T, MAX_RENDER_ENTITIES> _entities;
-
     Array<unsigned int, MAX_RENDER_ENTITIES> VAOs;
     Array<unsigned int, MAX_RENDER_ENTITIES> indices;
 };

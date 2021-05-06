@@ -21,6 +21,7 @@ public:
     Array<glm::fvec3, MAX_GAME_ENTITIES> scales;
     Array<glm::fmat4, MAX_GAME_ENTITIES> model_matrices;
     Array<glm::fmat4, MAX_GAME_ENTITIES> mvp_matrices;
+    Array<glm::fmat3, MAX_GAME_ENTITIES> normal_matrices;
 
     void Add(entityHandle_T entity);
     void SetPosition(entityHandle_T entity, glm::fvec3 position);

@@ -79,9 +79,26 @@ void Renderer::Render(Scene* scene, Shader* shader)
 // Render the scene using the new render entities
 void Renderer::Render(World* world, Shader* shader)
 {
+    shader->Bind();
+    glUniform1i(shader->uniforms[6], this->GetTick());
+
+    glm::fvec2 resolution = this->GetResolution();
+    glm::fmat4 view = world->camera->GetView();
+    glm::fmat4 projection = world->camera->GetProjection();
+    glm::fvec3 eyePos = world->camera->transform.GetPosition();
+
     unsigned int bound_material = 0;
-    for (int i = 0; i < world->_entities_top; i++) {
+    for (int i = 0; i < world->_entities_top; i++)
+    {
         entityHandle_T entity = world->_entity_handles[i];
+
+        glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &world->entity_transforms.model_matrices[entity.slot][0][0]);
+        glUniformMatrix4fv(shader->uniforms[1], 1, GL_FALSE, &view[0][0]);
+        glUniformMatrix4fv(shader->uniforms[2], 1, GL_FALSE, &projection[0][0]);
+        glUniformMatrix3fv(shader->uniforms[3], 1, GL_FALSE, &world->entity_transforms.normal_matrices[entity.slot][0][0]);
+
+        glUniform2fv(shader->uniforms[4], 1, &resolution[0]);
+        glUniform3fv(shader->uniforms[5], 1, &eyePos[0]);
 
         glBindVertexArray(world->render_entities.VAOs[entity.slot]);
         glDrawElements(GL_TRIANGLES, world->render_entities.indices[entity.slot], GL_UNSIGNED_INT, (void*)0);

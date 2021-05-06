@@ -7,6 +7,7 @@ entityHandle_T World::AddEntity(Entity* entity)
     handle.slot = _entities_top;
 
     this->_entities[this->_entities_top] = entity;
+    this->_entity_handles[this->_entities_top] = handle;
     this->_entities_top += 1;
 
     return handle;
@@ -14,7 +15,8 @@ entityHandle_T World::AddEntity(Entity* entity)
 
 Entity* World::GetEntity(entityHandle_T handle) 
 {
-    if (handle.id != INVALID_HANDLE_ID && handle.id <= this->_entities_top - 1) {
+    if (handle.id != INVALID_HANDLE_ID && handle.id <= this->_entities_top - 1) 
+    {
         return this->_entities[handle.id];
     }
     return 0;
