@@ -6,7 +6,26 @@ BIN = game
 SRC = src
 LIBDIR = src/lib
 OBJDIR = obj
-OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/scene.o $(OBJDIR)/entity.o $(OBJDIR)/render_mesh.o $(OBJDIR)/render_material.o $(OBJDIR)/model_loader.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/main.o
+OBJS = \
+	$(OBJDIR)/imgui.o \
+	$(OBJDIR)/imgui_draw.o \
+	$(OBJDIR)/imgui_impl.o \
+	$(OBJDIR)/game.o \
+	$(OBJDIR)/display.o \
+	$(OBJDIR)/renderer.o \
+	$(OBJDIR)/input.o \
+	$(OBJDIR)/controls.o \
+	$(OBJDIR)/world.o \
+	$(OBJDIR)/scene.o \
+	$(OBJDIR)/entity.o \
+	$(OBJDIR)/entity_transforms.o \
+	$(OBJDIR)/render_mesh.o \
+	$(OBJDIR)/render_material.o \
+	$(OBJDIR)/render_entities.o \
+	$(OBJDIR)/model_loader.o \
+	$(OBJDIR)/model.o \
+	$(OBJDIR)/shader.o \
+	$(OBJDIR)/main.o
 
 CFLAGS = -Wall -std=c++14
 LIBS = -lSDL2 -lassimp
@@ -59,16 +78,25 @@ $(OBJDIR)/input.o: $(SRC)/input.cpp
 $(OBJDIR)/controls.o: $(SRC)/controls.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJDIR)/world.o: $(SRC)/world.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(OBJDIR)/scene.o: $(SRC)/scene.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/entity.o: $(SRC)/entity.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/render_mesh.o: $(SRC)/rendering/render_mesh.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/render_entities.o: $(SRC)/rendering/render_entities.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model_loader.o: $(SRC)/loading/model_loader.cpp
