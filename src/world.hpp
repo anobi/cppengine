@@ -23,7 +23,7 @@ public:
 
     entityHandle_T AddEntity(Entity* entity);
 
-    unsigned int EntityCount() const { this->_entities_top; }
+    unsigned int EntityCount() const { return this->_entities_top; }
 
     Entity* GetEntity(entityHandle_T id);
 

@@ -1,14 +1,6 @@
 #include "entity.hpp"
 #include "entitycomponent.hpp"
 
-void Entity::Render(Renderer& renderer) 
-{
-    for (unsigned int i = 0; i < this->components.size(); i++)
-    {
-        this->components[i]->Render(renderer);
-    }
-}
-
 void Entity::Cleanup()
 {
     for (unsigned int i = 0; i < this->components.size(); i++)
@@ -34,4 +26,5 @@ EntityComponent* Entity::GetComponent(const char* name)
             return this->components[i];
         }
     }
+    return 0;
 }

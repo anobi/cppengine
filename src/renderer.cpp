@@ -87,7 +87,6 @@ void Renderer::Render(World* world, Shader* shader)
     glm::fmat4 projection = world->camera->GetProjection();
     glm::fvec3 eyePos = world->camera->transform.GetPosition();
 
-    unsigned int bound_material = 0;
     for (int i = 0; i < world->_entities_top; i++)
     {
         entityHandle_T entity = world->_entity_handles[i];

@@ -27,7 +27,7 @@ OBJS = \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/main.o
 
-CFLAGS = -Wall -std=c++14
+CFLAGS = -Wall -std=c++17
 LIBS = -lSDL2 -lassimp
 
 DEBUG ?= 1
@@ -115,4 +115,4 @@ clean: $(OBJ)
 	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)
 
 test: $(OBJS)
-	$(CC) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp
+	$(CC) $(CFLAGS) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp

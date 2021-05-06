@@ -125,7 +125,6 @@ void Game::Start()
 void Game::Loop()
 {
     SDL_Event event;
-    int frames = 0;
     int ticks = 0;
 
     // float target_framerate = 60.0f;
