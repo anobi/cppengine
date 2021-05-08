@@ -21,15 +21,13 @@
 // TODO: Temp holders. Create new homes for these.
 Scene defaultScene;
 Shader defaultShader;
+Shader greyboxShader;
 Camera camera;
 
 Entity room = Entity("Room");
 Entity bg_light = Entity("Skylight");
 Entity orange_light = Entity("Fireball");
 Entity blue_light = Entity("Lightningball");
-
-Entity test_cube = Entity("TestCube");
-Model test_cube_model;
 
 Model roomModel;
 Model pl1model;
@@ -376,6 +374,8 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     defaultShader = Shader("default");
     this->shader = &defaultShader;
 
+    greyboxShader = Shader("greybox");
+
     camera = Camera(
         60.0f,  // FOV
         0.1f,   // zNear
@@ -393,23 +393,22 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     // Even more temp test solution for a data oriented test cube
-    test_cube.handle = this->world.AddEntity(&test_cube);
-    LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", &test_cube_model, test_cube.handle);
+    entityHandle_T test_cube = this->world.AddEntity("Test cube");
+    LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", 0, test_cube);
     assert(test_cube_load == LOADINGSTATE::VALID);
 
-    this->world.render_entities.Add(test_cube.handle);
-    this->world.entity_transforms.Add(test_cube.handle);
+    this->world.render_entities.Add(test_cube);
+    this->world.entity_transforms.Add(test_cube);
 
     //Room
-    room.handle = this->world.AddEntity(&room);
-    LOADINGSTATE room_load = modelLoader->Load("sponza.obj", &roomModel, room.handle);
-    assert(room_load == LOADINGSTATE::VALID);
+    auto dod_room = this->world.AddEntity("Room");
+    this->world.entity_transforms.SetScale(dod_room, glm::fvec3(0.02f));
+    this->world.entity_transforms.SetRotation(dod_room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 
-    // dod
-    this->world.render_entities.Add(room.handle);
-    this->world.entity_transforms.Add(room.handle);
-    this->world.entity_transforms.SetScale(room.handle, glm::fvec3(0.02f));
-    this->world.entity_transforms.SetRotation(room.handle, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
+    LOADINGSTATE room_load = modelLoader->Load("sponza.obj", &roomModel, dod_room);
+    assert(room_load == LOADINGSTATE::VALID);
+    this->world.render_entities.Add(dod_room);
+
 
     // oop
     room.transform.SetScale(glm::fvec3(0.02f));
@@ -424,7 +423,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     //cool background light
-    bg_light.handle = this->world.AddEntity(&bg_light);
+    entityHandle_T dod_bg_light = this->world.AddEntity("Background light");
 
     pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
     bg_light.transform.SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
@@ -434,13 +433,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
 
     // Fiery light cube
-    orange_light.handle = this->world.AddEntity(&orange_light);
-    modelLoader->Load("uvcube.obj", &pl3model, orange_light.handle);
+    auto dod_orange_light = this->world.AddEntity("Orange light");
+    modelLoader->Load("uvcube.obj", &pl3model, dod_orange_light);
 
-    this->world.render_entities.Add(orange_light.handle);
-    this->world.entity_transforms.Add(orange_light.handle);
-    this->world.entity_transforms.SetPosition(orange_light.handle, glm::fvec3(-7.5f, 10.0f, 0.0f));
-    this->world.entity_transforms.SetScale(orange_light.handle, glm::fvec3(0.1f));
+    this->world.render_entities.Add(dod_orange_light);
+    this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
+    this->world.entity_transforms.SetScale(dod_orange_light, glm::fvec3(0.1f));
 
     orange_light.transform.SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
     orange_light.transform.SetScale(glm::fvec3(0.1f));
@@ -455,13 +453,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
 
     // Blue light cube
-    blue_light.handle = this->world.AddEntity(&blue_light);
-    modelLoader->Load("uvcube.obj", &pl4model, blue_light.handle);
+    auto dod_blue_light = this->world.AddEntity("Blue light");
+    modelLoader->Load("uvcube.obj", &pl4model, dod_blue_light);
 
-    this->world.render_entities.Add(blue_light.handle);
-    this->world.entity_transforms.Add(blue_light.handle);
-    this->world.entity_transforms.SetPosition(blue_light.handle, glm::fvec3(7.5f, 2.5f, 0.0f));
-    this->world.entity_transforms.SetScale(blue_light.handle, glm::fvec3(0.1f));
+    this->world.render_entities.Add(dod_blue_light);
+    this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
+    this->world.entity_transforms.SetScale(dod_blue_light, glm::fvec3(0.1f));
 
     blue_light.transform.SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
     blue_light.transform.SetScale(glm::fvec3(0.1f));

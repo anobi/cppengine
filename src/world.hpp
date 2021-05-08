@@ -3,12 +3,12 @@
 
 #include "constants.hpp"
 #include "containers/array.hpp"
-#include "entities/entity_handle.hpp"
 
+#include "entity.hpp"
+#include "entities/entity_handle.hpp"
 #include "entities/entity_transforms.hpp"
 #include "rendering/render_entities.hpp"
 
-class Entity;
 class Camera;
 
 class World {
@@ -21,7 +21,8 @@ public:
         this->_entities.Clear();
     }
 
-    entityHandle_T AddEntity(Entity* entity);
+    entityHandle_T AddEntity(const char* name);
+    entityHandle_T AddChildEntity(entityHandle_T parent);
 
     unsigned int EntityCount() const { return this->_entities_top; }
 
@@ -29,10 +30,10 @@ public:
 
     Camera* camera = 0;
 
-    // Time to make the Queue container soon?
-    unsigned int _entities_top = 0;
+    // The world shall be the new temporary home for entities
+    unsigned int _entities_top = 0;  // Time to make the Queue container soon?
     Array<entityHandle_T, MAX_GAME_ENTITIES> _entity_handles;
-    Array<Entity*, MAX_GAME_ENTITIES> _entities;
+    Array<Entity, MAX_GAME_ENTITIES> _entities;
 
     EntityTransforms entity_transforms;
     RenderEntities render_entities;

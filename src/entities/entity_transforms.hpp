@@ -24,10 +24,15 @@ public:
     Array<glm::fmat3, MAX_GAME_ENTITIES> normal_matrices;
 
     void Add(entityHandle_T entity);
+    void Update(glm::fmat4 view_projection);
+
     void SetPosition(entityHandle_T entity, glm::fvec3 position);
     void SetRotation(entityHandle_T entity, glm::fvec3 rotation);
     void SetScale(entityHandle_T entity, glm::fvec3 scale);
-    void Update(glm::fmat4 view_projection);
+    glm::fvec3 GetPosition(entityHandle_T entity);
+    glm::fvec3 GetRotation(entityHandle_T entity);
+    glm::fvec3 GetScale(entityHandle_T entity);
+    
 
 private:
     unsigned int _entities_top = 0;

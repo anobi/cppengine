@@ -73,6 +73,12 @@
     </None>
     <None Include="..\makefile" />
     <None Include="..\README.md" />
+    <None Include="..\shaders\greybox.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\greybox.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shaders">

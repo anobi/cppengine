@@ -130,17 +130,20 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     RenderMaterial renderMaterial = RenderMaterial();
 
     if (entity.id != INVALID_HANDLE_ID) {
-        this->world->render_entities.LoadModel(entity, vertices, indices);
+        auto child_entity = this->world->AddChildEntity(entity);
+        this->world->render_entities.LoadModel(child_entity, vertices, indices);
     }
 
-    renderMesh.Setup(vertices, indices);
-    model->renderMeshes.push_back(renderMesh);
+    if (model) {
+        renderMesh.Setup(vertices, indices);
+        model->renderMeshes.push_back(renderMesh);
 
-    if (mesh->mMaterialIndex >= 0)
-    {
-        aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
-        this->ProcessMaterial(aiMat, &renderMaterial);
-        model->renderMaterials.push_back(renderMaterial);
+        if (mesh->mMaterialIndex >= 0)
+        {
+            aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
+            this->ProcessMaterial(aiMat, &renderMaterial);
+            model->renderMaterials.push_back(renderMaterial);
+        }
     }
 }
 

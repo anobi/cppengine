@@ -21,7 +21,8 @@ class Model;
 
 class Entity {
 public:
-    Entity(const char* name) { this->name = name; }
+    Entity() {};
+    Entity(const char* name) { this->name = name; };
     ~Entity() {};
 
     void Update();
@@ -32,8 +33,9 @@ public:
     EntityComponent* GetComponent(const char* componentName);
 
     entityHandle_T handle;
+    entityHandle_T parent;
 
-    const char* name;
+    const char* name = "";
     std::vector<EntityComponent*> components;
     Transform transform;
 

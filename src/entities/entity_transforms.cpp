@@ -62,3 +62,24 @@ void EntityTransforms::SetScale(entityHandle_T entity, glm::fvec3 scale)
     }
 }
 
+glm::fvec3 EntityTransforms::GetPosition(entityHandle_T entity)
+{
+    if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
+        return this->positions[entity.slot];
+    }
+}
+
+glm::fvec3 EntityTransforms::GetRotation(entityHandle_T entity)
+{
+    if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
+        return this->rotations[entity.slot];
+    }
+}
+
+glm::fvec3 EntityTransforms::GetScale(entityHandle_T entity)
+{
+    if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
+        return this->scales[entity.slot];
+    }
+}
+
