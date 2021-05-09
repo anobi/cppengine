@@ -205,8 +205,9 @@ void Game::Loop()
             }
         }
 
+        bool dirty_camera = false;
         if (!this->menu) {
-            this->controls.Update(event, this->scene->camera, delay);
+            dirty_camera = this->controls.Update(event, this->scene->camera, delay);
         }
 
         //TODO: figure out where to put this shit
@@ -224,7 +225,7 @@ void Game::Loop()
             this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, e1_pos));
             this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, e2_pos));
 
-            this->world.entity_transforms.Update(this->scene->camera->GetViewProjection());
+            this->world.entity_transforms.Update(this->scene->camera->GetViewProjection(), dirty_camera);
             this->renderer.Render(&this->world, this->shader);
         }
         else 

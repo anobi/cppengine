@@ -24,7 +24,7 @@ public:
     Array<glm::fmat3, MAX_GAME_ENTITIES> normal_matrices;
 
     void Add(entityHandle_t entity);
-    void Update(glm::fmat4 view_projection);
+    void Update(glm::fmat4 view_projection, bool update_all);
 
     void SetPosition(entityHandle_t entity, glm::fvec3 position);
     void SetRotation(entityHandle_t entity, glm::fvec3 rotation);
@@ -37,6 +37,11 @@ public:
 private:
     unsigned int _entities_top = 0;
     Array<entityHandle_t, MAX_GAME_ENTITIES> _entities;
+
+    unsigned int _dirty_entities_top = 0;
+    Array<entityHandle_t, MAX_GAME_ENTITIES> _dirty_entities;
+    void SetDirty(entityHandle_t entity);
+
     const glm::fvec3 _up = glm::fvec3(0.0f, 1.0f, 0.0f);
     const glm::fvec3 _direction = glm::fvec3(0.0f, 0.0f, -1.0f);
 };

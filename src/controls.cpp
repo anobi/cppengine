@@ -10,8 +10,10 @@ void Controls::ResetMousePosition(SDL_Window* window, int center_x, int center_y
     SDL_WarpMouseInWindow(window, center_x, center_y);
 }
 
-void Controls::Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime) {
+bool Controls::Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime) {
 
+    glm::fvec3 oPos = camera->transform.GetPosition();
+    glm::fvec3 oRot = camera->transform.GetRotation();
     glm::fvec3& cPos = camera->transform.GetPosition();
     glm::fvec3& cRot = camera->transform.GetRotation();
 
@@ -57,4 +59,10 @@ void Controls::Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime
     if (keystate[SDL_SCANCODE_LCTRL]) {
         cPos -= camera->transform.GetUp() * this->movementSpeed * deltaTime;
     }
+
+    if (cPos != oPos || cRot != oRot) {
+        return true;
+    }
+
+    return false;
 }

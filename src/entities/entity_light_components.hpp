@@ -6,14 +6,16 @@
 #include "../containers/array.hpp"
 #include "entity_handle.hpp"
 
-enum lightTypes {
+enum lightTypes 
+{
     NONE,
     SPOTLIGHT,
     POINTLIGHT,
     DIRECTIONAL_LIGHT
 };
 
-struct baseLight_t {
+struct baseLight_t 
+{
     float intensity;
     float cutoff;
     glm::fvec3 color;
@@ -25,12 +27,14 @@ struct dirLight_t
     glm::fvec3 direction;  // Should be tied to the entity rotation
 };
 
-struct pointLight_t {
+struct pointLight_t 
+{
     baseLight_t light;
     float radius; 
 };
 
-class EntityLightComponents {
+class EntityLightComponents 
+{
 public:
     entityHandle_t AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc);
     entityHandle_t AddPointLight(entityHandle_t entity, pointLight_t light_desc);

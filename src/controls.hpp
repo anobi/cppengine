@@ -14,7 +14,7 @@ public:
     };
     ~Controls() {};
 
-    void Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime);
+    bool Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime);
     void ResetMousePosition(SDL_Window* window, int center_x, int center_y);
 
     float movementSpeed;

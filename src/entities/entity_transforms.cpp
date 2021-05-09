@@ -17,12 +17,21 @@ void EntityTransforms::Add(entityHandle_t entity)
     this->positions[entity.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->rotations[entity.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->scales[entity.slot] = glm::fvec3(1.0f, 1.0f, 1.0f);
+
+    // All transforms start in a dirty state to force the initial update
+    this->_dirty_entities[this->_dirty_entities_top] = entity;
+    this->_dirty_entities_top += 1;
 }
 
-void EntityTransforms::Update(glm::fmat4 view_projection)
+void EntityTransforms::Update(glm::fmat4 view_projection, bool update_all)
 {
-    for (int i = 0; i < this->_entities_top; i++) {
-        if (this->_entities[i].id == INVALID_HANDLE_ID) {
+    if (update_all) {
+        this->_dirty_entities = this->_entities;
+        this->_dirty_entities_top = this->_entities_top;
+    }
+
+    for (int i = 0; i < this->_dirty_entities_top; i++) {
+        if (this->_dirty_entities[i].id == INVALID_HANDLE_ID) {
             continue;
         }
 
@@ -39,6 +48,14 @@ void EntityTransforms::Update(glm::fmat4 view_projection)
         this->mvp_matrices[i] = view_projection * this->model_matrices[i];
         this->normal_matrices[i] = glm::inverse(glm::fmat3(this->model_matrices[i]));
     }
+
+    this->_dirty_entities_top = 0;
+}
+
+void EntityTransforms::SetDirty(entityHandle_t entity)
+{
+    this->_dirty_entities[this->_dirty_entities_top] = entity;
+    this->_dirty_entities_top += 1;
 }
 
 void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
