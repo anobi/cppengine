@@ -23,6 +23,7 @@ void EntityTransforms::Add(entityHandle_t entity)
     this->_dirty_entities_top += 1;
 }
 
+// TODO: This belongs into a render/mesh component. Or the render world?
 void EntityTransforms::Update(glm::fmat4 view_projection, bool update_all)
 {
     if (update_all) {

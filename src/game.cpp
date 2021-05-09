@@ -428,17 +428,17 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     //cool background light
     entityHandle_t dod_bg_light = this->world.AddEntity("Background light");
-    this->world.entity_transforms.SetPosition(dod_bg_light, glm::fvec3(1000.0f, 2000.0f, 500.0f));
+    this->world.entity_transforms.SetPosition(dod_bg_light, glm::fvec3(50.0f, 30.0f, -10.0f));
     dod_bg_light = this->world.entity_lights.AddDirectionalLight(
         dod_bg_light, 
         { 
-            { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) }, 
-            glm::fvec3(0.0f, -1.0f, 0.0f)
+            { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) },
+            glm::fvec3(0.0f, 0.0f, 0.0f)
         });
     this->world.UpdateHandle(dod_bg_light);
 
     pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0f);
-    bg_light.transform.SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
+    bg_light.transform.SetPosition(glm::fvec3(50.0f, 30.0f, -10.0f));
     bg_light.AddComponent(&pl2);
     AddEntity(&bg_light);
     this->scene->AddDirectionalLight(&pl2);
