@@ -32,8 +32,8 @@ public:
     void AddComponent(EntityComponent* component);
     EntityComponent* GetComponent(const char* componentName);
 
-    entityHandle_T handle;
-    entityHandle_T parent;
+    entityHandle_t handle;
+    entityHandle_t parent;
 
     const char* name = "";
     std::vector<EntityComponent*> components;

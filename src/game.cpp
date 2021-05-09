@@ -29,6 +29,9 @@ Entity bg_light = Entity("Skylight");
 Entity orange_light = Entity("Fireball");
 Entity blue_light = Entity("Lightningball");
 
+entityHandle_t dod_blue_light;
+entityHandle_t dod_orange_light;
+
 Model roomModel;
 Model pl1model;
 Model pl2model;
@@ -218,8 +221,8 @@ void Game::Loop()
 
         if (dod) 
         {
-            this->world.entity_transforms.SetPosition(orange_light.handle, glm::fvec3(-7.5f, 10.0f, e1_pos));
-            this->world.entity_transforms.SetPosition(blue_light.handle, glm::fvec3(7.5f, 2.5f, e2_pos));
+            this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, e1_pos));
+            this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, e2_pos));
 
             this->world.entity_transforms.Update(this->scene->camera->GetViewProjection());
             this->renderer.Render(&this->world, this->shader);
@@ -393,7 +396,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     // Even more temp test solution for a data oriented test cube
-    entityHandle_T test_cube = this->world.AddEntity("Test cube");
+    entityHandle_t test_cube = this->world.AddEntity("Test cube");
     LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", 0, test_cube);
     assert(test_cube_load == LOADINGSTATE::VALID);
 
@@ -423,9 +426,17 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     //cool background light
-    entityHandle_T dod_bg_light = this->world.AddEntity("Background light");
+    entityHandle_t dod_bg_light = this->world.AddEntity("Background light");
+    this->world.entity_transforms.SetPosition(dod_bg_light, glm::fvec3(1000.0f, 2000.0f, 500.0f));
+    dod_bg_light = this->world.entity_lights.AddDirectionalLight(
+        dod_bg_light, 
+        { 
+            { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) }, 
+            glm::fvec3(0.0f, -1.0f, 0.0f)
+        });
+    this->world.UpdateHandle(dod_bg_light);
 
-    pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0);
+    pl2 = DirectionalLight(glm::fvec3(1.0f, 0.9f, 0.9f), 1.0f, 1.0f);
     bg_light.transform.SetPosition(glm::fvec3(1000.0f, 2000.0f, 500.0f));
     bg_light.AddComponent(&pl2);
     AddEntity(&bg_light);
@@ -433,32 +444,44 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
 
     // Fiery light cube
-    auto dod_orange_light = this->world.AddEntity("Orange light");
+    dod_orange_light = this->world.AddEntity("Orange light");
     modelLoader->Load("uvcube.obj", &pl3model, dod_orange_light);
 
     this->world.render_entities.Add(dod_orange_light);
     this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
     this->world.entity_transforms.SetScale(dod_orange_light, glm::fvec3(0.1f));
+    dod_orange_light = this->world.entity_lights.AddPointLight(
+        dod_orange_light, 
+        { 
+            { 1.0f, 0.1f, glm::fvec3(1.0f, 0.4f, 0.0f) },
+            5.0f 
+        });
+    this->world.UpdateHandle(dod_orange_light);
 
     orange_light.transform.SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
     orange_light.transform.SetScale(glm::fvec3(0.1f));
-
     pl3 = PointLight(glm::fvec3(1.0f, 0.4f, 0.0f), 1.0f, 0.1f, 5.0f);
     orange_light.AddComponent(&pl3);
     orange_light.AddComponent(&pl3model);
-
     AddEntity(&orange_light);
     this->scene->AddPointLight(&pl3);
     this->scene->AddModel(&pl3model);
 
 
     // Blue light cube
-    auto dod_blue_light = this->world.AddEntity("Blue light");
+    dod_blue_light = this->world.AddEntity("Blue light");
     modelLoader->Load("uvcube.obj", &pl4model, dod_blue_light);
 
     this->world.render_entities.Add(dod_blue_light);
     this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
     this->world.entity_transforms.SetScale(dod_blue_light, glm::fvec3(0.1f));
+    dod_blue_light = this->world.entity_lights.AddPointLight(
+        dod_blue_light, 
+        {
+            { 1.0f, 0.1f, glm::fvec3(0.4f, 0.8f, 1.0f) }, 
+            5.0f
+        });
+    this->world.UpdateHandle(dod_blue_light);
 
     blue_light.transform.SetPosition(glm::fvec3(7.5f, 5.0f, 0.0f));
     blue_light.transform.SetScale(glm::fvec3(0.1f));

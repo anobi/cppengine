@@ -87,9 +87,34 @@ void Renderer::Render(World* world, Shader* shader)
     glm::fmat4 projection = world->camera->GetProjection();
     glm::fvec3 eyePos = world->camera->transform.GetPosition();
 
+    // TODO: Replace with unified light data
+    unsigned int loc = 32; // PointLight uniform offset
+    unsigned int dloc = 64; // PointLight uniform offset
+    for (int i = 0; i < world->entity_lights.entities_top; i++) 
+    {
+        if (world->entity_lights.light_types[i] == 3)
+        {
+            entityHandle_t entity = world->entity_lights.entities[i];
+            glUniform3fv(shader->uniforms[dloc + 0], 1, &world->entity_transforms.positions[entity.slot][0]);
+            glUniform3fv(shader->uniforms[dloc + 1], 1, &world->entity_lights.colors[entity.light_component_slot][0]);
+            glUniform1f(shader->uniforms[dloc + 2], world->entity_lights.intensities[entity.light_component_slot]);
+            dloc += 3; // Number of light uniforms
+        }
+        else if (world->entity_lights.light_types[i] == 2)
+        {
+            entityHandle_t entity = world->entity_lights.entities[i];
+            glUniform3fv(shader->uniforms[loc + 0], 1, &world->entity_transforms.positions[entity.slot][0]);
+            glUniform3fv(shader->uniforms[loc + 1], 1, &world->entity_lights.colors[entity.light_component_slot][0]);
+            glUniform1f(shader->uniforms[loc + 2], world->entity_lights.intensities[entity.light_component_slot]);
+            glUniform1f(shader->uniforms[loc + 3], world->entity_lights.radiuses[entity.light_component_slot]);
+            glUniform1f(shader->uniforms[loc + 4], world->entity_lights.cutoffs[entity.light_component_slot]);
+            loc += 5; // Number of light uniforms
+        }
+    }
+
     for (int i = 0; i < world->_entities_top; i++)
     {
-        entityHandle_T entity = world->_entity_handles[i];
+        entityHandle_t entity = world->_entity_handles[i];
 
         glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &world->entity_transforms.model_matrices[entity.slot][0][0]);
         glUniformMatrix4fv(shader->uniforms[1], 1, GL_FALSE, &view[0][0]);

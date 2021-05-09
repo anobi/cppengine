@@ -15,12 +15,12 @@ public:
     RenderEntities() {};
     ~RenderEntities() {};
 
-    void Add(entityHandle_T entity);
-    void LoadModel(entityHandle_T entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices);
+    void Add(entityHandle_t entity);
+    void LoadModel(entityHandle_t entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices);
     void Cleanup();
 
     unsigned int _entities_top = 0;
-    Array<entityHandle_T, MAX_RENDER_ENTITIES> _entities;
+    Array<entityHandle_t, MAX_RENDER_ENTITIES> _entities;
     Array<unsigned int, MAX_RENDER_ENTITIES> VAOs;
     Array<unsigned int, MAX_RENDER_ENTITIES> indices;
 };

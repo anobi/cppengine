@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-void EntityTransforms::Add(entityHandle_T entity)
+void EntityTransforms::Add(entityHandle_t entity)
 {
     this->_entities[entity.slot] = entity;
     if (entity.slot > this->_entities_top) {
@@ -41,42 +41,42 @@ void EntityTransforms::Update(glm::fmat4 view_projection)
     }
 }
 
-void EntityTransforms::SetPosition(entityHandle_T entity, glm::fvec3 position)
+void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         this->positions[entity.slot] = position;
     }
 }
 
-void EntityTransforms::SetRotation(entityHandle_T entity, glm::fvec3 rotation)
+void EntityTransforms::SetRotation(entityHandle_t entity, glm::fvec3 rotation)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         this->rotations[entity.slot] = rotation;
     }
 }
 
-void EntityTransforms::SetScale(entityHandle_T entity, glm::fvec3 scale)
+void EntityTransforms::SetScale(entityHandle_t entity, glm::fvec3 scale)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         this->scales[entity.slot] = scale;
     }
 }
 
-glm::fvec3 EntityTransforms::GetPosition(entityHandle_T entity)
+glm::fvec3 EntityTransforms::GetPosition(entityHandle_t entity)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         return this->positions[entity.slot];
     }
 }
 
-glm::fvec3 EntityTransforms::GetRotation(entityHandle_T entity)
+glm::fvec3 EntityTransforms::GetRotation(entityHandle_t entity)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         return this->rotations[entity.slot];
     }
 }
 
-glm::fvec3 EntityTransforms::GetScale(entityHandle_T entity)
+glm::fvec3 EntityTransforms::GetScale(entityHandle_t entity)
 {
     if (entity.id != INVALID_HANDLE_ID && entity.slot != INVALID_SLOT) {
         return this->scales[entity.slot];

@@ -8,7 +8,7 @@
 // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
 constexpr unsigned int MAX_PATH_LENGTH = 4096;
 
-LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle_T entity)
+LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle_t entity)
 {
 #ifdef _WIN32 
     const char* resources_dir = "res/";
@@ -41,6 +41,7 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle
         | aiProcess_FixInfacingNormals
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace
+        | aiProcess_ImproveCacheLocality
     );
 
     if (scene == NULL)
@@ -54,7 +55,7 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle
     return LOADINGSTATE::VALID;
 }
 
-void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_T entity)
+void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_t entity)
 {
     for (int i = 0; i < node->mNumMeshes; i++)
     {
@@ -68,7 +69,7 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* m
     }
 }
 
-void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_T entity)
+void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_t entity)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;

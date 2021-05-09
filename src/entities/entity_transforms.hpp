@@ -23,20 +23,20 @@ public:
     Array<glm::fmat4, MAX_GAME_ENTITIES> mvp_matrices;
     Array<glm::fmat3, MAX_GAME_ENTITIES> normal_matrices;
 
-    void Add(entityHandle_T entity);
+    void Add(entityHandle_t entity);
     void Update(glm::fmat4 view_projection);
 
-    void SetPosition(entityHandle_T entity, glm::fvec3 position);
-    void SetRotation(entityHandle_T entity, glm::fvec3 rotation);
-    void SetScale(entityHandle_T entity, glm::fvec3 scale);
-    glm::fvec3 GetPosition(entityHandle_T entity);
-    glm::fvec3 GetRotation(entityHandle_T entity);
-    glm::fvec3 GetScale(entityHandle_T entity);
+    void SetPosition(entityHandle_t entity, glm::fvec3 position);
+    void SetRotation(entityHandle_t entity, glm::fvec3 rotation);
+    void SetScale(entityHandle_t entity, glm::fvec3 scale);
+    glm::fvec3 GetPosition(entityHandle_t entity);
+    glm::fvec3 GetRotation(entityHandle_t entity);
+    glm::fvec3 GetScale(entityHandle_t entity);
     
 
 private:
     unsigned int _entities_top = 0;
-    Array<entityHandle_T, MAX_GAME_ENTITIES> _entities;
+    Array<entityHandle_t, MAX_GAME_ENTITIES> _entities;
     const glm::fvec3 _up = glm::fvec3(0.0f, 1.0f, 0.0f);
     const glm::fvec3 _direction = glm::fvec3(0.0f, 0.0f, -1.0f);
 };

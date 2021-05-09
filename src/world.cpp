@@ -1,8 +1,8 @@
 #include "world.hpp"
 
-entityHandle_T World::AddEntity(const char* name) 
+entityHandle_t World::AddEntity(const char* name) 
 {
-    entityHandle_T handle;
+    entityHandle_t handle;
     handle.id   = _entities_top + 1;
     handle.slot = _entities_top;
 
@@ -16,10 +16,10 @@ entityHandle_T World::AddEntity(const char* name)
     return handle;
 }
 
-entityHandle_T World::AddChildEntity(entityHandle_T parent)
+entityHandle_t World::AddChildEntity(entityHandle_t parent)
 {
     Entity* parent_entity = this->GetEntity(parent);
-    entityHandle_T handle = this->AddEntity(parent_entity->name);
+    entityHandle_t handle = this->AddEntity(parent_entity->name);
 
     Entity* entity = this->GetEntity(handle);
     entity->parent = parent;
@@ -32,7 +32,15 @@ entityHandle_T World::AddChildEntity(entityHandle_T parent)
     return handle;
 }
 
-Entity* World::GetEntity(entityHandle_T handle)
+// Hmmmm...
+void World::UpdateHandle(entityHandle_t handle)
+{
+    if (handle.valid()) {
+        this->_entity_handles[handle.slot] = handle;
+    }
+}
+
+Entity* World::GetEntity(entityHandle_t handle)
 {
     if (handle.id != INVALID_HANDLE_ID && handle.slot <= this->_entities_top - 1)
     {

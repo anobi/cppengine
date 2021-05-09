@@ -1,7 +1,7 @@
 #include "../opengl.hpp"
 #include "render_entities.hpp"
 
-void RenderEntities::Add(entityHandle_T entity)
+void RenderEntities::Add(entityHandle_t entity)
 {
     this->_entities[entity.slot] = entity;
     if (entity.slot > this->_entities_top) {
@@ -12,7 +12,7 @@ void RenderEntities::Add(entityHandle_T entity)
     }
 }
 
-void RenderEntities::LoadModel(entityHandle_T entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
+void RenderEntities::LoadModel(entityHandle_t entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
 {
     this->indices[entity.slot] = indices.size();
     unsigned int VBO;
