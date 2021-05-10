@@ -19,6 +19,7 @@ OBJS = \
 	$(OBJDIR)/scene.o \
 	$(OBJDIR)/entity.o \
 	$(OBJDIR)/entity_transforms.o \
+	$(OBJDIR)/entity_light_components.o \
 	$(OBJDIR)/render_mesh.o \
 	$(OBJDIR)/render_material.o \
 	$(OBJDIR)/render_entities.o \
@@ -88,6 +89,9 @@ $(OBJDIR)/entity.o: $(SRC)/entity.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/entity_light_components.o: $(SRC)/entities/entity_light_components.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
