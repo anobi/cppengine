@@ -28,6 +28,7 @@ public:
     void UpdateHandle(entityHandle_t handle);
     unsigned int EntityCount() const { return this->_entities_top; }
 
+    entityHandle_t GetHandle(const char* name);
     Entity* GetEntity(entityHandle_t id);
 
     Camera* camera = 0;

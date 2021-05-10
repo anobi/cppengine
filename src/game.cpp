@@ -31,6 +31,7 @@ Entity blue_light = Entity("Lightningball");
 
 entityHandle_t dod_blue_light;
 entityHandle_t dod_orange_light;
+entityHandle_t dod_test_cube;
 
 Model roomModel;
 Model pl1model;
@@ -224,6 +225,11 @@ void Game::Loop()
         {
             this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, e1_pos));
             this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, e2_pos));
+            this->world.entity_transforms.SetRotation(dod_test_cube, glm::fvec3(
+                1.0f + ticks * dt,
+                1.0f + ticks * dt,
+                0.0f
+            ));
 
             this->world.entity_transforms.Update(this->scene->camera->GetViewProjection(), dirty_camera);
             this->renderer.Render(&this->world, this->shader);
@@ -252,6 +258,8 @@ void Game::Loop()
 
     this->scene->Cleanup();
     this->scene = 0;
+
+    this->world.Cleanup();
 
     Shutdown();
 }
@@ -317,7 +325,8 @@ void Game::UpdateUI()
 {
     Array<const char*, MAX_GAME_ENTITIES> entity_list;
     int num_entities = this->entities.size();
-    if (num_entities > MAX_GAME_ENTITIES) {
+    if (num_entities > MAX_GAME_ENTITIES) 
+    {
         num_entities = MAX_GAME_ENTITIES;
     }
 
@@ -397,12 +406,13 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     // Even more temp test solution for a data oriented test cube
-    entityHandle_t test_cube = this->world.AddEntity("Test cube");
-    LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", 0, test_cube);
-    assert(test_cube_load == LOADINGSTATE::VALID);
+     dod_test_cube = this->world.AddEntity("Test cube");
+     this->world.entity_transforms.SetPosition(dod_test_cube, glm::fvec3(0.0f, 3.0f, 0.0f));
 
-    this->world.render_entities.Add(test_cube);
-    this->world.entity_transforms.Add(test_cube);
+     LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", 0, dod_test_cube);
+     assert(test_cube_load == LOADINGSTATE::VALID);
+     this->world.render_entities.Add(dod_test_cube);
+    
 
     //Room
     auto dod_room = this->world.AddEntity("Room");
@@ -448,16 +458,16 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     dod_orange_light = this->world.AddEntity("Orange light");
     modelLoader->Load("uvcube.obj", &pl3model, dod_orange_light);
 
-    this->world.render_entities.Add(dod_orange_light);
     this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
     this->world.entity_transforms.SetScale(dod_orange_light, glm::fvec3(0.1f));
+    this->world.render_entities.Add(dod_orange_light);
     dod_orange_light = this->world.entity_lights.AddPointLight(
         dod_orange_light, 
         { 
             { 1.0f, 0.1f, glm::fvec3(1.0f, 0.4f, 0.0f) },
             5.0f 
         });
-    this->world.UpdateHandle(dod_orange_light);
+     this->world.UpdateHandle(dod_orange_light);
 
     orange_light.transform.SetPosition(glm::fvec3(-7.5f, 10.0f, 0.0f));
     orange_light.transform.SetScale(glm::fvec3(0.1f));

@@ -50,26 +50,26 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle
         return LOADINGSTATE::INVALID;
     }
 
-    this->ProcessNode(scene->mRootNode, scene, model, entity);
+    this->ProcessNode(scene->mRootNode, scene, model, entity, false);
 
     return LOADINGSTATE::VALID;
 }
 
-void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_t entity)
+void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_t entity, bool child)
 {
     for (int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        this->ProcessMesh(aiMesh, scene, model, entity);
+        this->ProcessMesh(aiMesh, scene, model, entity, (child || i > 0));
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
     {
-        this->ProcessNode(node->mChildren[i], scene, model, entity);
+        this->ProcessNode(node->mChildren[i], scene, model, entity, true);
     }
 }
 
-void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_t entity)
+void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_t entity, bool child)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -130,12 +130,21 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     RenderMesh renderMesh = RenderMesh();
     RenderMaterial renderMaterial = RenderMaterial();
 
-    if (entity.id != INVALID_HANDLE_ID) {
-        auto child_entity = this->world->AddChildEntity(entity);
-        this->world->render_entities.LoadModel(child_entity, vertices, indices);
+    if (entity.id != INVALID_HANDLE_ID) 
+    {
+        if (child) 
+        {
+            auto child_entity = this->world->AddChildEntity(entity);
+            this->world->render_entities.LoadModel(child_entity, vertices, indices);
+        }
+        else 
+        {
+            this->world->render_entities.LoadModel(entity, vertices, indices);
+        }
     }
 
-    if (model) {
+    if (model) 
+    {
         renderMesh.Setup(vertices, indices);
         model->renderMeshes.push_back(renderMesh);
 

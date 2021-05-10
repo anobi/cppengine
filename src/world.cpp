@@ -5,6 +5,8 @@ entityHandle_t World::AddEntity(const char* name)
     entityHandle_t handle;
     handle.id   = _entities_top + 1;
     handle.slot = _entities_top;
+    // handle.name = name;
+    strncpy_s(handle.name, name, 64);
 
     this->_entities[this->_entities_top] = Entity(name);
     this->_entity_handles[this->_entities_top] = handle;
@@ -37,6 +39,15 @@ void World::UpdateHandle(entityHandle_t handle)
 {
     if (handle.valid()) {
         this->_entity_handles[handle.slot] = handle;
+    }
+}
+
+entityHandle_t World::GetHandle(const char* name)
+{
+    for (int i = 0; i < this->_entities_top; i++) {
+        if (this->_entity_handles[i].name == name) {
+            return this->_entity_handles[i];
+        }
     }
 }
 
