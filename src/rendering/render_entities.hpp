@@ -7,8 +7,6 @@
 #include "../types.hpp"
 #include "../entities/entity_handle.hpp"
 
-class Entity;
-
 class RenderEntities
 {
 public:

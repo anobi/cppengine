@@ -16,15 +16,11 @@ OBJS = \
 	$(OBJDIR)/input.o \
 	$(OBJDIR)/controls.o \
 	$(OBJDIR)/world.o \
-	$(OBJDIR)/scene.o \
-	$(OBJDIR)/entity.o \
 	$(OBJDIR)/entity_transforms.o \
 	$(OBJDIR)/entity_light_components.o \
-	$(OBJDIR)/render_mesh.o \
 	$(OBJDIR)/render_material.o \
 	$(OBJDIR)/render_entities.o \
 	$(OBJDIR)/model_loader.o \
-	$(OBJDIR)/model.o \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/main.o
 
@@ -82,12 +78,6 @@ $(OBJDIR)/controls.o: $(SRC)/controls.cpp
 $(OBJDIR)/world.o: $(SRC)/world.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/scene.o: $(SRC)/scene.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/entity.o: $(SRC)/entity.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -97,16 +87,10 @@ $(OBJDIR)/entity_light_components.o: $(SRC)/entities/entity_light_components.cpp
 $(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/render_mesh.o: $(SRC)/rendering/render_mesh.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(OBJDIR)/render_entities.o: $(SRC)/rendering/render_entities.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model_loader.o: $(SRC)/loading/model_loader.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/model.o: $(SRC)/model.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/shader.o: $(SRC)/shader.cpp

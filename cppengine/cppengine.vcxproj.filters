@@ -127,9 +127,6 @@
     <ClCompile Include="..\src\display.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -154,17 +151,8 @@
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\rendering\render_mesh.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\rendering\render_material.cpp">
       <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\scene.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\loading\model_loader.cpp">
       <Filter>Source Files\loading</Filter>
@@ -216,22 +204,10 @@
     <ClInclude Include="..\src\display.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\entity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\entitycomponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\input.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\light.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\model.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\opengl.hpp">
@@ -243,14 +219,8 @@
     <ClInclude Include="..\src\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\scene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\transform.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\rendering\render_mesh.hpp">
-      <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\src\rendering\render_material.hpp">
       <Filter>Header Files\rendering</Filter>

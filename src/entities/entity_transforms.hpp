@@ -8,7 +8,6 @@
 #include "../containers/array.hpp"
 #include "../entities/entity_handle.hpp"
 
-class Entity;
 class World;
 
 class EntityTransforms {

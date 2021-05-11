@@ -7,7 +7,6 @@ entityHandle_t World::AddEntity(const char* name)
     handle.slot = _entities_top;
     handle.name = name;
 
-    this->_entities[this->_entities_top] = Entity(name);
     this->_entity_handles[this->_entities_top] = handle;
     this->_entities_top += 1;
 
@@ -19,11 +18,7 @@ entityHandle_t World::AddEntity(const char* name)
 
 entityHandle_t World::AddChildEntity(entityHandle_t parent)
 {
-    Entity* parent_entity = this->GetEntity(parent);
-    entityHandle_t handle = this->AddEntity(parent_entity->name);
-
-    Entity* entity = this->GetEntity(handle);
-    entity->parent = parent;
+    entityHandle_t handle = this->AddEntity(parent.name.c_str());
 
     // Clone the spatial data from the parent
     this->entity_transforms.positions[handle.slot] = this->entity_transforms.positions[parent.slot];
@@ -67,13 +62,4 @@ entityHandle_t World::GetHandle(const char* name)
             return this->_entity_handles[i];
         }
     }
-}
-
-Entity* World::GetEntity(entityHandle_t handle)
-{
-    if (handle.id != INVALID_HANDLE_ID && handle.slot <= this->_entities_top - 1)
-    {
-        return &this->_entities[handle.slot];
-    }
-    return 0;
 }

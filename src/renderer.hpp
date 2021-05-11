@@ -6,13 +6,8 @@
 
 #include "display.hpp"
 #include "camera.hpp"
-
-#include "scene.hpp"
 #include "world.hpp"
-
 #include "shader.hpp"
-#include "model.hpp"
-#include "light.hpp"
 
 #include "rendering/render_entities.hpp"
 
@@ -28,7 +23,6 @@ public:
     void UpdateResolution(const int w, const int h) { this->resolution = glm::fvec2(w, h); }
     glm::fvec2 GetResolution() { return this->resolution; }
 
-    void Render(Scene* scene, Shader* shader);
     void Render(World* world, Shader* shader);
     void Shutdown();
 

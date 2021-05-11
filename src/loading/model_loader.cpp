@@ -8,7 +8,7 @@
 // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
 constexpr unsigned int MAX_PATH_LENGTH = 4096;
 
-LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle_t entity)
+LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
 {
 #ifdef _WIN32 
     const char* resources_dir = "res/";
@@ -50,26 +50,26 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, Model* model, entityHandle
         return LOADINGSTATE::INVALID;
     }
 
-    this->ProcessNode(scene->mRootNode, scene, model, entity, false);
+    this->ProcessNode(scene->mRootNode, scene, entity, false);
 
     return LOADINGSTATE::VALID;
 }
 
-void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_t entity, bool child)
+void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity, bool child)
 {
     for (int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        this->ProcessMesh(aiMesh, scene, model, entity, (child || i > 0));
+        this->ProcessMesh(aiMesh, scene, entity, (child || i > 0));
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
     {
-        this->ProcessNode(node->mChildren[i], scene, model, entity, true);
+        this->ProcessNode(node->mChildren[i], scene, entity, true);
     }
 }
 
-void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_t entity, bool child)
+void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity, bool child)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -127,42 +127,26 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
         }
     }
 
-    RenderMesh renderMesh = RenderMesh();
-    RenderMaterial renderMaterial = RenderMaterial();
-
-    if (entity.valid()) 
+    if (child) 
     {
-        if (child) 
-        {
-            auto child_entity = this->world->AddChildEntity(entity);
-            this->world->render_entities.LoadModel(child_entity, vertices, indices);
-            entity = child_entity;  // For material processing
-        }
-        else 
-        {
-            this->world->render_entities.LoadModel(entity, vertices, indices);
-        }
+        auto child_entity = this->world->AddChildEntity(entity);
+        this->world->render_entities.LoadModel(child_entity, vertices, indices);
+        entity = child_entity;  // For material processing
     }
-
-    if (model) 
+    else 
     {
-        renderMesh.Setup(vertices, indices);
-        model->renderMeshes.push_back(renderMesh);
+        this->world->render_entities.LoadModel(entity, vertices, indices);
     }
 
     if (mesh->mMaterialIndex >= 0)
     {
+        RenderMaterial renderMaterial = RenderMaterial();
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         this->ProcessMaterial(aiMat, &renderMaterial);
 
-        if (model) {
-            model->renderMaterials.push_back(renderMaterial);
-        }
-        if (entity.valid()) {
-            auto handle = this->world->AddMaterial(renderMaterial);
-            entity.render_material_slot = handle.slot;
-            this->world->UpdateHandle(entity);
-        }
+        auto handle = this->world->AddMaterial(renderMaterial);
+        entity.render_material_slot = handle.slot;
+        this->world->UpdateHandle(entity);
     }
 }
 

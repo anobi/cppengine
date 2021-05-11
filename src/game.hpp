@@ -9,11 +9,8 @@
 #include "display.hpp"
 #include "input.hpp"
 #include "controls.hpp"
-#include "entity.hpp"
 #include "renderer.hpp"
-
-#include "scene.hpp"
-#include "world.hpp"  // Will replace the scene
+#include "world.hpp"
 
 #include "entities/entity_transforms.hpp"
 
@@ -34,9 +31,6 @@ public:
     GAMESTATE gameState;
     std::string workingDirectory;
 
-    void AddEntity(Entity* entity);
-    Entity* GetEntity(const std::string name);
-
     bool Init();
     void Start();
     void Shutdown();
@@ -50,10 +44,6 @@ private:
     Renderer renderer;
 
     World world;
-
-    Scene* scene;
-    Shader* shader;
-    std::vector<Entity*> entities;
 
     void UpdateUI();
     void ConstructScene(ModelLoader* modelLoader);

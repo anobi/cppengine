@@ -6,8 +6,6 @@
 #include <assimp/postprocess.h>
 
 #include "../world.hpp"
-#include "../model.hpp"
-#include "../rendering/render_mesh.hpp"
 #include "../rendering/render_material.hpp"
 #include "../entities/entity_handle.hpp"
 
@@ -26,9 +24,9 @@ public:
 
     // TODO: proper inputs would be modelFile, *modelPool, *materialPool
 
-    LOADINGSTATE Load(const char* modelFile, Model* model, entityHandle_t entity);
-    void ProcessNode(const aiNode* node, const aiScene* scene, Model* model, entityHandle_t entity, bool child);
-    void ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model, entityHandle_t entity, bool child);
+    LOADINGSTATE Load(const char* modelFile, entityHandle_t entity);
+    void ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity, bool child);
+    void ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity, bool child);
 
     void ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* material);
     LOADINGSTATE LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture);
