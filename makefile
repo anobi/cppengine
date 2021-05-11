@@ -6,9 +6,25 @@ BIN = game
 SRC = src
 LIBDIR = src/lib
 OBJDIR = obj
-OBJS = $(OBJDIR)/imgui.o $(OBJDIR)/imgui_draw.o $(OBJDIR)/imgui_impl.o $(OBJDIR)/game.o $(OBJDIR)/display.o $(OBJDIR)/renderer.o $(OBJDIR)/input.o $(OBJDIR)/controls.o $(OBJDIR)/scene.o $(OBJDIR)/entity.o $(OBJDIR)/render_mesh.o $(OBJDIR)/render_material.o $(OBJDIR)/model_loader.o $(OBJDIR)/model.o $(OBJDIR)/shader.o $(OBJDIR)/main.o
+OBJS = \
+	$(OBJDIR)/imgui.o \
+	$(OBJDIR)/imgui_draw.o \
+	$(OBJDIR)/imgui_impl.o \
+	$(OBJDIR)/game.o \
+	$(OBJDIR)/display.o \
+	$(OBJDIR)/renderer.o \
+	$(OBJDIR)/input.o \
+	$(OBJDIR)/controls.o \
+	$(OBJDIR)/world.o \
+	$(OBJDIR)/entity_transforms.o \
+	$(OBJDIR)/entity_light_components.o \
+	$(OBJDIR)/render_material.o \
+	$(OBJDIR)/render_entities.o \
+	$(OBJDIR)/model_loader.o \
+	$(OBJDIR)/shader.o \
+	$(OBJDIR)/main.o
 
-CFLAGS = -Wall -std=c++14
+CFLAGS = -Wall -std=c++17
 LIBS = -lSDL2 -lassimp
 
 DEBUG ?= 1
@@ -59,22 +75,22 @@ $(OBJDIR)/input.o: $(SRC)/input.cpp
 $(OBJDIR)/controls.o: $(SRC)/controls.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/scene.o: $(SRC)/scene.cpp
+$(OBJDIR)/world.o: $(SRC)/world.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/entity.o: $(SRC)/entity.cpp
+$(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/entity_light_components.o: $(SRC)/entities/entity_light_components.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/render_mesh.o: $(SRC)/rendering/render_mesh.cpp
+$(OBJDIR)/render_entities.o: $(SRC)/rendering/render_entities.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model_loader.o: $(SRC)/loading/model_loader.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/model.o: $(SRC)/model.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/shader.o: $(SRC)/shader.cpp
@@ -87,4 +103,4 @@ clean: $(OBJ)
 	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)
 
 test: $(OBJS)
-	$(CC) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp
+	$(CC) $(CFLAGS) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp

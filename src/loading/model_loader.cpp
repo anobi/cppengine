@@ -8,7 +8,7 @@
 // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
 constexpr unsigned int MAX_PATH_LENGTH = 4096;
 
-loadingState_e ModelLoader::Load(const char* modelFile, Model* model)
+LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
 {
 #ifdef _WIN32 
     const char* resources_dir = "res/";
@@ -41,34 +41,35 @@ loadingState_e ModelLoader::Load(const char* modelFile, Model* model)
         | aiProcess_FixInfacingNormals
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace
+        | aiProcess_ImproveCacheLocality
     );
 
     if (scene == NULL)
     {
         printf("  !! ERROR: Unable to load model: %s \n", path);
-        return LOADINGSTATE_INVALID;
+        return LOADINGSTATE::INVALID;
     }
 
-    this->ProcessNode(scene->mRootNode, scene, model);
+    this->ProcessNode(scene->mRootNode, scene, entity, false);
 
-    return LOADINGSTATE_VALID;
+    return LOADINGSTATE::VALID;
 }
 
-void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, Model* model)
+void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity, bool child)
 {
     for (int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        this->ProcessMesh(aiMesh, scene, model);
+        this->ProcessMesh(aiMesh, scene, entity, (child || i > 0));
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
     {
-        this->ProcessNode(node->mChildren[i], scene, model);
+        this->ProcessNode(node->mChildren[i], scene, entity, true);
     }
 }
 
-void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model)
+void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity, bool child)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -126,19 +127,27 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
         }
     }
 
-    RenderMesh renderMesh = RenderMesh();
-    RenderMaterial renderMaterial = RenderMaterial();
-
-    renderMesh.Setup(vertices, indices);
+    if (child) 
+    {
+        auto child_entity = this->world->AddChildEntity(entity);
+        this->world->render_entities.LoadModel(child_entity, vertices, indices);
+        entity = child_entity;  // For material processing
+    }
+    else 
+    {
+        this->world->render_entities.LoadModel(entity, vertices, indices);
+    }
 
     if (mesh->mMaterialIndex >= 0)
     {
+        RenderMaterial renderMaterial = RenderMaterial();
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         this->ProcessMaterial(aiMat, &renderMaterial);
-    }
 
-    model->renderMaterials.push_back(renderMaterial);
-    model->renderMeshes.push_back(renderMesh);
+        auto handle = this->world->AddMaterial(renderMaterial);
+        entity.render_material_slot = handle.slot;
+        this->world->UpdateHandle(entity);
+    }
 }
 
 void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* material)
@@ -146,6 +155,7 @@ void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* mater
     // Name the material so we can utilize the material cache
     aiString matName;
     aiMat->Get(AI_MATKEY_NAME, matName);
+    material->name = matName.C_Str();
 
     // TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
@@ -177,7 +187,7 @@ void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* mater
     }
 }
 
-loadingState_e ModelLoader::LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture)
+LOADINGSTATE ModelLoader::LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture)
 {
 
 #ifdef _WIN32 
@@ -199,13 +209,13 @@ loadingState_e ModelLoader::LoadTexture(const char* filename, RenderMaterial* ma
     {
         // TODO: Load some ugly generated default texture that doesn't require any files?
         printf("  !! ERROR: Unable to load texture: %s \n", filename);
-        return LOADINGSTATE_INVALID;
+        return LOADINGSTATE::INVALID;
     }
 
     material->Setup(texture, width, height, data);
 
     stbi_image_free(data);
 
-    return LOADINGSTATE_VALID;
+    return LOADINGSTATE::VALID;
 }
 

@@ -73,6 +73,12 @@
     </None>
     <None Include="..\makefile" />
     <None Include="..\README.md" />
+    <None Include="..\shaders\greybox.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\greybox.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shaders">
@@ -98,14 +104,20 @@
     <Filter Include="Source Files\rendering">
       <UniqueIdentifier>{7c0d00a5-7b88-4177-acf8-4476545d2481}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\containers">
-      <UniqueIdentifier>{cd2dead3-707c-4246-8d21-1354b36a2254}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\loading">
       <UniqueIdentifier>{4c3e95eb-144f-4587-8c7d-a4f9ba21c208}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\loading">
       <UniqueIdentifier>{849bd3ec-7e46-48b3-a21d-351fc8e8844d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\containers">
+      <UniqueIdentifier>{cd2dead3-707c-4246-8d21-1354b36a2254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\entities">
+      <UniqueIdentifier>{9a9503c0-b72f-494a-808f-4bdfecb1d8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\entities">
+      <UniqueIdentifier>{d7c7d358-5e7c-43f8-a8b9-61c28218dde5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +125,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\game.cpp">
@@ -142,20 +151,23 @@
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\rendering\render_mesh.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\rendering\render_material.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\loading\model_loader.cpp">
       <Filter>Source Files\loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\entities\entity_transforms.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\render_entities.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\entities\entity_light_components.cpp">
+      <Filter>Source Files\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,22 +204,10 @@
     <ClInclude Include="..\src\display.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\entity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\entitycomponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\input.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\light.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\model.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\opengl.hpp">
@@ -219,14 +219,8 @@
     <ClInclude Include="..\src\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\scene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\transform.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\rendering\render_mesh.hpp">
-      <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\src\rendering\render_material.hpp">
       <Filter>Header Files\rendering</Filter>
@@ -235,13 +229,31 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\containers\array.hpp">
-      <Filter>Source Files\containers</Filter>
+      <Filter>Header Files\containers</Filter>
     </ClInclude>
     <ClInclude Include="..\src\rendering\render_entities.hpp">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\src\loading\model_loader.hpp">
       <Filter>Header Files\loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\render_world.hpp">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entities\entity_transforms.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\constants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entities\entity_handle.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entities\entity_light_components.hpp">
+      <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

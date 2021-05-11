@@ -44,7 +44,6 @@ public:
 
     inline glm::fmat4 GetProjection() { return projection; }
     inline glm::fmat4 GetViewProjection() { return projection * GetView(); }
-    inline void LookAt(const glm::fvec3& target) { this->transform.LookAt(target); }
 
     Transform transform;
     glm::fmat4 projection;

@@ -159,6 +159,7 @@ void main(void)
     //   Texture Maps   //
     //////////////////////
 
+    vec3 color = vec3(0.7f, 0.7f, 0.7f);
     vec3 ambient = vec3(0.1f, 0.1f, 0.1f);
     vec3 normal = normalize(vs_in.normal);
 
@@ -173,7 +174,7 @@ void main(void)
     
     if(use_diffuseMap == 1)
     {
-        ambient *= texture(diffuseMap, texCoords).rgb;
+        color = texture(diffuseMap, texCoords).rgb;
     }
     
     if(use_normalMap == 1)
@@ -202,7 +203,6 @@ void main(void)
         light_accumulator += vec3(addPointLight(i, texCoords, lightDir, viewDir, normal)) * pointLights[i].intensity;
     }
 
-
-    vec3 color = ambient + light_accumulator;
-    fragColor = vec4(color, 1.0f);
+    vec3 color_out = ambient * color + light_accumulator;
+    fragColor = vec4(color_out, 1.0f);
 }

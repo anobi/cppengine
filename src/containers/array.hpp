@@ -6,11 +6,13 @@
 template<class T, size_t S>
 class Array {
 public:
-    Array() { memset(this->data, 0, this->Size()); };
-    ~Array() {};
+    Array()     { memset(this->data, 0, this->Size()); };
+    ~Array()    { };
 
-    size_t Length() const;
-    size_t Size()   const;
+    size_t  Length() const;
+    size_t  Size()   const;
+
+    void    Clear();
 
     const   T& operator[](size_t index) const;
             T& operator[](size_t index);
@@ -34,6 +36,10 @@ inline size_t Array<T, S>::Size() const {
     return S * sizeof(T);
 }
 
+template<class T, size_t S>
+inline void Array<T, S>::Clear() {
+    memset(this->data, 0, this->Size());
+}
 
 // =============================================================
 // Operators

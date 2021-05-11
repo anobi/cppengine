@@ -43,7 +43,8 @@ public:
         return glm::fvec3(
             sin(rotation.x - 3.14f / 2.0f),
             0,
-            cos(rotation.x - 3.14f / 2.0f));
+            cos(rotation.x - 3.14f / 2.0f)
+        );
     }
 
     inline glm::fvec3 GetUp() {
@@ -60,9 +61,6 @@ public:
     inline void SetPosition(const glm::fvec3& position) { this->position = position; }
     inline void SetRotation(const glm::fvec3& rotation) { this->rotation = rotation; }
     inline void SetScale(const glm::fvec3& scale) { this->scale = scale; }
-    inline void LookAt(const glm::fvec3& target) {
-        glm::mat4 translation = glm::lookAt(this->position, target, this->up);
-    }
 
 private:
     glm::fvec3 position;

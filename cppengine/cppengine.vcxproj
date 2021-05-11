@@ -205,6 +205,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
+    <None Include="..\shaders\greybox.frag" />
+    <None Include="..\shaders\greybox.vert" />
     <None Include="..\shaders\noise.frag">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
@@ -217,7 +219,8 @@
   <ItemGroup>
     <ClCompile Include="..\src\controls.cpp" />
     <ClCompile Include="..\src\display.cpp" />
-    <ClCompile Include="..\src\entity.cpp" />
+    <ClCompile Include="..\src\entities\entity_light_components.cpp" />
+    <ClCompile Include="..\src\entities\entity_transforms.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\input.cpp" />
     <ClCompile Include="..\src\lib\imgui.cpp" />
@@ -225,20 +228,21 @@
     <ClCompile Include="..\src\lib\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="..\src\loading\model_loader.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\model.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
+    <ClCompile Include="..\src\rendering\render_entities.cpp" />
     <ClCompile Include="..\src\rendering\render_material.cpp" />
-    <ClCompile Include="..\src\rendering\render_mesh.cpp" />
-    <ClCompile Include="..\src\scene.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
+    <ClCompile Include="..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\camera.hpp" />
+    <ClInclude Include="..\src\constants.hpp" />
     <ClInclude Include="..\src\containers\array.hpp" />
     <ClInclude Include="..\src\controls.hpp" />
     <ClInclude Include="..\src\display.hpp" />
-    <ClInclude Include="..\src\entity.hpp" />
-    <ClInclude Include="..\src\entitycomponent.hpp" />
+    <ClInclude Include="..\src\entities\entity_handle.hpp" />
+    <ClInclude Include="..\src\entities\entity_light_components.hpp" />
+    <ClInclude Include="..\src\entities\entity_transforms.hpp" />
     <ClInclude Include="..\src\game.hpp" />
     <ClInclude Include="..\src\input.hpp" />
     <ClInclude Include="..\src\lib\imconfig.h" />
@@ -249,18 +253,16 @@
     <ClInclude Include="..\src\lib\stb_rect_pack.h" />
     <ClInclude Include="..\src\lib\stb_textedit.h" />
     <ClInclude Include="..\src\lib\stb_truetype.h" />
-    <ClInclude Include="..\src\light.hpp" />
     <ClInclude Include="..\src\loading\model_loader.hpp" />
-    <ClInclude Include="..\src\model.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\renderer.hpp" />
     <ClInclude Include="..\src\rendering\render_entities.hpp" />
     <ClInclude Include="..\src\rendering\render_material.hpp" />
-    <ClInclude Include="..\src\rendering\render_mesh.hpp" />
-    <ClInclude Include="..\src\scene.hpp" />
+    <ClInclude Include="..\src\rendering\render_world.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />
     <ClInclude Include="..\src\types.hpp" />
+    <ClInclude Include="..\src\world.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\Barrel.Height.png">

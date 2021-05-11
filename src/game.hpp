@@ -1,24 +1,26 @@
-#ifndef G_GAME_H
-#define G_GAME_H
+#ifndef __GAME_H__
+#define __GAME_H__
 
 #include <iostream>
 #include <memory>
 #include <vector>
 
+#include "constants.hpp"
 #include "display.hpp"
 #include "input.hpp"
 #include "controls.hpp"
-#include "entity.hpp"
 #include "renderer.hpp"
-#include "scene.hpp"
+#include "world.hpp"
 
-constexpr auto MAX_GAME_ENTITIES = 1024;
+#include "entities/entity_transforms.hpp"
 
-enum gameState_t
+enum class GAMESTATE
 {
-    GAMESTATE_RUNNING,
-    GAMESTATE_STOPPED
+    RUNNING,
+    STOPPED
 };
+
+class ModelLoader;
 
 class Game
 {
@@ -26,11 +28,8 @@ public:
     Game();
     ~Game() {};
 
-    gameState_t gameState;
+    GAMESTATE gameState;
     std::string workingDirectory;
-
-    void AddEntity(Entity* entity);
-    Entity* GetEntity(const std::string name);
 
     bool Init();
     void Start();
@@ -44,15 +43,13 @@ private:
     Display display;
     Renderer renderer;
 
-    Scene* scene;
-    Shader* shader;
-    std::vector<Entity*> entities;
+    World world;
 
     void UpdateUI();
-    void ConstructScene();
+    void ConstructScene(ModelLoader* modelLoader);
 
     bool menu = false;
     bool debug_ui = true;
 };
 
-#endif
+#endif  // __GAME_H__

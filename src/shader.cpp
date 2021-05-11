@@ -10,7 +10,6 @@
 
 constexpr unsigned int MAX_PATH_LENGTH = 4096;
 constexpr unsigned int MAX_UNIFORM_LENGTH = 4096;
-constexpr unsigned int MAX_SHADER_LENGTH = 32768;
 
 Shader::Shader(const char* fileName)
 {

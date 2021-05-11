@@ -5,31 +5,34 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
-#include "../model.hpp"
-#include "../rendering/render_mesh.hpp"
+#include "../world.hpp"
 #include "../rendering/render_material.hpp"
+#include "../entities/entity_handle.hpp"
 
 
-typedef enum {
-    LOADINGSTATE_INIT,
-    LOADINGSTATE_VALID,
-    LOADINGSTATE_INVALID
-} loadingState_e;
+enum class LOADINGSTATE {
+    INIT,
+    VALID,
+    INVALID
+};
 
 
 class ModelLoader {
 public:
-    ModelLoader() {};
+    ModelLoader(World* world) { this->world = world; };
     ~ModelLoader() {};
 
     // TODO: proper inputs would be modelFile, *modelPool, *materialPool
 
-    loadingState_e Load(const char* modelFile, Model* model);
-    void ProcessNode(const aiNode* node, const aiScene* scene, Model* model);
-    void ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* model);
+    LOADINGSTATE Load(const char* modelFile, entityHandle_t entity);
+    void ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity, bool child);
+    void ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity, bool child);
 
     void ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* material);
-    loadingState_e LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture);
+    LOADINGSTATE LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture);
+
+private:
+    World* world;
 };
 
 #endif // __LOADER__MODEL_LOADER_H_

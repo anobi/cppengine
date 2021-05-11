@@ -50,7 +50,6 @@ void RenderMaterial::Bind(const Shader* shader)
 void RenderMaterial::Unbind() 
 {
     SetUniforms(0);
-    glActiveTexture(GL_TEXTURE0);
     this->boundShader = 0;
 }
 
