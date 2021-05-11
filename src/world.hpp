@@ -9,6 +9,7 @@
 #include "entities/entity_transforms.hpp"
 #include "entities/entity_light_components.hpp"
 #include "rendering/render_entities.hpp"
+#include "rendering/render_material.hpp"
 
 class Camera;
 
@@ -24,6 +25,8 @@ public:
 
     entityHandle_t AddEntity(const char* name);
     entityHandle_t AddChildEntity(entityHandle_t parent);
+
+    materialHandle_t AddMaterial(RenderMaterial material);
     
     void UpdateHandle(entityHandle_t handle);
     unsigned int EntityCount() const { return this->_entities_top; }
@@ -40,6 +43,10 @@ public:
 
     EntityTransforms entity_transforms;
     EntityLightComponents entity_lights;
+
+    unsigned int _materials_top = 0;
+    Array<materialHandle_t, MAX_GAME_ENTITIES> _material_handles;
+    Array<RenderMaterial, MAX_GAME_ENTITIES> _materials;
 
     RenderEntities render_entities;
 };

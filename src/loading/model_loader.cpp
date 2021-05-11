@@ -130,12 +130,13 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     RenderMesh renderMesh = RenderMesh();
     RenderMaterial renderMaterial = RenderMaterial();
 
-    if (entity.id != INVALID_HANDLE_ID) 
+    if (entity.valid()) 
     {
         if (child) 
         {
             auto child_entity = this->world->AddChildEntity(entity);
             this->world->render_entities.LoadModel(child_entity, vertices, indices);
+            entity = child_entity;  // For material processing
         }
         else 
         {
@@ -147,12 +148,20 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, Model* m
     {
         renderMesh.Setup(vertices, indices);
         model->renderMeshes.push_back(renderMesh);
+    }
 
-        if (mesh->mMaterialIndex >= 0)
-        {
-            aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
-            this->ProcessMaterial(aiMat, &renderMaterial);
+    if (mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
+        this->ProcessMaterial(aiMat, &renderMaterial);
+
+        if (model) {
             model->renderMaterials.push_back(renderMaterial);
+        }
+        if (entity.valid()) {
+            auto handle = this->world->AddMaterial(renderMaterial);
+            entity.render_material_slot = handle.slot;
+            this->world->UpdateHandle(entity);
         }
     }
 }
@@ -162,6 +171,7 @@ void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* mater
     // Name the material so we can utilize the material cache
     aiString matName;
     aiMat->Get(AI_MATKEY_NAME, matName);
+    material->name = matName.C_Str();
 
     // TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)

@@ -1,6 +1,8 @@
 #ifndef __RENDERING__RENDER_MATERIAL_H__
 #define __RENDERING__RENDER_MATERIAL_H__
 
+#include <string>
+
 #include "../opengl.hpp"
 #include "../shader.hpp"
 
@@ -15,6 +17,8 @@ public:
     void Bind(const Shader* shader);
     void Unbind();
     void Cleanup();
+
+    std::string name = "Material";
 
     const Shader* boundShader = 0;
 

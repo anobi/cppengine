@@ -144,7 +144,6 @@ void Game::Loop()
         Uint64 frame_time = loop_end - loop_start;
         loop_start = loop_end;
 
-        // TODO: Replace the delay with a spinlock
         float elapsed = frame_time / (float)SDL_GetPerformanceFrequency();
         float delay = target_frame_time - elapsed;
         if (elapsed >= 0) {

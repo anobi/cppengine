@@ -112,6 +112,7 @@ void Renderer::Render(World* world, Shader* shader)
         }
     }
 
+    materialHandle_t bound_material;
     for (int i = 0; i < world->_entities_top; i++)
     {
         entityHandle_t entity = world->_entity_handles[i];
@@ -124,8 +125,15 @@ void Renderer::Render(World* world, Shader* shader)
         glUniform2fv(shader->uniforms[4], 1, &resolution[0]);
         glUniform3fv(shader->uniforms[5], 1, &eyePos[0]);
 
+        if (bound_material.slot != entity.render_material_slot) {
+            world->_materials[entity.render_material_slot].Bind(shader);
+            bound_material = world->_material_handles[entity.render_material_slot];
+        }
+
         glBindVertexArray(world->render_entities.VAOs[entity.slot]);
         glDrawElements(GL_TRIANGLES, world->render_entities.indices[entity.slot], GL_UNSIGNED_INT, (void*)0);
     }
+
+    world->_materials[bound_material.slot].Unbind();
     glBindVertexArray(0);
 }
