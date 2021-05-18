@@ -14,6 +14,8 @@
 
 #include "entities/entity_transforms.hpp"
 
+#include "rendering/material_manager.hpp"
+
 enum class GAMESTATE
 {
     RUNNING,
@@ -44,6 +46,8 @@ private:
     Renderer renderer;
 
     World world;
+
+    Rendering::MaterialManager material_manager;
 
     void UpdateUI();
     void ConstructScene(ModelLoader* modelLoader);

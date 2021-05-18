@@ -229,8 +229,8 @@
     <ClCompile Include="..\src\loading\model_loader.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
+    <ClCompile Include="..\src\rendering\material_manager.cpp" />
     <ClCompile Include="..\src\rendering\render_entities.cpp" />
-    <ClCompile Include="..\src\rendering\render_material.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
     <ClCompile Include="..\src\world.cpp" />
   </ItemGroup>
@@ -238,6 +238,7 @@
     <ClInclude Include="..\src\camera.hpp" />
     <ClInclude Include="..\src\constants.hpp" />
     <ClInclude Include="..\src\containers\array.hpp" />
+    <ClInclude Include="..\src\containers\queue.hpp" />
     <ClInclude Include="..\src\controls.hpp" />
     <ClInclude Include="..\src\display.hpp" />
     <ClInclude Include="..\src\entities\entity_handle.hpp" />
@@ -256,8 +257,8 @@
     <ClInclude Include="..\src\loading\model_loader.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\renderer.hpp" />
+    <ClInclude Include="..\src\rendering\material_manager.hpp" />
     <ClInclude Include="..\src\rendering\render_entities.hpp" />
-    <ClInclude Include="..\src\rendering\render_material.hpp" />
     <ClInclude Include="..\src\rendering\render_world.hpp" />
     <ClInclude Include="..\src\shader.hpp" />
     <ClInclude Include="..\src\transform.hpp" />

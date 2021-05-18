@@ -36,11 +36,16 @@ struct pointLight_t
 class EntityLightComponents 
 {
 public:
-    entityHandle_t AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc);
-    entityHandle_t AddPointLight(entityHandle_t entity, pointLight_t light_desc);
+    void AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc);
+    void AddPointLight(entityHandle_t entity, pointLight_t light_desc);
 
-    unsigned int entities_top;
-    Array<entityHandle_t, MAX_GAME_ENTITIES>    entities;
+    
+    unsigned int _entities_top = 0;
+    Array<resourceSlot_t, MAX_GAME_ENTITIES> _entity_index;
+    resourceSlot_t AllocateResource(entityHandle_t entity);
+    resourceSlot_t FindResource(entityHandle_t entity);
+
+
     Array<lightTypes, MAX_GAME_ENTITIES>        light_types;
 
     // Base light components
@@ -51,7 +56,7 @@ public:
     Array<float, MAX_GAME_ENTITIES>             radiuses;   // Spotlight components
 
 private:
-    entityHandle_t AddBaseComponents(entityHandle_t entity, baseLight_t base);
+    resourceSlot_t AddBaseComponents(entityHandle_t entity, baseLight_t base);
 };
 
 #endif

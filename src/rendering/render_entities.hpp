@@ -18,7 +18,11 @@ public:
     void Cleanup();
 
     unsigned int _entities_top = 0;
-    Array<entityHandle_t, MAX_RENDER_ENTITIES> _entities;
+    Array<resourceSlot_t, MAX_GAME_ENTITIES> _entity_index;
+    resourceSlot_t AllocateResource(entityHandle_t entity);
+    resourceSlot_t FindResource(entityHandle_t entity);
+
+
     Array<unsigned int, MAX_RENDER_ENTITIES> VAOs;
     Array<unsigned int, MAX_RENDER_ENTITIES> indices;
 };

@@ -18,7 +18,7 @@ OBJS = \
 	$(OBJDIR)/world.o \
 	$(OBJDIR)/entity_transforms.o \
 	$(OBJDIR)/entity_light_components.o \
-	$(OBJDIR)/render_material.o \
+	$(OBJDIR)/material_manager.o \
 	$(OBJDIR)/render_entities.o \
 	$(OBJDIR)/model_loader.o \
 	$(OBJDIR)/shader.o \
@@ -84,7 +84,7 @@ $(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
 $(OBJDIR)/entity_light_components.o: $(SRC)/entities/entity_light_components.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/render_material.o: $(SRC)/rendering/render_material.cpp
+$(OBJDIR)/material_manager.o: $(SRC)/rendering/material_manager.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/render_entities.o: $(SRC)/rendering/render_entities.cpp
@@ -103,4 +103,8 @@ clean: $(OBJ)
 	rm $(OBJDIR)/*.o && rm $(BUILDDIR)/$(BIN)
 
 test: $(OBJS)
-	$(CC) $(CFLAGS) -o bin/runtests tests/tests_main.cpp tests/test_dummy.cpp tests/test_containers_array.cpp
+	$(CC) $(CFLAGS) -o bin/runtests \
+		tests/tests_main.cpp \
+		tests/test_dummy.cpp \
+		tests/test_containers_array.cpp \
+		tests/test_containers_queue.cpp

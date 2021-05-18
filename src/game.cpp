@@ -89,8 +89,10 @@ void Game::Start()
     {
         this->renderer.UpdateResolution(this->display.width, this->display.height);
 
+        this->renderer.material_manager = &this->material_manager;
+
         //Build the scene, a temp solution
-        ModelLoader modelLoader = ModelLoader(&this->world);
+        ModelLoader modelLoader = ModelLoader(&this->world, &this->material_manager);
         this->ConstructScene(&modelLoader);
 
         //Start the game loop
@@ -247,16 +249,16 @@ void Game::Quit()
     gameState = GAMESTATE::STOPPED;
 }
 
-static auto entity_array_getter = [](void* entities, int idx, const char** out_text)
-{
-    Array<entityHandle_t, MAX_GAME_ENTITIES> entity_list = *static_cast<Array<entityHandle_t, MAX_GAME_ENTITIES>*>(entities);
-    if (idx < 0 || idx >= static_cast<int>(entity_list.Size()))
-    {
-        return false;
-    }
-    *out_text = entity_list[idx].name.c_str();
-    return true;
-};
+//static auto entity_array_getter = [](void* entities, int idx, const char** out_text)
+//{
+//    Array<entityHandle_t, MAX_GAME_ENTITIES> entity_list = *static_cast<Array<entityHandle_t, MAX_GAME_ENTITIES>*>(entities);
+//    if (idx < 0 || idx >= static_cast<int>(entity_list.Size()))
+//    {
+//        return false;
+//    }
+//    *out_text = entity_list[idx].name.c_str();
+//    return true;
+//};
 
 int selected_entity = 0;
 void Game::UpdateUI()
@@ -336,12 +338,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     //Room
     auto dod_room = this->world.AddEntity("Room");
-    this->world.entity_transforms.SetScale(dod_room, glm::fvec3(0.02f));
-    this->world.entity_transforms.SetRotation(dod_room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-
     LOADINGSTATE room_load = modelLoader->Load("sponza.obj", dod_room);
     assert(room_load == LOADINGSTATE::VALID);
     this->world.render_entities.Add(dod_room);
+
+    this->world.entity_transforms.SetScale(dod_room, glm::fvec3(0.02f));
+    this->world.entity_transforms.SetRotation(dod_room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 
     /*
     Lights
@@ -350,13 +352,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     //cool background light
     entityHandle_t dod_bg_light = this->world.AddEntity("Background light");
     this->world.entity_transforms.SetPosition(dod_bg_light, glm::fvec3(50.0f, 30.0f, -10.0f));
-    dod_bg_light = this->world.entity_lights.AddDirectionalLight(
+    this->world.entity_lights.AddDirectionalLight(
         dod_bg_light, 
         { 
             { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) },
             glm::fvec3(0.0f, 0.0f, 0.0f)
         });
-    this->world.UpdateHandle(dod_bg_light);
 
 
     // Fiery light cube
@@ -366,13 +367,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     this->world.entity_transforms.SetPosition(dod_orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
     this->world.entity_transforms.SetScale(dod_orange_light, glm::fvec3(0.1f));
     this->world.render_entities.Add(dod_orange_light);
-    dod_orange_light = this->world.entity_lights.AddPointLight(
+    this->world.entity_lights.AddPointLight(
         dod_orange_light, 
         { 
             { 1.0f, 0.1f, glm::fvec3(1.0f, 0.4f, 0.0f) },
             5.0f 
         });
-     this->world.UpdateHandle(dod_orange_light);
 
 
     // Blue light cube
@@ -382,14 +382,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     this->world.render_entities.Add(dod_blue_light);
     this->world.entity_transforms.SetPosition(dod_blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
     this->world.entity_transforms.SetScale(dod_blue_light, glm::fvec3(0.1f));
-    dod_blue_light = this->world.entity_lights.AddPointLight(
+    this->world.entity_lights.AddPointLight(
         dod_blue_light, 
         {
             { 1.0f, 0.1f, glm::fvec3(0.4f, 0.8f, 1.0f) }, 
             5.0f
         });
-    this->world.UpdateHandle(dod_blue_light);
-
 
     // Done loading
     printf("\n");

@@ -1,6 +1,7 @@
 #ifndef __WORLD_H__
 #define __WORLD_H__
 
+#include <vector>
 #include "constants.hpp"
 #include "containers/array.hpp"
 
@@ -8,7 +9,6 @@
 #include "entities/entity_transforms.hpp"
 #include "entities/entity_light_components.hpp"
 #include "rendering/render_entities.hpp"
-#include "rendering/render_material.hpp"
 
 class Camera;
 
@@ -20,21 +20,16 @@ public:
     void Cleanup() {
         this->camera = 0;
         this->_entity_handles.Clear();
-        this->_material_handles.Clear();
-        this->_materials.Clear();
     }
 
     entityHandle_t AddEntity(const char* name);
     entityHandle_t AddChildEntity(entityHandle_t parent);
-
-    materialHandle_t AddMaterial(RenderMaterial material);
-    
-    void UpdateHandle(entityHandle_t handle);
     unsigned int EntityCount() const { return this->_entities_top; }
-
     entityHandle_t GetHandle(const char* name);
 
+
     Camera* camera = 0;
+
 
     // The world shall be the new temporary home for entities
     unsigned int _entities_top = 0;  // Time to make the Queue container soon?
@@ -42,10 +37,6 @@ public:
 
     EntityTransforms entity_transforms;
     EntityLightComponents entity_lights;
-
-    unsigned int _materials_top = 0;
-    Array<materialHandle_t, MAX_GAME_ENTITIES> _material_handles;
-    Array<RenderMaterial, MAX_GAME_ENTITIES> _materials;
 
     RenderEntities render_entities;
 };

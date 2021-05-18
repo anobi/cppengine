@@ -3,23 +3,19 @@
 
 void RenderEntities::Add(entityHandle_t entity)
 {
-    this->_entities[entity.slot] = entity;
-    if (entity.slot > this->_entities_top) {
-        this->_entities_top = entity.slot + 1;
-    }
-    else {
-        this->_entities_top += 1;
-    }
+    resourceSlot_t resource = this->AllocateResource(entity);
 }
 
 void RenderEntities::LoadModel(entityHandle_t entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
 {
-    this->indices[entity.slot] = indices.size();
+    resourceSlot_t resource = this->FindResource(entity);
+
+    this->indices[resource.slot] = indices.size();
     unsigned int VBO;
     unsigned int EBO;
 
-    glGenVertexArrays(1, &this->VAOs[entity.slot]);
-    glBindVertexArray(this->VAOs[entity.slot]);
+    glGenVertexArrays(1, &this->VAOs[resource.slot]);
+    glBindVertexArray(this->VAOs[resource.slot]);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
@@ -65,6 +61,28 @@ void RenderEntities::Cleanup()
     }
     this->VAOs.Clear();
     this->indices.Clear();
-    this->_entities.Clear();
+    this->_entity_index.Clear();
+}
+
+resourceSlot_t RenderEntities::AllocateResource(entityHandle_t entity)
+{
+    resourceSlot_t resource;
+    if (this->_entities_top < MAX_GAME_ENTITIES) {
+        resource.slot = this->_entities_top;
+        resource.entity = entity;
+        this->_entity_index[this->_entities_top] = resource;
+        this->_entities_top += 1;
+    }
+    return resource;
+}
+
+resourceSlot_t RenderEntities::FindResource(entityHandle_t entity)
+{
+    for (int i = 0; i < this->_entities_top; i++) {
+        if (this->_entity_index[i].entity == entity) {
+            return this->_entity_index[i];
+        }
+    }
+    return resourceSlot_t();
 }
 

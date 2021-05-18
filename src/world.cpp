@@ -12,6 +12,7 @@ entityHandle_t World::AddEntity(const char* name)
 
     // Add a spatial component by default because how can an entity exist in the world if it's not IN the world?
     this->entity_transforms.Add(handle);
+    // this->UpdateHandle(handle);
 
     return handle;
 }
@@ -19,14 +20,31 @@ entityHandle_t World::AddEntity(const char* name)
 entityHandle_t World::AddChildEntity(entityHandle_t parent)
 {
     entityHandle_t handle = this->AddEntity(parent.name.c_str());
+    handle.parent_id = parent.id;
 
     // Clone the spatial data from the parent
     this->entity_transforms.positions[handle.slot] = this->entity_transforms.positions[parent.slot];
     this->entity_transforms.rotations[handle.slot] = this->entity_transforms.rotations[parent.slot];
     this->entity_transforms.scales[handle.slot] = this->entity_transforms.scales[parent.slot];
 
+     parent.num_children += 1;
+
     return handle;
 }
+
+//std::vector<entityHandle_t> World::GetChildren(entityHandle_t parent)
+//{
+//    std::vector<entityHandle_t> children;
+//    for (int i = 0; i < parent._child_entities_top; i++) {
+//        for (int j = 0; j < this->_entities_top; j++) {
+//            if (this->_entity_handles[j].id == i) {
+//                children.push_back(this->_entity_handles[j]);
+//            }
+//        }
+//    }
+//
+//    return children;
+//}
 
 materialHandle_t World::AddMaterial(RenderMaterial material)
 {
@@ -45,14 +63,6 @@ materialHandle_t World::AddMaterial(RenderMaterial material)
     this->_materials_top += 1;
 
     return handle;
-}
-
-// Hmmmm...
-void World::UpdateHandle(entityHandle_t handle)
-{
-    if (handle.valid()) {
-        this->_entity_handles[handle.slot] = handle;
-    }
 }
 
 entityHandle_t World::GetHandle(const char* name)

@@ -1,5 +1,6 @@
 #include "opengl.hpp"
 #include "renderer.hpp"
+#include "rendering/material_manager.hpp"
 
 void Renderer::Shutdown()
 {
@@ -24,50 +25,52 @@ void Renderer::Render(World* world, Shader* shader)
     // TODO: Replace with unified light data
     unsigned int loc = 32; // PointLight uniform offset
     unsigned int dloc = 64; // PointLight uniform offset
-    for (int i = 0; i < world->entity_lights.entities_top; i++) 
+    for (int i = 0; i < world->entity_lights._entities_top; i++)
     {
-        if (world->entity_lights.light_types[i] == 3)
+        resourceSlot_t resource = world->entity_lights._entity_index[i];
+        resourceSlot_t spatial_resource = world->entity_transforms.FindResource(resource.entity);
+        if (world->entity_lights.light_types[resource.slot] == 3)
         {
-            entityHandle_t entity = world->entity_lights.entities[i];
-            glUniform3fv(shader->uniforms[dloc + 0], 1, &world->entity_transforms.positions[entity.slot][0]);
-            glUniform3fv(shader->uniforms[dloc + 1], 1, &world->entity_lights.colors[entity.light_component_slot][0]);
-            glUniform1f(shader->uniforms[dloc + 2], world->entity_lights.intensities[entity.light_component_slot]);
+            glUniform3fv(shader->uniforms[dloc + 0], 1, &world->entity_transforms.positions[spatial_resource.slot][0]);
+            glUniform3fv(shader->uniforms[dloc + 1], 1, &world->entity_lights.colors[resource.slot][0]);
+            glUniform1f(shader->uniforms[dloc + 2], world->entity_lights.intensities[resource.slot]);
             dloc += 3; // Number of light uniforms
         }
-        else if (world->entity_lights.light_types[i] == 2)
+        else if (world->entity_lights.light_types[resource.slot] == 2)
         {
-            entityHandle_t entity = world->entity_lights.entities[i];
-            glUniform3fv(shader->uniforms[loc + 0], 1, &world->entity_transforms.positions[entity.slot][0]);
-            glUniform3fv(shader->uniforms[loc + 1], 1, &world->entity_lights.colors[entity.light_component_slot][0]);
-            glUniform1f(shader->uniforms[loc + 2], world->entity_lights.intensities[entity.light_component_slot]);
-            glUniform1f(shader->uniforms[loc + 3], world->entity_lights.radiuses[entity.light_component_slot]);
-            glUniform1f(shader->uniforms[loc + 4], world->entity_lights.cutoffs[entity.light_component_slot]);
+            glUniform3fv(shader->uniforms[loc + 0], 1, &world->entity_transforms.positions[spatial_resource.slot][0]);
+            glUniform3fv(shader->uniforms[loc + 1], 1, &world->entity_lights.colors[resource.slot][0]);
+            glUniform1f(shader->uniforms[loc + 2], world->entity_lights.intensities[resource.slot]);
+            glUniform1f(shader->uniforms[loc + 3], world->entity_lights.radiuses[resource.slot]);
+            glUniform1f(shader->uniforms[loc + 4], world->entity_lights.cutoffs[resource.slot]);
             loc += 5; // Number of light uniforms
         }
     }
 
     materialHandle_t bound_material;
-    for (int i = 0; i < world->_entities_top; i++)
+    for (int i = 0; i < world->render_entities._entities_top; i++)
     {
-        entityHandle_t entity = world->_entity_handles[i];
-
-        glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &world->entity_transforms.model_matrices[entity.slot][0][0]);
+        resourceSlot_t resource = world->render_entities._entity_index[i];
+        resourceSlot_t spatial_resource = world->entity_transforms.FindResource(resource.entity);
+       
+        glUniformMatrix4fv(shader->uniforms[0], 1, GL_FALSE, &world->entity_transforms.model_matrices[spatial_resource.slot][0][0]);
         glUniformMatrix4fv(shader->uniforms[1], 1, GL_FALSE, &view[0][0]);
         glUniformMatrix4fv(shader->uniforms[2], 1, GL_FALSE, &projection[0][0]);
-        glUniformMatrix3fv(shader->uniforms[3], 1, GL_FALSE, &world->entity_transforms.normal_matrices[entity.slot][0][0]);
+        glUniformMatrix3fv(shader->uniforms[3], 1, GL_FALSE, &world->entity_transforms.normal_matrices[spatial_resource.slot][0][0]);
 
         glUniform2fv(shader->uniforms[4], 1, &resolution[0]);
         glUniform3fv(shader->uniforms[5], 1, &eyePos[0]);
 
-        if (bound_material.slot != entity.render_material_slot) {
-            world->_materials[entity.render_material_slot].Bind(shader);
-            bound_material = world->_material_handles[entity.render_material_slot];
+        materialHandle_t entity_material; // = world->entity_materials.FindResource(resource.entity);
+        if (bound_material != entity_material) {
+            this->material_manager->Bind(entity_material, shader);
+            bound_material = entity_material;
         }
 
         glBindVertexArray(world->render_entities.VAOs[entity.slot]);
         glDrawElements(GL_TRIANGLES, world->render_entities.indices[entity.slot], GL_UNSIGNED_INT, (void*)0);
     }
 
-    world->_materials[bound_material.slot].Unbind();
+    this->material_manager->Unbind();
     glBindVertexArray(0);
 }

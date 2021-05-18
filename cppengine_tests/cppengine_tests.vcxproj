@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="..\tests\tests_main.cpp" />
     <ClCompile Include="..\tests\test_containers_array.cpp" />
+    <ClCompile Include="..\tests\test_containers_queue.cpp" />
     <ClCompile Include="..\tests\test_dummy.cpp" />
   </ItemGroup>
   <ItemGroup>
