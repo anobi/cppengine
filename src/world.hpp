@@ -5,27 +5,34 @@
 #include "constants.hpp"
 #include "containers/array.hpp"
 
-#include "entities/entity_handle.hpp"
-#include "entities/entity_transforms.hpp"
-#include "entities/entity_light_components.hpp"
-#include "rendering/render_entities.hpp"
+#include "entities/entity_manager.hpp"
+#include "rendering/model_manager.hpp"
+#include "rendering/material_manager.hpp"
 
 class Camera;
 
 class World {
 public:
-    World() {}
-    ~World() {}
+    World() { }
+
+    ~World() 
+    {
+        this->_entity_handles.Clear();
+        this->_entities_top = 0;
+
+        this->camera            = nullptr;
+        this->entity_manager    = nullptr;
+        this->material_manager  = nullptr;
+        this->model_manager     = nullptr;
+    }
 
     void Cleanup() {
         this->camera = 0;
         this->_entity_handles.Clear();
     }
 
-    entityHandle_t AddEntity(const char* name);
-    entityHandle_t AddChildEntity(entityHandle_t parent);
+    void AddEntity(entityHandle_t entity);
     unsigned int EntityCount() const { return this->_entities_top; }
-    entityHandle_t GetHandle(const char* name);
 
 
     Camera* camera = 0;
@@ -35,9 +42,8 @@ public:
     unsigned int _entities_top = 0;  // Time to make the Queue container soon?
     Array<entityHandle_t, MAX_GAME_ENTITIES> _entity_handles;
 
-    EntityTransforms entity_transforms;
-    EntityLightComponents entity_lights;
-
-    RenderEntities render_entities;
+    Entities::EntityManager* entity_manager         = nullptr;
+    Rendering::MaterialManager* material_manager    = nullptr;
+    Rendering::ModelManager* model_manager          = nullptr;
 };
 #endif  // __WORLD_H__

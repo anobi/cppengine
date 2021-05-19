@@ -157,9 +157,6 @@
     <ClCompile Include="..\src\entities\entity_transforms.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\rendering\render_entities.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="..\src\rendering\material_manager.cpp">
       <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rendering\model_manager.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\entities\entity_manager.cpp">
+      <Filter>Source Files\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +231,6 @@
     <ClInclude Include="..\src\containers\array.hpp">
       <Filter>Header Files\containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\rendering\render_entities.hpp">
-      <Filter>Header Files\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\loading\model_loader.hpp">
       <Filter>Header Files\loading</Filter>
     </ClInclude>
@@ -257,6 +257,12 @@
     </ClInclude>
     <ClInclude Include="..\src\rendering\material_manager.hpp">
       <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rendering\model_manager.hpp">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entities\entity_manager.hpp">
+      <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

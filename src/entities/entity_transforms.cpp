@@ -7,7 +7,7 @@
 
 void EntityTransforms::Add(entityHandle_t entity)
 {
-    resourceSlot_t resource = this->AllocateResource(entity);
+    entitySlot_t resource = this->AllocateResource(entity);
 
     this->positions[resource.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->rotations[resource.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
@@ -30,14 +30,14 @@ void EntityTransforms::Update(glm::fmat4 view_projection, bool update_all)
         }
     }
 
-    std::vector<resourceSlot_t> dirty_index;
+    std::vector<entitySlot_t> dirty_index;
     for (int i = 0; i < this->_dirty_entities_top; i++) {
-        resourceSlot_t resource = this->FindResource(this->_dirty_entities[i]);
+        entitySlot_t resource = this->FindResource(this->_dirty_entities[i]);
         dirty_index.push_back(resource);
     }
 
     for (int i = 0; i < dirty_index.size(); i++) {
-        resourceSlot_t resource = dirty_index[i];
+        entitySlot_t resource = dirty_index[i];
 
         glm::fmat4 rotationMatrix = 
             glm::rotate(glm::fmat4(1.0f), this->rotations[resource.slot].x, glm::fvec3(1.0, 0.0, 0.0))
@@ -64,7 +64,7 @@ void EntityTransforms::SetDirty(entityHandle_t entity)
 
 void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->positions[resource.slot] = position;
         this->SetDirty(resource.entity);
@@ -73,7 +73,7 @@ void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
 
 void EntityTransforms::SetRotation(entityHandle_t entity, glm::fvec3 rotation)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->rotations[resource.slot] = rotation;
         this->SetDirty(resource.entity);
@@ -82,7 +82,7 @@ void EntityTransforms::SetRotation(entityHandle_t entity, glm::fvec3 rotation)
 
 void EntityTransforms::SetScale(entityHandle_t entity, glm::fvec3 scale)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->scales[resource.slot] = scale;
         this->SetDirty(resource.entity);
@@ -91,7 +91,7 @@ void EntityTransforms::SetScale(entityHandle_t entity, glm::fvec3 scale)
 
 glm::fvec3 EntityTransforms::GetPosition(entityHandle_t entity)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         return this->positions[resource.slot];
     }
@@ -99,7 +99,7 @@ glm::fvec3 EntityTransforms::GetPosition(entityHandle_t entity)
 
 glm::fvec3 EntityTransforms::GetRotation(entityHandle_t entity)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         return this->rotations[resource.slot];
     }
@@ -107,15 +107,15 @@ glm::fvec3 EntityTransforms::GetRotation(entityHandle_t entity)
 
 glm::fvec3 EntityTransforms::GetScale(entityHandle_t entity)
 {
-    resourceSlot_t resource = this->FindResource(entity);
+    entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         return this->scales[resource.slot];
     }
 }
 
-resourceSlot_t EntityTransforms::AllocateResource(entityHandle_t entity)
+entitySlot_t EntityTransforms::AllocateResource(entityHandle_t entity)
 {
-    resourceSlot_t resource;
+    entitySlot_t resource;
     if (this->_entities_top < MAX_GAME_ENTITIES) {
         resource.slot = this->_entities_top;
         resource.entity = entity;
@@ -125,12 +125,12 @@ resourceSlot_t EntityTransforms::AllocateResource(entityHandle_t entity)
     return resource;
 }
 
-resourceSlot_t EntityTransforms::FindResource(entityHandle_t entity)
+entitySlot_t EntityTransforms::FindResource(entityHandle_t entity)
 {
     for (int i = 0; i < this->_entities_top; i++) {
         if (this->_entity_index[i].entity == entity) {
             return this->_entity_index[i];
         }
     }
-    return resourceSlot_t();
+    return entitySlot_t();
 }

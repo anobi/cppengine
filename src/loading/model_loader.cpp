@@ -1,5 +1,6 @@
 #include <numeric>
 #include "model_loader.hpp"
+#include "../types.hpp"
 #include "../configuration.hpp"
 
 
@@ -61,8 +62,11 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
     {
         aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
         if (i > 0) {
-            auto child = this->world->AddChildEntity(entity);
-            this->ProcessMesh(aiMesh, scene, child);
+            auto child = this->world->entity_manager->AddChild(entity);
+            if (child.valid()) 
+            {
+                this->ProcessMesh(aiMesh, scene, child);
+            }
         }
         else {
             this->ProcessMesh(aiMesh, scene, entity);
@@ -161,10 +165,10 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
         );
     }
 
-    this->world->render_entities.LoadModel(entity, vertices, indices);
+    this->world->model_manager->LoadModel(entity, vertices, indices);
 
     // Translate the entity into the new center position
-    this->world->entity_transforms.SetPosition(entity, center_position);
+    this->world->entity_manager->SetPosition(entity, center_position);
 
     if (mesh->mMaterialIndex >= 0)
     {
@@ -182,40 +186,40 @@ materialHandle_t ModelLoader::ProcessMaterial(const aiMaterial* aiMat)
     aiMat->Get(AI_MATKEY_NAME, matName);
 
     // Check if the material has already been loaded
-    materialHandle_t handle = this->material_manager->FindMaterial(matName.C_Str());
+    materialHandle_t handle = this->world->material_manager->Find(matName.C_Str());
     if (handle.valid()) {
         return handle;
     }
 
-    materialHandle_t material = this->material_manager->Add(matName.C_Str());
+    materialHandle_t material = this->world->material_manager->Add(matName.C_Str());
 
     // TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-        this->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::DIFFUSE);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::DIFFUSE);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-        this->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::SPECULAR);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::SPECULAR);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-        this->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::NORMAL);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::NORMAL);
     }
 
     for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
-        this->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::ALPHA);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::ALPHA);
     }
 
     return material;

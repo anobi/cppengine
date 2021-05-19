@@ -27,9 +27,9 @@ public:
     
 
     unsigned int _entities_top = 0;
-    Array<resourceSlot_t, MAX_GAME_ENTITIES> _entity_index;
-    resourceSlot_t AllocateResource(entityHandle_t entity);
-    resourceSlot_t FindResource(entityHandle_t entity);
+    Array<entitySlot_t, MAX_GAME_ENTITIES> _entity_index;
+    entitySlot_t AllocateResource(entityHandle_t entity);
+    entitySlot_t FindResource(entityHandle_t entity);
 
 
     Array<glm::fvec3, MAX_GAME_ENTITIES> positions;

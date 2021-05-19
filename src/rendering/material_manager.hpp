@@ -59,7 +59,7 @@ namespace Rendering
         ~MaterialManager() {};
 
         materialHandle_t Add(const char* name);
-        materialHandle_t FindMaterial(const char* name);
+        materialHandle_t Find(const char* name);
 
         void Setup(materialHandle_t material, TextureType_e type, const int width, const int height, const void* data);
         void LoadTexture(const char* filename, materialHandle_t material, TextureType_e type);

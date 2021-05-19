@@ -9,7 +9,7 @@
 #include "world.hpp"
 #include "shader.hpp"
 
-#include "rendering/render_entities.hpp"
+#include "rendering/model_manager.hpp"
 #include "rendering/material_manager.hpp"
 
 class Renderer {
@@ -28,6 +28,7 @@ public:
     void Shutdown();
 
     Rendering::MaterialManager* material_manager = nullptr;
+    Rendering::ModelManager* model_manager = nullptr;
 
 private:
     int m_tick = 0;

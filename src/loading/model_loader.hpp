@@ -6,8 +6,9 @@
 #include <assimp/postprocess.h>
 
 #include "../world.hpp"
+#include "../entities/entity_manager.hpp"
 #include "../rendering/material_manager.hpp"
-#include "../entities/entity_handle.hpp"
+#include "../rendering/model_manager.hpp"
 
 
 enum class LOADINGSTATE {
@@ -19,13 +20,15 @@ enum class LOADINGSTATE {
 
 class ModelLoader {
 public:
-    ModelLoader(World* world, Rendering::MaterialManager* material_manager) 
+    ModelLoader(World* world) 
     { 
         this->world = world;
-        this->material_manager = material_manager;
     };
 
-    ~ModelLoader() {};
+    ~ModelLoader() 
+    {
+        this->world = nullptr;
+    };
 
     // TODO: proper inputs would be modelFile, *modelPool, *materialPool
 
@@ -36,8 +39,7 @@ public:
     materialHandle_t ProcessMaterial(const aiMaterial* aiMat);
 
 private:
-    World* world;
-    Rendering::MaterialManager* material_manager;
+    World* world = nullptr;
 };
 
 #endif // __LOADER__MODEL_LOADER_H_

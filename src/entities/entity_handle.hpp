@@ -7,7 +7,7 @@
 
 constexpr int INVALID_HANDLE_ID = 0;
 constexpr int INVALID_SLOT = -1;
-constexpr int ENTITY_MAX_CHILDREN = 8;
+constexpr int ENTITY_MAX_CHILDREN = 1024;
 
 
 struct entityHandle_t
@@ -23,13 +23,29 @@ struct entityHandle_t
     }
 };
 
-struct resourceSlot_t {
+struct entitySlot_t 
+{
     entityHandle_t entity;
-    unsigned int slot;
+    unsigned int slot = INVALID_SLOT;
+
+    unsigned int num_children = 0;
+    unsigned int children[ENTITY_MAX_CHILDREN];
+
+    bool has_spatial_component = false;
+    bool has_pointlight_component = false;
+    bool has_dirlight_component = false;
+    bool has_model_component = false;
+    bool has_material_component = false;
+
+    std::string name = "Entity";
 
     inline bool valid() {
         return (entity.valid() && slot != INVALID_SLOT);
     };
+
+    inline bool operator==(entitySlot_t other) {
+        return this->entity == other.entity;
+    }
 };
 
 class Entity 

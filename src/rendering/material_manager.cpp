@@ -8,7 +8,7 @@
 
 materialHandle_t Rendering::MaterialManager::Add(const char* name)
 {
-    materialHandle_t existing = this->FindResource(name);
+    materialHandle_t existing = this->Find(name);
     if (existing.valid()) {
         return existing;
     }
@@ -21,6 +21,17 @@ materialHandle_t Rendering::MaterialManager::Add(const char* name)
     this->names[resource.slot] = name;
 
     return material;
+}
+
+materialHandle_t Rendering::MaterialManager::Find(const char* name)
+{
+    for (int i = 0; i < this->_materials_top; i++) {
+        int slot = this->_material_index[i].slot;
+        if (this->names[slot] == name) {
+            return this->_material_index[i].material;
+        }
+    }
+    return materialHandle_t();
 }
 
 void Rendering::MaterialManager::Setup(materialHandle_t material, TextureType_e type, const int width, const int height, const void* data)
@@ -130,23 +141,26 @@ void Rendering::MaterialManager::Bind(materialHandle_t material, const Shader* s
 
 void Rendering::MaterialManager::Unbind()
 {
-    glActiveTexture(GL_TEXTURE0 + 0);
-    glUniform1i(this->boundShader->_uniforms.diffuse, 0);
-    glUniform1i(this->boundShader->_uniforms.use_diffuse, 0);
+    if (this->boundShader)
+    {
+        glActiveTexture(GL_TEXTURE0 + 0);
+        glUniform1i(this->boundShader->_uniforms.diffuse, 0);
+        glUniform1i(this->boundShader->_uniforms.use_diffuse, 0);
 
-    glActiveTexture(GL_TEXTURE0 + 1);
-    glUniform1i(this->boundShader->_uniforms.specular, 0);
-    glUniform1i(this->boundShader->_uniforms.use_specular, 0);
+        glActiveTexture(GL_TEXTURE0 + 1);
+        glUniform1i(this->boundShader->_uniforms.specular, 0);
+        glUniform1i(this->boundShader->_uniforms.use_specular, 0);
 
-    glActiveTexture(GL_TEXTURE0 + 2);
-    glUniform1i(this->boundShader->_uniforms.normal, 0);
-    glUniform1i(this->boundShader->_uniforms.use_normal, 0);
+        glActiveTexture(GL_TEXTURE0 + 2);
+        glUniform1i(this->boundShader->_uniforms.normal, 0);
+        glUniform1i(this->boundShader->_uniforms.use_normal, 0);
 
-    glActiveTexture(GL_TEXTURE0 + 3);
-    glUniform1i(this->boundShader->_uniforms.alpha, 0);
-    glUniform1i(this->boundShader->_uniforms.use_alpha, 0);
+        glActiveTexture(GL_TEXTURE0 + 3);
+        glUniform1i(this->boundShader->_uniforms.alpha, 0);
+        glUniform1i(this->boundShader->_uniforms.use_alpha, 0);
 
-    this->boundShader = 0;
+        this->boundShader = 0;
+    }
 }
 
 void Rendering::MaterialManager::Cleanup()
@@ -184,15 +198,4 @@ materialSlot_t Rendering::MaterialManager::FindResource(materialHandle_t materia
         }
     }
     return materialSlot_t();
-}
-
-materialHandle_t Rendering::MaterialManager::FindMaterial(const char* name)
-{
-    for (int i = 0; i < this->_materials_top; i++) {
-        int slot = this->_material_index[i].slot;
-        if (this->names[slot] == name) {
-            return this->_material_index[i].material;
-        }
-    }
-    return materialHandle_t();
 }

@@ -1,14 +1,25 @@
 #include "../opengl.hpp"
-#include "render_entities.hpp"
+#include "model_manager.hpp"
 
-void RenderEntities::Add(entityHandle_t entity)
+Rendering::ModelManager::ModelManager()
 {
-    resourceSlot_t resource = this->AllocateResource(entity);
 }
 
-void RenderEntities::LoadModel(entityHandle_t entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
+Rendering::ModelManager::~ModelManager()
 {
-    resourceSlot_t resource = this->FindResource(entity);
+}
+
+void Rendering::ModelManager::Add(entityHandle_t entity)
+{
+    entitySlot_t resource = this->AllocateResource(entity);
+}
+
+void Rendering::ModelManager::LoadModel(entityHandle_t entity, const std::vector<Vertex> vertices, const std::vector<unsigned int> indices)
+{
+    entitySlot_t resource = this->FindResource(entity);
+    if (!resource.valid()) {
+        return;
+    }
 
     this->indices[resource.slot] = indices.size();
     unsigned int VBO;
@@ -53,7 +64,7 @@ void RenderEntities::LoadModel(entityHandle_t entity, const std::vector<Vertex> 
     glDeleteBuffers(1, &EBO);
 }
 
-void RenderEntities::Cleanup()
+void Rendering::ModelManager::Cleanup()
 {
     for (int i = 0; i < this->_entities_top; i++) 
     {
@@ -64,9 +75,9 @@ void RenderEntities::Cleanup()
     this->_entity_index.Clear();
 }
 
-resourceSlot_t RenderEntities::AllocateResource(entityHandle_t entity)
+entitySlot_t Rendering::ModelManager::AllocateResource(entityHandle_t entity)
 {
-    resourceSlot_t resource;
+    entitySlot_t resource;
     if (this->_entities_top < MAX_GAME_ENTITIES) {
         resource.slot = this->_entities_top;
         resource.entity = entity;
@@ -76,13 +87,13 @@ resourceSlot_t RenderEntities::AllocateResource(entityHandle_t entity)
     return resource;
 }
 
-resourceSlot_t RenderEntities::FindResource(entityHandle_t entity)
+entitySlot_t Rendering::ModelManager::FindResource(entityHandle_t entity)
 {
     for (int i = 0; i < this->_entities_top; i++) {
         if (this->_entity_index[i].entity == entity) {
             return this->_entity_index[i];
         }
     }
-    return resourceSlot_t();
+    return entitySlot_t();
 }
 

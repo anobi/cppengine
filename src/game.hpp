@@ -12,8 +12,9 @@
 #include "renderer.hpp"
 #include "world.hpp"
 
-#include "entities/entity_transforms.hpp"
+#include "entities/entity_manager.hpp"
 
+#include "rendering/model_manager.hpp"
 #include "rendering/material_manager.hpp"
 
 enum class GAMESTATE
@@ -47,7 +48,10 @@ private:
 
     World world;
 
+    Entities::EntityManager entity_manager;
+
     Rendering::MaterialManager material_manager;
+    Rendering::ModelManager model_manager;
 
     void UpdateUI();
     void ConstructScene(ModelLoader* modelLoader);
