@@ -6,6 +6,9 @@
 #include "entity_handle.hpp"
 #include "entity_transforms.hpp"
 #include "entity_light_components.hpp"
+#include "entity_model_components.hpp"
+
+#include "../rendering/material_manager.hpp"
 
 
 namespace Entities {
@@ -26,6 +29,8 @@ namespace Entities {
         void AddPointLight(entityHandle_t entity, pointLight_t light_desc);
         void AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc);
 
+        void AddMaterialComponent(entityHandle_t entity, materialHandle_t material);
+
         Array<std::string, MAX_GAME_ENTITIES> names;
 
         unsigned int _next_id = 1;
@@ -37,6 +42,7 @@ namespace Entities {
 
         EntityTransforms spatial_components;
         EntityLightComponents light_components;
+        Entities::ModelComponents model_components;
     };
 }
 

@@ -43,13 +43,19 @@ entityHandle_t Entities::EntityManager::Find(const char* name)
 entityHandle_t Entities::EntityManager::AddChild(entityHandle_t parent)
 {
     entitySlot_t resource = this->FindResource(parent);
-    if (resource.valid() && resource.num_children < ENTITY_MAX_CHILDREN) 
+    if (resource.valid() && resource.num_children < ENTITY_MAX_CHILDREN)
     {
         std::string name = resource.name + " [" + std::to_string(resource.num_children) + "]";
         entityHandle_t child = this->Add(name.c_str());
 
         if (resource.has_spatial_component) {
             this->spatial_components.Add(child);
+
+            entitySlot_t parent_spatial = this->spatial_components.FindResource(parent);
+            if (parent_spatial.valid()) {
+                this->SetRotation(child, this->spatial_components.rotations[parent_spatial.slot]);
+                this->SetScale(child, this->spatial_components.scales[parent_spatial.slot]);
+            }
         }
 
         entitySlot_t child_resource = this->FindResource(child);
@@ -115,6 +121,18 @@ void Entities::EntityManager::AddDirectionalLight(entityHandle_t entity, dirLigh
     if (resource.valid()) {
         this->light_components.AddDirectionalLight(resource.entity, light_desc);
         resource.has_dirlight_component = true;
+        this->UpdateResource(resource);
+    }
+}
+
+void Entities::EntityManager::AddMaterialComponent(entityHandle_t entity, materialHandle_t material)
+{
+    entitySlot_t resource = this->FindResource(entity);
+    if (resource.valid()) {
+
+        this->model_components.AddMaterial(resource.entity, material);
+
+        resource.has_model_component = true;
         this->UpdateResource(resource);
     }
 }

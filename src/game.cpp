@@ -208,7 +208,10 @@ void Game::Loop()
         ));
 
         this->entity_manager.spatial_components.Update(this->world.camera->GetViewProjection(), dirty_camera);
-        this->renderer.Render(&this->world, &defaultShader);
+
+        RenderWorld render_world = this->ConstructRenderWorld();
+        // RenderWorld render_world;
+        this->renderer.Render(render_world, &defaultShader);
 
 
         if (this->debug_ui)
@@ -250,6 +253,52 @@ void Game::Quit()
 {
     printf("QUIT \n");
     gameState = GAMESTATE::STOPPED;
+}
+
+RenderWorld Game::ConstructRenderWorld()
+{
+    RenderWorld render_world;
+
+    render_world.render_resolution  = this->renderer.GetResolution();
+    render_world.view_matrix        = this->world.camera->GetView();
+    render_world.projection_matrix  = this->world.camera->GetProjection();
+    render_world.eye_position       = this->world.camera->transform.GetPosition();
+
+    // Set lights
+    for (int i = 0; i < this->entity_manager.light_components._entities_top; i++) 
+    {
+        entitySlot_t light = this->entity_manager.light_components._entity_index[i];
+        lightTypes light_type = this->entity_manager.light_components.light_types[light.slot];
+
+        render_world.light_types[i]         = light_type;
+        render_world.light_colors[i]        = this->entity_manager.light_components.colors[light.slot];
+        render_world.light_intensities[i]   = this->entity_manager.light_components.intensities[light.slot];
+        render_world.light_positions[i]     = this->entity_manager.spatial_components.GetPosition(light.entity);
+
+        if (light_type == lightTypes::POINTLIGHT) {
+            render_world.light_radiuses[i] = this->entity_manager.light_components.radiuses[light.slot];
+            render_world.light_cutoffs[i] = this->entity_manager.light_components.cutoffs[light.slot];
+        }
+        render_world.light_count += 1;
+    }
+
+    for (int i = 0; i < this->entity_manager.model_components._entities_top; i++) {
+        entitySlot_t model = this->entity_manager.model_components._entity_index[i];
+        render_world.materials[i] = this->entity_manager.model_components.materials[model.slot];
+
+        entitySlot_t model_resource = this->model_manager.FindResource(model.entity);
+        render_world.VAOs[i] = this->model_manager.VAOs[model_resource.slot];
+        render_world.indices[i] = this->model_manager.indices[model_resource.slot];
+
+        entitySlot_t spatial_resource = this->entity_manager.spatial_components.FindResource(model.entity);
+        render_world.model_matrices[i] = this->entity_manager.spatial_components.model_matrices[spatial_resource.slot];
+        render_world.normal_matrices[i] = this->entity_manager.spatial_components.normal_matrices[spatial_resource.slot];
+
+        render_world.render_entity_count += 1;
+    }
+
+    return render_world;
+    
 }
 
 static auto entity_array_getter = [](void* entities, int idx, const char** out_text)
@@ -341,7 +390,6 @@ void Game::ConstructScene(ModelLoader* modelLoader)
      this->model_manager.Add(test_cube);
      
     
-
     //Room
     auto room = this->entity_manager.Add("Room");
     this->world.AddEntity(room);

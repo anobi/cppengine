@@ -172,6 +172,9 @@
     <ClCompile Include="..\src\entities\entity_manager.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\entities\entity_model_components.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\lib\imconfig.h">
@@ -262,6 +265,9 @@
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\src\entities\entity_manager.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\entities\entity_model_components.hpp">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>

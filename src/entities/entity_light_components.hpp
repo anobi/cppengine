@@ -2,17 +2,12 @@
 #define __ENTITIES__ENTITY_LIGHT_COMPONENTS_H__
 
 #include <glm/glm.hpp>
+#include "../types.hpp"
 #include "../constants.hpp"
 #include "../containers/array.hpp"
 #include "entity_handle.hpp"
 
-enum lightTypes 
-{
-    NONE,
-    SPOTLIGHT,
-    POINTLIGHT,
-    DIRECTIONAL_LIGHT
-};
+
 
 struct baseLight_t 
 {

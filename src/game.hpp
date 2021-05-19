@@ -14,6 +14,7 @@
 
 #include "entities/entity_manager.hpp"
 
+#include "rendering/render_world.hpp"
 #include "rendering/model_manager.hpp"
 #include "rendering/material_manager.hpp"
 
@@ -53,8 +54,11 @@ private:
     Rendering::MaterialManager material_manager;
     Rendering::ModelManager model_manager;
 
+    RenderWorld ConstructRenderWorld();
+
     void UpdateUI();
     void ConstructScene(ModelLoader* modelLoader);
+
 
     bool menu = false;
     bool debug_ui = true;

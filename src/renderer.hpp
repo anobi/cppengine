@@ -9,6 +9,7 @@
 #include "world.hpp"
 #include "shader.hpp"
 
+#include "rendering/render_world.hpp"
 #include "rendering/model_manager.hpp"
 #include "rendering/material_manager.hpp"
 
@@ -24,7 +25,7 @@ public:
     void UpdateResolution(const int w, const int h) { this->resolution = glm::fvec2(w, h); }
     glm::fvec2 GetResolution() { return this->resolution; }
 
-    void Render(World* world, Shader* shader);
+    void Render(RenderWorld render_world, Shader* shader);
     void Shutdown();
 
     Rendering::MaterialManager* material_manager = nullptr;

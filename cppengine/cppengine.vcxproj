@@ -221,6 +221,7 @@
     <ClCompile Include="..\src\display.cpp" />
     <ClCompile Include="..\src\entities\entity_light_components.cpp" />
     <ClCompile Include="..\src\entities\entity_manager.cpp" />
+    <ClCompile Include="..\src\entities\entity_model_components.cpp" />
     <ClCompile Include="..\src\entities\entity_transforms.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\input.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="..\src\entities\entity_handle.hpp" />
     <ClInclude Include="..\src\entities\entity_light_components.hpp" />
     <ClInclude Include="..\src\entities\entity_manager.hpp" />
+    <ClInclude Include="..\src\entities\entity_model_components.hpp" />
     <ClInclude Include="..\src\entities\entity_transforms.hpp" />
     <ClInclude Include="..\src\game.hpp" />
     <ClInclude Include="..\src\input.hpp" />

@@ -60,16 +60,17 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
 {
     for (int i = 0; i < node->mNumMeshes; i++)
     {
-        aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         if (i > 0) {
             auto child = this->world->entity_manager->AddChild(entity);
+            // auto child = this->world->entity_manager->Add(mesh->mName.C_Str());
             if (child.valid()) 
             {
-                this->ProcessMesh(aiMesh, scene, child);
+                this->ProcessMesh(mesh, scene, child);
             }
         }
         else {
-            this->ProcessMesh(aiMesh, scene, entity);
+            this->ProcessMesh(mesh, scene, entity);
         } 
     }
 
@@ -157,25 +158,25 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
     // ---
 
     // Calculate new vertex posisions offset around the origin
-    for (int i = 0; i < vertices.size(); i++) {
-        vertices[i].position = glm::fvec3(
-            vertices[i].position.x - center_position.x,
-            vertices[i].position.y - center_position.y,
-            vertices[i].position.z - center_position.z
-        );
-    }
+    //for (int i = 0; i < vertices.size(); i++) {
+    //    vertices[i].position = glm::fvec3(
+    //        vertices[i].position.x - center_position.x,
+    //        vertices[i].position.y - center_position.y,
+    //        vertices[i].position.z - center_position.z
+    //    );
+    //}
 
+    this->world->model_manager->Add(entity);
     this->world->model_manager->LoadModel(entity, vertices, indices);
 
     // Translate the entity into the new center position
-    this->world->entity_manager->SetPosition(entity, center_position);
+    // this->world->entity_manager->SetPosition(entity, center_position);
 
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         auto material = this->ProcessMaterial(aiMat);
-
-        // this->world->entity_models->AddMaterial(entity, material);
+        this->world->entity_manager->AddMaterialComponent(entity, material);
     }
 }
 

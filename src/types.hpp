@@ -12,4 +12,12 @@ struct Vertex
     glm::fvec2 texCoords;
 };
 
+enum class lightTypes
+{
+    NONE,
+    SPOTLIGHT,
+    POINTLIGHT,
+    DIRECTIONAL_LIGHT
+};
+
 #endif
