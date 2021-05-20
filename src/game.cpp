@@ -336,10 +336,17 @@ void Game::UpdateUI()
     ImGui::Begin("Entities");
 
     ImGui::PushItemWidth(-1);
-    ImGui::ListBox("##entities", &selected_entity, entity_array_getter, static_cast<void*>(&this->entity_manager._entity_index), this->entity_manager._entities_top);
+    ImGui::ListBox(
+        "##entities", 
+        &selected_entity, 
+        entity_array_getter, 
+        static_cast<void*>(&this->entity_manager._entity_index), 
+        this->entity_manager._entities_top,
+        32
+    );
     ImGui::PopItemWidth();
 
-    entityHandle_t selected = this->world._entity_handles[selected_entity];
+    entityHandle_t selected = this->entity_manager._entity_index[selected_entity].entity;
     glm::fvec3 e_pos = this->entity_manager.spatial_components.GetPosition(selected);
     ImGui::Text("Location x: %.2f y: %.2f z:%.2f", e_pos.x, e_pos.y, e_pos.z);
     ImGui::SliderFloat("X", &e_pos.x, -100, 100);
