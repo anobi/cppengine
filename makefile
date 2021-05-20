@@ -18,8 +18,10 @@ OBJS = \
 	$(OBJDIR)/world.o \
 	$(OBJDIR)/entity_transforms.o \
 	$(OBJDIR)/entity_light_components.o \
-	$(OBJDIR)/material_manager.o \
-	$(OBJDIR)/render_entities.o \
+	$(OBJDIR)/entity_model_components.o \
+	$(OBJDIR)/entity_manager.o \
+	$(OBJDIR)/rendering_material_manager.o \
+	$(OBJDIR)/rendering_model_manager.o \
 	$(OBJDIR)/model_loader.o \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/main.o
@@ -84,10 +86,16 @@ $(OBJDIR)/entity_transforms.o: $(SRC)/entities/entity_transforms.cpp
 $(OBJDIR)/entity_light_components.o: $(SRC)/entities/entity_light_components.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/material_manager.o: $(SRC)/rendering/material_manager.cpp
+$(OBJDIR)/entity_model_components.o: $(SRC)/entities/entity_model_components.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/render_entities.o: $(SRC)/rendering/render_entities.cpp
+$(OBJDIR)/entity_manager.o: $(SRC)/entities/entity_manager.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/rendering_material_manager.o: $(SRC)/rendering/material_manager.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/rendering_model_manager.o: $(SRC)/rendering/model_manager.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/model_loader.o: $(SRC)/loading/model_loader.cpp

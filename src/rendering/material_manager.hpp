@@ -35,7 +35,7 @@ struct materialHandle_t
 struct materialSlot_t 
 {
     materialHandle_t material;
-    unsigned int slot;
+    int slot = INVALID_SLOT;
 
     inline bool valid() 
     {

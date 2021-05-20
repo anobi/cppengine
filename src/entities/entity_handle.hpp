@@ -26,7 +26,7 @@ struct entityHandle_t
 struct entitySlot_t 
 {
     entityHandle_t entity;
-    unsigned int slot = INVALID_SLOT;
+    int slot = INVALID_SLOT;
 
     unsigned int num_children = 0;
     unsigned int children[ENTITY_MAX_CHILDREN];

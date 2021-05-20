@@ -30,13 +30,13 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
         | aiProcess_FindInvalidData
         | aiProcess_FindInstances
         | aiProcess_FindDegenerates
-        // | aiProcess_RemoveComponent
+        | aiProcess_RemoveComponent
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
         | aiProcess_OptimizeMeshes
         | aiProcess_SortByPType
         | aiProcess_SplitLargeMeshes
-        // | aiProcess_RemoveRedundantMaterials
+        | aiProcess_RemoveRedundantMaterials
         | aiProcess_GenUVCoords
         | aiProcess_GenSmoothNormals
         | aiProcess_FixInfacingNormals
@@ -58,7 +58,7 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
 
 void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity)
 {
-    for (int i = 0; i < node->mNumMeshes; i++)
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         if (i > 0) {
@@ -73,7 +73,7 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
         } 
     }
 
-    for (int i = 0; i < node->mNumChildren; i++)
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
         this->ProcessNode(node->mChildren[i], scene, entity);
     }
@@ -194,28 +194,28 @@ materialHandle_t ModelLoader::ProcessMaterial(const aiMaterial* aiMat)
     materialHandle_t material = this->world->material_manager->Add(matName.C_Str());
 
     // TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
         this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::DIFFUSE);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
         this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::SPECULAR);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
         this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::NORMAL);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
