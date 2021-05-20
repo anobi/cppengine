@@ -10,10 +10,10 @@ Entities::EntityManager::~EntityManager()
 
 entityHandle_t Entities::EntityManager::Add(const char* name)
 {
-    entityHandle_t existing = this->Find(name);
-    if (existing.valid()) {
-        return existing;
-    }
+    //entityHandle_t existing = this->Find(name);
+    //if (existing.valid()) {
+    //    return existing;
+    //}
 
     entityHandle_t entity = entityHandle_t();
     entity.id = this->_next_id;
@@ -47,22 +47,17 @@ entityHandle_t Entities::EntityManager::AddChild(entityHandle_t parent)
     {
         std::string name = resource.name + " [" + std::to_string(resource.num_children) + "]";
         entityHandle_t child = this->Add(name.c_str());
-
-        if (resource.has_spatial_component) {
-            this->spatial_components.Add(child);
-
-            entitySlot_t parent_spatial = this->spatial_components.FindResource(parent);
-            if (parent_spatial.valid()) {
-                this->SetRotation(child, this->spatial_components.rotations[parent_spatial.slot]);
-                this->SetScale(child, this->spatial_components.scales[parent_spatial.slot]);
-            }
-        }
-
         entitySlot_t child_resource = this->FindResource(child);
+
+        this->AddSpatialComponent(child);
+        this->SetRotation(child, this->spatial_components.GetRotation(parent));
+        this->SetScale(child, this->spatial_components.GetScale(parent));
+        
         resource.children[resource.num_children] = child_resource.slot;
         resource.num_children += 1;
-        
         this->UpdateResource(resource);
+
+        return child;
     }
 
     return entityHandle_t();

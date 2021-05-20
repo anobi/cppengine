@@ -21,6 +21,9 @@ Shader defaultShader;
 Shader greyboxShader;
 Camera camera;
 
+entityHandle_t test_cube;
+entityHandle_t orange_light;
+entityHandle_t blue_light;
 
 Game::Game()
 {
@@ -111,7 +114,7 @@ void Game::Loop()
     SDL_Event event;
     int ticks = 0;
 
-    // float target_framerate = 60.0f;
+    //float target_framerate = 60.0f;
     // float target_framerate = 90.0f;
     // float target_framerate = 144.0f;
     float target_framerate = 200.0f;
@@ -196,9 +199,9 @@ void Game::Loop()
         float e1_pos = glm::cos((ticks + e1_speed) * dt) * 15;
         float e2_pos = glm::cos((ticks + e2_speed) * dt) * 15;
 
-        auto orange_light = this->entity_manager.Find("Orange light");
-        auto blue_light = this->entity_manager.Find("Blue light");
-        auto test_cube = this->entity_manager.Find("Test cube");
+        // auto orange_light = this->entity_manager.Find("Orange light");
+        // auto blue_light = this->entity_manager.Find("Blue light");
+        // auto test_cube = this->entity_manager.Find("Test cube");
         this->entity_manager.SetPosition(orange_light, glm::fvec3(-7.5f, 10.0f, e1_pos));
         this->entity_manager.SetPosition(blue_light, glm::fvec3(7.5f, 2.5f, e2_pos));
         this->entity_manager.SetRotation(test_cube, glm::fvec3(
@@ -276,22 +279,22 @@ RenderWorld Game::ConstructRenderWorld()
         render_world.light_positions[i]     = this->entity_manager.spatial_components.GetPosition(light.entity);
 
         if (light_type == lightTypes::POINTLIGHT) {
-            render_world.light_radiuses[i] = this->entity_manager.light_components.radiuses[light.slot];
-            render_world.light_cutoffs[i] = this->entity_manager.light_components.cutoffs[light.slot];
+            render_world.light_radiuses[i]  = this->entity_manager.light_components.radiuses[light.slot];
+            render_world.light_cutoffs[i]   = this->entity_manager.light_components.cutoffs[light.slot];
         }
         render_world.light_count += 1;
     }
 
     for (int i = 0; i < this->entity_manager.model_components._entities_top; i++) {
-        entitySlot_t model = this->entity_manager.model_components._entity_index[i];
-        render_world.materials[i] = this->entity_manager.model_components.materials[model.slot];
+        entitySlot_t model              = this->entity_manager.model_components._entity_index[i];
+        render_world.materials[i]       = this->entity_manager.model_components.materials[model.slot];
 
-        entitySlot_t model_resource = this->model_manager.FindResource(model.entity);
-        render_world.VAOs[i] = this->model_manager.VAOs[model_resource.slot];
-        render_world.indices[i] = this->model_manager.indices[model_resource.slot];
+        entitySlot_t model_resource     = this->model_manager.FindResource(model.entity);
+        render_world.VAOs[i]            = this->model_manager.VAOs[model_resource.slot];
+        render_world.indices[i]         = this->model_manager.indices[model_resource.slot];
 
-        entitySlot_t spatial_resource = this->entity_manager.spatial_components.FindResource(model.entity);
-        render_world.model_matrices[i] = this->entity_manager.spatial_components.model_matrices[spatial_resource.slot];
+        entitySlot_t spatial_resource   = this->entity_manager.spatial_components.FindResource(model.entity);
+        render_world.model_matrices[i]  = this->entity_manager.spatial_components.model_matrices[spatial_resource.slot];
         render_world.normal_matrices[i] = this->entity_manager.spatial_components.normal_matrices[spatial_resource.slot];
 
         render_world.render_entity_count += 1;
@@ -381,23 +384,22 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     // Even more temp test solution for a data oriented test cube
-     auto test_cube = this->entity_manager.Add("Test cube");
+     test_cube = this->entity_manager.Add("Test cube");
      this->world.AddEntity(test_cube);
 
      this->entity_manager.SetPosition(test_cube, glm::fvec3(0.0f, 3.0f, 0.0f));
      LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", test_cube);
      assert(test_cube_load == LOADINGSTATE::VALID);
-     this->model_manager.Add(test_cube);
      
     
     //Room
     auto room = this->entity_manager.Add("Room");
+    this->entity_manager.SetScale(room, glm::fvec3(0.02f));
+    this->entity_manager.SetRotation(room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
     this->world.AddEntity(room);
 
     LOADINGSTATE room_load = modelLoader->Load("sponza.obj", room);
     assert(room_load == LOADINGSTATE::VALID);
-    this->entity_manager.SetScale(room, glm::fvec3(0.02f));
-    this->entity_manager.SetRotation(room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 
     /*
     Lights
@@ -416,7 +418,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
 
     // Fiery light cube
-    auto orange_light = this->entity_manager.Add("Orange light");
+    orange_light = this->entity_manager.Add("Orange light");
     this->world.AddEntity(orange_light);
 
     modelLoader->Load("uvcube.obj", orange_light);
@@ -431,7 +433,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     
 
     // Blue light cube
-    auto blue_light = this->entity_manager.Add("Blue light");
+    blue_light = this->entity_manager.Add("Blue light");
     this->world.AddEntity(blue_light);
 
     modelLoader->Load("uvcube.obj", blue_light);
