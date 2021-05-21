@@ -24,8 +24,12 @@ namespace Rendering
         entitySlot_t AllocateResource(entityHandle_t entity);
         entitySlot_t FindResource(entityHandle_t entity);
 
-        Array<unsigned int, MAX_RENDER_ENTITIES> VAOs;
-        Array<unsigned int, MAX_RENDER_ENTITIES> indices;
+        Array<unsigned int, MAX_GAME_ENTITIES> VAOs;
+        Array<unsigned int, MAX_GAME_ENTITIES> indices;
+
+        Array<float, MAX_GAME_ENTITIES> bounding_sphere_radiuses;
+        Array<glm::fvec3, MAX_GAME_ENTITIES> object_centers;  // Until the stuff can be properly positionalized
+        Array<AABB, MAX_GAME_ENTITIES> AABBs;
     };
 }
 

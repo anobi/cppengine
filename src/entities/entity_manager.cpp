@@ -40,13 +40,13 @@ entityHandle_t Entities::EntityManager::Find(const char* name)
     return entityHandle_t();
 }
 
-entityHandle_t Entities::EntityManager::AddChild(entityHandle_t parent)
+entityHandle_t Entities::EntityManager::AddChild(std::string name, entityHandle_t parent)
 {
     entitySlot_t resource = this->FindResource(parent);
     if (resource.valid() && resource.num_children < ENTITY_MAX_CHILDREN)
     {
-        std::string name = resource.name + " [" + std::to_string(resource.num_children) + "]";
-        entityHandle_t child = this->Add(name.c_str());
+        std::string n = name + " (" + resource.name + " [" + std::to_string(resource.num_children) + "])";
+        entityHandle_t child = this->Add(n.c_str());
         entitySlot_t child_resource = this->FindResource(child);
 
         this->AddSpatialComponent(child);

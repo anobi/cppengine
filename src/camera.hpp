@@ -26,6 +26,7 @@ public:
     ~Camera() {};
 
     inline void SetAspectRatio(float aspectRatio) {
+        this->aspect_ratio = aspectRatio;
         this->projection = glm::perspective(
             glm::radians(this->fov),
             aspectRatio,
@@ -48,6 +49,7 @@ public:
     Transform transform;
     glm::fmat4 projection;
 
+    float aspect_ratio = 0.0f;
     float fov   = 45.0f;
     float near  = 0.1f;
     float far   = 100.0f;

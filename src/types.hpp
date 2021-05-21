@@ -12,6 +12,16 @@ struct Vertex
     glm::fvec2 texCoords;
 };
 
+struct AABB {
+    glm::fvec3 min;
+    glm::fvec3 max;
+
+    AABB(glm::fvec3 min, glm::fvec3 max) {
+        this->min = min;
+        this->max = max;
+    }
+};
+
 enum class lightTypes
 {
     NONE,

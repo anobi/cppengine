@@ -9,7 +9,7 @@
 #include "rendering/model_manager.hpp"
 #include "rendering/material_manager.hpp"
 
-class Camera;
+#include "camera.hpp"
 
 class World {
 public:
@@ -34,6 +34,8 @@ public:
     void AddEntity(entityHandle_t entity);
     unsigned int EntityCount() const { return this->_entities_top; }
 
+    std::vector<entityHandle_t> SphereFrustumCull();
+    std::vector<entityHandle_t> BoundingBoxFrustumCull();
 
     Camera* camera = 0;
 

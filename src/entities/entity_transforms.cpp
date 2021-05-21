@@ -12,54 +12,35 @@ void EntityTransforms::Add(entityHandle_t entity)
     this->positions[resource.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->rotations[resource.slot] = glm::fvec3(0.0f, 0.0f, 0.0f);
     this->scales[resource.slot] = glm::fvec3(1.0f, 1.0f, 1.0f);
-
-    // All transforms start in a dirty state to force the initial update
-    this->_dirty_entities[this->_dirty_entities_top] = entity;
-    this->_dirty_entities_top += 1;
 }
 
 // TODO: This belongs into a render/mesh component. Or the render world?
-void EntityTransforms::Update(glm::fmat4 view_projection, bool update_all)
+void EntityTransforms::Update(std::vector<entityHandle_t> entities, glm::fmat4 view_projection)
 {
-    if (update_all) {
-        this->_dirty_entities_top = 0;
-        for (int i = 0; i < this->_entities_top; i++) {
-            entityHandle_t entity = this->_entity_index[i].entity;
-            this->_dirty_entities[i] = entity;
-            this->_dirty_entities_top += 1;
-        }
-    }
-
-    std::vector<entitySlot_t> dirty_index;
-    for (int i = 0; i < this->_dirty_entities_top; i++) {
-        entitySlot_t resource = this->FindResource(this->_dirty_entities[i]);
-        dirty_index.push_back(resource);
-    }
-
-    for (int i = 0; i < dirty_index.size(); i++) {
-        entitySlot_t resource = dirty_index[i];
-
-        glm::fmat4 rotationMatrix = 
-            glm::rotate(glm::fmat4(1.0f), this->rotations[resource.slot].x, glm::fvec3(1.0, 0.0, 0.0))
-          * glm::rotate(glm::fmat4(1.0f), this->rotations[resource.slot].y, glm::fvec3(0.0, 1.0, 0.0))
-          * glm::rotate(glm::fmat4(1.0f), this->rotations[resource.slot].z, glm::fvec3(0.0, 0.0, 1.0));
-
-        this->model_matrices[resource.slot] =
-            glm::translate(glm::fmat4(1.0f), this->positions[resource.slot] * this->scales[resource.slot])
-          * rotationMatrix
-          * glm::scale(glm::fmat4(1.0f), this->scales[resource.slot]);
+    for (int i = 0; i < entities.size(); i++) {
+        entitySlot_t resource = this->FindResource(entities[i]);
 
         this->mvp_matrices[resource.slot] = view_projection * this->model_matrices[resource.slot];
         this->normal_matrices[resource.slot] = glm::inverse(glm::fmat3(this->model_matrices[resource.slot]));
     }
-
-    this->_dirty_entities_top = 0;
 }
 
-void EntityTransforms::SetDirty(entityHandle_t entity)
+void EntityTransforms::UpdateModels()
 {
-    this->_dirty_entities[this->_dirty_entities_top] = entity;
-    this->_dirty_entities_top += 1;
+    for (int i = 0; i < this->_model_update_queue.size(); i++) {
+        unsigned int slot = this->_model_update_queue[i].slot;
+
+        glm::fmat4 rotationMatrix =
+            glm::rotate(glm::fmat4(1.0f), this->rotations[slot].x, glm::fvec3(1.0, 0.0, 0.0))
+            * glm::rotate(glm::fmat4(1.0f), this->rotations[slot].y, glm::fvec3(0.0, 1.0, 0.0))
+            * glm::rotate(glm::fmat4(1.0f), this->rotations[slot].z, glm::fvec3(0.0, 0.0, 1.0));
+
+        this->model_matrices[slot] =
+            glm::translate(glm::fmat4(1.0f), this->positions[slot] * this->scales[slot])
+            * rotationMatrix
+            * glm::scale(glm::fmat4(1.0f), this->scales[slot]);
+    }
+    this->_model_update_queue.clear();
 }
 
 void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
@@ -67,7 +48,7 @@ void EntityTransforms::SetPosition(entityHandle_t entity, glm::fvec3 position)
     entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->positions[resource.slot] = position;
-        this->SetDirty(resource.entity);
+        this->_model_update_queue.push_back(resource);
     }
 }
 
@@ -76,7 +57,7 @@ void EntityTransforms::SetRotation(entityHandle_t entity, glm::fvec3 rotation)
     entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->rotations[resource.slot] = rotation;
-        this->SetDirty(resource.entity);
+        this->_model_update_queue.push_back(resource);
     }
 }
 
@@ -85,7 +66,7 @@ void EntityTransforms::SetScale(entityHandle_t entity, glm::fvec3 scale)
     entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         this->scales[resource.slot] = scale;
-        this->SetDirty(resource.entity);
+        this->_model_update_queue.push_back(resource);
     }
 }
 
@@ -110,6 +91,14 @@ glm::fvec3 EntityTransforms::GetScale(entityHandle_t entity)
     entitySlot_t resource = this->FindResource(entity);
     if (resource.valid()) {
         return this->scales[resource.slot];
+    }
+}
+
+glm::fmat4 EntityTransforms::GetModel(entityHandle_t entity)
+{
+    entitySlot_t resource = this->FindResource(entity);
+    if (resource.valid()) {
+        return this->model_matrices[resource.slot];
     }
 }
 

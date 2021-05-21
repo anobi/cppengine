@@ -19,7 +19,7 @@ namespace Entities {
 
         entityHandle_t Add(const char* name);
         entityHandle_t Find(const char* name);
-        entityHandle_t AddChild(entityHandle_t parent);
+        entityHandle_t AddChild(std::string name, entityHandle_t parent);
 
         void AddSpatialComponent(entityHandle_t entity);
         void SetPosition(entityHandle_t entity, glm::fvec3 position);

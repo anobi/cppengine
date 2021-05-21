@@ -1,3 +1,7 @@
+#include <numeric>
+#include <functional>
+#include <algorithm>
+
 #include "../opengl.hpp"
 #include "model_manager.hpp"
 
@@ -21,7 +25,57 @@ void Rendering::ModelManager::LoadModel(entityHandle_t entity, const std::vector
         return;
     }
 
+    // TODO: Translate vertices into object space and the entity origin position in the center of the mesh
+    // TODO: Also generate and add bounding boxes for each mesh entity
+
+    // Calculate the center position by averaging out the mesh X, Y and Z positions
+    // ---
+
+    std::vector<float> x_positions;
+    std::vector<float> y_positions;
+    std::vector<float> z_positions;
+    for (int i = 0; i < vertices.size(); i++) {
+        x_positions.push_back(vertices[i].position.x);
+        y_positions.push_back(vertices[i].position.y);
+        z_positions.push_back(vertices[i].position.z);
+    }
+
+    auto minmax_x = std::minmax_element(x_positions.begin(), x_positions.end());
+    auto minmax_y = std::minmax_element(y_positions.begin(), y_positions.end());
+    auto minmax_z = std::minmax_element(z_positions.begin(), z_positions.end());
+
+    float max_x = minmax_x.second[0] - minmax_x.first[0];
+    float max_y = minmax_y.second[0] - minmax_y.first[0];
+    float max_z = minmax_z.second[0] - minmax_z.first[0];
+    float radius = std::fmax(std::fmax(max_x, max_y), max_z);
+    this->bounding_sphere_radiuses[resource.slot] = radius;
+
+    AABB aabb = AABB(
+        glm::fvec3(minmax_x.first[0], minmax_y.first[0], minmax_z.first[0]),
+        glm::fvec3(minmax_x.second[0], minmax_y.second[0], minmax_z.second[0])
+    );
+    this->AABBs[resource.slot] = aabb;
+
+
+    float center_x = std::accumulate(x_positions.begin(), x_positions.end(), 0.0f, std::plus<float>()) / x_positions.size();
+    float center_y = std::accumulate(y_positions.begin(), y_positions.end(), 0.0f, std::plus<float>()) / y_positions.size();
+    float center_z = std::accumulate(z_positions.begin(), z_positions.end(), 0.0f, std::plus<float>()) / z_positions.size();
+    this->object_centers[resource.slot] = glm::fvec3(center_x, center_y, center_z);;
+
+    // Calculate new vertex posisions offset around the origin
+    //for (int i = 0; i < vertices.size(); i++) {
+    //    vertices[i].position = glm::fvec3(
+    //        vertices[i].position.x - center_position.x,
+    //        vertices[i].position.y - center_position.y,
+    //        vertices[i].position.z - center_position.z
+    //    );
+    //}
+
+    // Translate the entity into the new center position
+    //this->world->entity_manager->SetPosition(entity, center_position);
+
     this->indices[resource.slot] = indices.size();
+
     unsigned int VBO;
     unsigned int EBO;
 

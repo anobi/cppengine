@@ -22,6 +22,7 @@ Shader greyboxShader;
 Camera camera;
 
 entityHandle_t test_cube;
+entityHandle_t bg_light;
 entityHandle_t orange_light;
 entityHandle_t blue_light;
 
@@ -114,7 +115,7 @@ void Game::Loop()
     SDL_Event event;
     int ticks = 0;
 
-    //float target_framerate = 60.0f;
+    // float target_framerate = 60.0f;
     // float target_framerate = 90.0f;
     // float target_framerate = 144.0f;
     float target_framerate = 200.0f;
@@ -210,10 +211,14 @@ void Game::Loop()
             0.0f
         ));
 
-        this->entity_manager.spatial_components.Update(this->world.camera->GetViewProjection(), dirty_camera);
+        this->entity_manager.spatial_components.UpdateModels();
 
-        RenderWorld render_world = this->ConstructRenderWorld();
-        // RenderWorld render_world;
+        std::vector<entityHandle_t> render_entities = this->world.SphereFrustumCull();
+        render_entities.push_back(bg_light);  // Need to do a separate light culling pass to handle the lights properly
+
+        this->entity_manager.spatial_components.Update(render_entities, this->world.camera->GetViewProjection());
+
+        RenderWorld render_world = this->ConstructRenderWorld(render_entities);
         this->renderer.Render(render_world, &defaultShader);
 
 
@@ -258,7 +263,7 @@ void Game::Quit()
     gameState = GAMESTATE::STOPPED;
 }
 
-RenderWorld Game::ConstructRenderWorld()
+RenderWorld Game::ConstructRenderWorld(std::vector<entityHandle_t> entities)
 {
     RenderWorld render_world;
 
@@ -267,10 +272,24 @@ RenderWorld Game::ConstructRenderWorld()
     render_world.projection_matrix  = this->world.camera->GetProjection();
     render_world.eye_position       = this->world.camera->transform.GetPosition();
 
+    std::vector<entityHandle_t> lights;
+    std::vector<entityHandle_t> models;
+
+    for (int i = 0; i < entities.size(); i++) {
+        entitySlot_t resource = this->entity_manager.FindResource(entities[i]);
+        if (resource.has_dirlight_component || resource.has_pointlight_component) {
+            lights.push_back(resource.entity);
+        }
+        else if (resource.has_model_component) {
+            models.push_back(resource.entity);
+        }
+    }
+
     // Set lights
-    for (int i = 0; i < this->entity_manager.light_components._entities_top; i++) 
+    for (int i = 0; i < lights.size(); i++) 
     {
-        entitySlot_t light = this->entity_manager.light_components._entity_index[i];
+        entityHandle_t entity = lights[i];
+        entitySlot_t light = this->entity_manager.light_components.FindResource(entity);
         lightTypes light_type = this->entity_manager.light_components.light_types[light.slot];
 
         render_world.light_types[i]         = light_type;
@@ -285,15 +304,16 @@ RenderWorld Game::ConstructRenderWorld()
         render_world.light_count += 1;
     }
 
-    for (int i = 0; i < this->entity_manager.model_components._entities_top; i++) {
-        entitySlot_t model              = this->entity_manager.model_components._entity_index[i];
+    for (int i = 0; i < models.size(); i++) {
+        entityHandle_t entity = models[i];
+        entitySlot_t model              = this->entity_manager.model_components.FindResource(entity);
         render_world.materials[i]       = this->entity_manager.model_components.materials[model.slot];
 
-        entitySlot_t model_resource     = this->model_manager.FindResource(model.entity);
+        entitySlot_t model_resource     = this->model_manager.FindResource(entity);
         render_world.VAOs[i]            = this->model_manager.VAOs[model_resource.slot];
         render_world.indices[i]         = this->model_manager.indices[model_resource.slot];
 
-        entitySlot_t spatial_resource   = this->entity_manager.spatial_components.FindResource(model.entity);
+        entitySlot_t spatial_resource   = this->entity_manager.spatial_components.FindResource(entity);
         render_world.model_matrices[i]  = this->entity_manager.spatial_components.model_matrices[spatial_resource.slot];
         render_world.normal_matrices[i] = this->entity_manager.spatial_components.normal_matrices[spatial_resource.slot];
 
@@ -392,8 +412,6 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     // Even more temp test solution for a data oriented test cube
      test_cube = this->entity_manager.Add("Test cube");
-     this->world.AddEntity(test_cube);
-
      this->entity_manager.SetPosition(test_cube, glm::fvec3(0.0f, 3.0f, 0.0f));
      LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", test_cube);
      assert(test_cube_load == LOADINGSTATE::VALID);
@@ -403,7 +421,6 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     auto room = this->entity_manager.Add("Room");
     this->entity_manager.SetScale(room, glm::fvec3(0.02f));
     this->entity_manager.SetRotation(room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
-    this->world.AddEntity(room);
 
     LOADINGSTATE room_load = modelLoader->Load("sponza.obj", room);
     assert(room_load == LOADINGSTATE::VALID);
@@ -413,8 +430,7 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     */
 
     //cool background light
-    auto bg_light = this->entity_manager.Add("Background light");
-    this->world.AddEntity(bg_light);
+    bg_light = this->entity_manager.Add("Background light");
     this->entity_manager.SetPosition(bg_light, glm::fvec3(50.0f, 30.0f, -10.0f));
     this->entity_manager.AddDirectionalLight(
         bg_light,
@@ -426,8 +442,6 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     // Fiery light cube
     orange_light = this->entity_manager.Add("Orange light");
-    this->world.AddEntity(orange_light);
-
     modelLoader->Load("uvcube.obj", orange_light);
     this->entity_manager.SetPosition(orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
     this->entity_manager.SetScale(orange_light, glm::fvec3(0.1f));
@@ -441,8 +455,6 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     // Blue light cube
     blue_light = this->entity_manager.Add("Blue light");
-    this->world.AddEntity(blue_light);
-
     modelLoader->Load("uvcube.obj", blue_light);
     this->entity_manager.SetPosition(blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
     this->entity_manager.SetScale(blue_light, glm::fvec3(0.1f));
@@ -452,6 +464,12 @@ void Game::ConstructScene(ModelLoader* modelLoader)
             { 1.0f, 0.1f, glm::fvec3(0.4f, 0.8f, 1.0f) }, 
             5.0f
         });
+
+    std::vector<entityHandle_t> created_entities;
+    for (int i = 0; i < this->entity_manager._entities_top; i++) {
+        this->world.AddEntity(this->entity_manager._entity_index[i].entity);
+        created_entities.push_back(this->entity_manager._entity_index[i].entity);
+    }
 
     // Done loading
     printf("\n");

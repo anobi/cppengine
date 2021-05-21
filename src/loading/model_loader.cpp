@@ -1,4 +1,3 @@
-#include <numeric>
 #include "model_loader.hpp"
 #include "../types.hpp"
 #include "../configuration.hpp"
@@ -31,15 +30,14 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
         | aiProcess_FindInstances
         | aiProcess_FindDegenerates
         | aiProcess_RemoveComponent
+        | aiProcess_RemoveRedundantMaterials
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
-        | aiProcess_OptimizeMeshes
+        // | aiProcess_OptimizeMeshes
         | aiProcess_SortByPType
         | aiProcess_SplitLargeMeshes
-        | aiProcess_RemoveRedundantMaterials
-        | aiProcess_GenUVCoords
         | aiProcess_GenSmoothNormals
-        | aiProcess_FixInfacingNormals
+        // | aiProcess_FixInfacingNormals
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace
         | aiProcess_ImproveCacheLocality
@@ -62,7 +60,7 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         if (i > 0) {
-            auto child = this->world->entity_manager->AddChild(entity);
+            auto child = this->world->entity_manager->AddChild(mesh->mName.C_Str(), entity);
             if (child.valid()) 
             {
                 this->ProcessMesh(mesh, scene, child);
@@ -136,40 +134,9 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
         }
     }
 
-    // TODO: Translate vertices into object space and the entity origin position in the center of the mesh
-    // TODO: Also generate and add bounding boxes for each mesh entity
-
-    // Calculate the center position by averaging out the mesh X, Y and Z positions
-    // ---
-    //std::vector<float> x_positions;
-    //std::vector<float> y_positions;
-    //std::vector<float> z_positions;
-    //for (int i = 0; i < vertices.size(); i++) {
-    //    x_positions.push_back(vertices[i].position.x);
-    //    y_positions.push_back(vertices[i].position.y);
-    //    z_positions.push_back(vertices[i].position.z);
-    //}
-
-    //float center_x = std::accumulate(x_positions.begin(), x_positions.end(), 0.0f) / x_positions.size();
-    //float center_y = std::accumulate(y_positions.begin(), y_positions.end(), 0.0f) / y_positions.size();
-    //float center_z = std::accumulate(z_positions.begin(), z_positions.end(), 0.0f) / z_positions.size();
-    //glm::fvec3 center_position = glm::fvec3(center_x, center_y, center_z);
-    //// ---
-
-    //// Calculate new vertex posisions offset around the origin
-    //for (int i = 0; i < vertices.size(); i++) {
-    //    vertices[i].position = glm::fvec3(
-    //        vertices[i].position.x - center_position.x,
-    //        vertices[i].position.y - center_position.y,
-    //        vertices[i].position.z - center_position.z
-    //    );
-    //}
-
-    //// Translate the entity into the new center position
-    //this->world->entity_manager->SetPosition(entity, center_position);
-
     this->world->model_manager->Add(entity);
     this->world->model_manager->LoadModel(entity, vertices, indices);
+    
 
     if (mesh->mMaterialIndex >= 0)
     {

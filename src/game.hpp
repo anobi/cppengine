@@ -54,7 +54,7 @@ private:
     Rendering::MaterialManager material_manager;
     Rendering::ModelManager model_manager;
 
-    RenderWorld ConstructRenderWorld();
+    RenderWorld ConstructRenderWorld(std::vector<entityHandle_t> entities);
 
     void UpdateUI();
     void ConstructScene(ModelLoader* modelLoader);
