@@ -36,7 +36,7 @@ void EntityTransforms::UpdateModels()
             * glm::rotate(glm::fmat4(1.0f), this->rotations[slot].z, glm::fvec3(0.0, 0.0, 1.0));
 
         this->model_matrices[slot] =
-            glm::translate(glm::fmat4(1.0f), this->positions[slot] * this->scales[slot])
+            glm::translate(glm::fmat4(1.0f), this->positions[slot])
             * rotationMatrix
             * glm::scale(glm::fmat4(1.0f), this->scales[slot]);
     }

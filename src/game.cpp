@@ -110,6 +110,8 @@ void Game::Start()
     }
 }
 
+unsigned int render_world_size = 0;
+
 void Game::Loop()
 {
     SDL_Event event;
@@ -188,6 +190,9 @@ void Game::Loop()
         bool dirty_camera = false;
         if (!this->menu) {
             dirty_camera = this->controls.Update(event, this->world.camera, delay);
+            if (dirty_camera) {
+                this->world.camera->Update();
+            }
         }
 
         //TODO: figure out where to put this shit
@@ -215,12 +220,12 @@ void Game::Loop()
 
         std::vector<entityHandle_t> render_entities = this->world.SphereFrustumCull();
         render_entities.push_back(bg_light);  // Need to do a separate light culling pass to handle the lights properly
+        render_world_size = render_entities.size();
 
         this->entity_manager.spatial_components.Update(render_entities, this->world.camera->GetViewProjection());
 
         RenderWorld render_world = this->ConstructRenderWorld(render_entities);
         this->renderer.Render(render_world, &defaultShader);
-
 
         if (this->debug_ui)
         {
@@ -348,6 +353,7 @@ void Game::UpdateUI()
     ImGui::Text("Player position x: %.2f y: %.2f z: %.2f", cPos.x, cPos.y, cPos.z);
     ImGui::Text("Player rotation x: %.2f y: %.2f z: %.2f", cRot.x, cRot.y, cRot.z);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Rendering entity count: %d", render_world_size);
     ImGui::End();
 
     // Entity debug window
@@ -395,15 +401,10 @@ void Game::ConstructScene(ModelLoader* modelLoader)
     defaultShader = Shader("default");
     greyboxShader = Shader("greybox");
 
-    camera = Camera(
-        60.0f,  // FOV
-        0.1f,   // zNear
-        1000.0f  // zFar
-    );
-
-    camera.transform.SetPosition(glm::fvec3(0.0f, 2.0f, 0.0f));
-    camera.transform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
+    camera = Camera();
     camera.SetAspectRatio(this->display.GetAspectRatio());
+    camera.transform.SetPosition(glm::fvec3(0.0f, 0.0f, 0.0f));
+    camera.transform.SetRotation(glm::fvec3(0.0f, 0.0f, 0.0f));
     this->world.camera = &camera;
 
     /*
@@ -412,63 +413,76 @@ void Game::ConstructScene(ModelLoader* modelLoader)
 
     // Even more temp test solution for a data oriented test cube
      test_cube = this->entity_manager.Add("Test cube");
-     this->entity_manager.SetPosition(test_cube, glm::fvec3(0.0f, 3.0f, 0.0f));
-     LOADINGSTATE test_cube_load = modelLoader->Load("uvcube.obj", test_cube);
-     assert(test_cube_load == LOADINGSTATE::VALID);
+     this->entity_manager.SetPosition(test_cube, glm::fvec3(0.0f, 0.0f, 0.0f));
+     modelLoader->Load("uvcube.obj", test_cube);
+
+     auto test_cube_2 = this->entity_manager.Add("Test cube 2");
+     this->entity_manager.SetPosition(test_cube_2, glm::fvec3(-10.0f, 0.0f, 0.0f));
+     modelLoader->Load("uvcube.obj", test_cube_2);
+
+     auto test_cube_3 = this->entity_manager.Add("Test cube 3");
+     this->entity_manager.SetPosition(test_cube_3, glm::fvec3(10.0f, 0.0f, 0.0f));
+     modelLoader->Load("uvcube.obj", test_cube_3);
+
+     auto test_cube_4 = this->entity_manager.Add("Test cube 4");
+     this->entity_manager.SetPosition(test_cube_4, glm::fvec3(0.0f, 0.0f, -10.0f));
+     modelLoader->Load("uvcube.obj", test_cube_4);
+
+     auto test_cube_5 = this->entity_manager.Add("Test cube 5");
+     this->entity_manager.SetPosition(test_cube_5, glm::fvec3(0.0f, 0.0f, 10.0f));
+     modelLoader->Load("uvcube.obj", test_cube_5);
      
     
     //Room
-    auto room = this->entity_manager.Add("Room");
-    this->entity_manager.SetScale(room, glm::fvec3(0.02f));
-    this->entity_manager.SetRotation(room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
+    // auto room = this->entity_manager.Add("Room");
+    // this->entity_manager.SetScale(room, glm::fvec3(0.02f));
+    // this->entity_manager.SetRotation(room, glm::fvec3(0.0f, glm::radians(90.0f), 0.0f));
 
-    LOADINGSTATE room_load = modelLoader->Load("sponza.obj", room);
-    assert(room_load == LOADINGSTATE::VALID);
+    //LOADINGSTATE room_load = modelLoader->Load("lost_empire.obj", room);
+    //assert(room_load == LOADINGSTATE::VALID);
 
     /*
     Lights
     */
 
     //cool background light
-    bg_light = this->entity_manager.Add("Background light");
-    this->entity_manager.SetPosition(bg_light, glm::fvec3(50.0f, 30.0f, -10.0f));
-    this->entity_manager.AddDirectionalLight(
-        bg_light,
-        { 
-            { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) },
-            glm::fvec3(0.0f, 0.0f, 0.0f)
-        });
+    //bg_light = this->entity_manager.Add("Background light");
+    //this->entity_manager.SetPosition(bg_light, glm::fvec3(50.0f, 30.0f, -10.0f));
+    //this->entity_manager.AddDirectionalLight(
+    //    bg_light,
+    //    { 
+    //        { 1.0f, 1.0f, glm::fvec3(1.0f, 0.9f, 0.9f) },
+    //        glm::fvec3(0.0f, 0.0f, 0.0f)
+    //    });
 
 
-    // Fiery light cube
-    orange_light = this->entity_manager.Add("Orange light");
-    modelLoader->Load("uvcube.obj", orange_light);
-    this->entity_manager.SetPosition(orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
-    this->entity_manager.SetScale(orange_light, glm::fvec3(0.1f));
-    this->entity_manager.AddPointLight(
-        orange_light,
-        { 
-            { 1.0f, 0.1f, glm::fvec3(1.0f, 0.4f, 0.0f) },
-            5.0f 
-        });
-    
+    //// Fiery light cube
+    //orange_light = this->entity_manager.Add("Orange light");
+    //modelLoader->Load("uvcube.obj", orange_light);
+    //this->entity_manager.SetPosition(orange_light, glm::fvec3(-7.5f, 10.0f, 0.0f));
+    //this->entity_manager.SetScale(orange_light, glm::fvec3(0.1f));
+    //this->entity_manager.AddPointLight(
+    //    orange_light,
+    //    { 
+    //        { 1.0f, 0.1f, glm::fvec3(1.0f, 0.4f, 0.0f) },
+    //        5.0f 
+    //    });
+    //
 
-    // Blue light cube
-    blue_light = this->entity_manager.Add("Blue light");
-    modelLoader->Load("uvcube.obj", blue_light);
-    this->entity_manager.SetPosition(blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
-    this->entity_manager.SetScale(blue_light, glm::fvec3(0.1f));
-    this->entity_manager.AddPointLight(
-        blue_light,
-        {
-            { 1.0f, 0.1f, glm::fvec3(0.4f, 0.8f, 1.0f) }, 
-            5.0f
-        });
+    //// Blue light cube
+    //blue_light = this->entity_manager.Add("Blue light");
+    //modelLoader->Load("uvcube.obj", blue_light);
+    //this->entity_manager.SetPosition(blue_light, glm::fvec3(7.5f, 2.5f, 0.0f));
+    //this->entity_manager.SetScale(blue_light, glm::fvec3(0.1f));
+    //this->entity_manager.AddPointLight(
+    //    blue_light,
+    //    {
+    //        { 1.0f, 0.1f, glm::fvec3(0.4f, 0.8f, 1.0f) }, 
+    //        5.0f
+    //    });
 
-    std::vector<entityHandle_t> created_entities;
     for (int i = 0; i < this->entity_manager._entities_top; i++) {
         this->world.AddEntity(this->entity_manager._entity_index[i].entity);
-        created_entities.push_back(this->entity_manager._entity_index[i].entity);
     }
 
     // Done loading

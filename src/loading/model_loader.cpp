@@ -68,7 +68,7 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
         }
         else {
             this->ProcessMesh(mesh, scene, entity);
-        } 
+        }
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -136,13 +136,14 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
 
     this->world->model_manager->Add(entity);
     this->world->model_manager->LoadModel(entity, vertices, indices);
-    
 
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         auto material = this->ProcessMaterial(aiMat);
         this->world->entity_manager->AddMaterialComponent(entity, material);
+
+        // delete aiMat;
     }
 }
 
