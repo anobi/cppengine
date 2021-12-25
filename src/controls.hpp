@@ -2,7 +2,7 @@
 #define CONTROLS_H
 
 #include <memory>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <glm/glm.hpp>
 #include "camera.hpp"
 

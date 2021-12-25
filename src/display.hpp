@@ -1,7 +1,7 @@
 #ifndef D_DISPLAY_H
 #define D_DISPLAY_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <memory>
 #include <vector>
 
