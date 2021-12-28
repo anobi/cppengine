@@ -18,7 +18,10 @@ struct Plane {
     }
 
     Plane(float a, float b, float c, float d, bool normalize) {
-        float l = glm::sqrt(a * a + b * b + c * c);
+        float l = 1.0f;
+        if (normalize) {
+            float l = glm::sqrt((a * a) + (b * b) + (c * c));
+        }
         this->n = glm::fvec3(a / l, b / l, c / l);
         this->d = d / l;
     }
@@ -47,7 +50,7 @@ public:
     }
 
     inline glm::fmat4 GetView() { return this->view; }
-    inline glm::fmat4 GetProjection() { return this->projection;  }
+    inline glm::fmat4 GetProjection() { return this->projection; }
     inline glm::fmat4 GetViewProjection() { return GetProjection() * GetView(); }
 
     void Update() {
@@ -66,7 +69,7 @@ public:
         );
 
         // Update frustum planes
-        glm::fmat4 A = this->projection * this->view;
+        glm::fmat4 A = this->GetViewProjection();
 
         // Left
         this->frustum_planes[0] = Plane(
@@ -85,7 +88,7 @@ public:
             true
         );
         // Top
-        this->frustum_planes[1] = Plane(
+        this->frustum_planes[2] = Plane(
             A[3][0] - A[1][0],
             A[3][1] - A[1][1],
             A[3][2] - A[1][2],
@@ -93,7 +96,7 @@ public:
             true
         );
         // Bottom
-        this->frustum_planes[1] = Plane(
+        this->frustum_planes[3] = Plane(
             A[3][0] + A[1][0],
             A[3][1] + A[1][1],
             A[3][2] + A[1][2],
@@ -101,7 +104,7 @@ public:
             true
         );
         // Near
-        this->frustum_planes[1] = Plane(
+        this->frustum_planes[4] = Plane(
             A[3][0] + A[2][0],
             A[3][1] + A[2][1],
             A[3][2] + A[2][2],
@@ -109,7 +112,7 @@ public:
             true
         );
         // Far
-        this->frustum_planes[1] = Plane(
+        this->frustum_planes[5] = Plane(
             A[3][0] - A[2][0],
             A[3][1] - A[2][1],
             A[3][2] - A[2][2],
