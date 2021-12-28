@@ -3,6 +3,12 @@
 
 #include "world.hpp"
 
+typedef enum {
+    CULL_OUT    = 0,
+    CULL_CLIP   = 1,
+    CULL_IN     = 2
+} CullStatus;
+
 
 void World::AddEntity(entityHandle_t entity)
 {
@@ -19,25 +25,22 @@ std::vector<entityHandle_t> World::SphereFrustumCull()
         entityHandle_t entity = this->_entity_handles[i];
         entitySlot_t model = this->model_manager->FindResource(entity);
 
-        if (!model.valid()) continue;
-
         float radius = this->model_manager->bounding_sphere_radiuses[model.slot];
-        // glm::fvec3 position = this->model_manager->object_centers[model.slot];
         glm::fvec3 position = this->entity_manager->spatial_components.GetPosition(entity);
-        glm::fvec4 p = glm::fvec4(position.x, position.y, position.z, 1.0f);
-        position = glm::fvec3(p.x, p.y, p.z);
-
-        bool visible = true;
+        int culled = false;
         for (int j = 0; j < 6; j++) {
-            Plane plane = this->camera->frustum_planes[j];
-            float dist = glm::dot(plane.n, position) + plane.d;
-            if (dist <= -radius) {
-                visible = false;
+            Plane frustum = this->camera->frustum_planes[j];
+            float dist = glm::dot(position, frustum.n) - frustum.d;
+            if (dist < -radius) {
+                culled = CullStatus::CULL_OUT;
                 break;
+            }
+            else if (dist <= radius) {
+                culled = CullStatus::CULL_CLIP;
             }
         }
 
-        if (visible) {
+        if (culled != CullStatus::CULL_OUT) {
             entities.push_back(entity);
         }
     }
