@@ -7,6 +7,7 @@
 #include <glm/trigonometric.hpp>
 
 #include "transform.hpp"
+#include "frustum.hpp"
 
 struct Plane {
     glm::fvec3 n;
@@ -20,7 +21,8 @@ struct Plane {
     Plane(float a, float b, float c, float d, bool normalize) {
         float l = 1.0f;
         if (normalize) {
-            float l = glm::sqrt((a * a) + (b * b) + (c * c));
+            // float l = glm::sqrt((a * a) + (b * b) + (c * c));
+            float l = glm::length(glm::fvec3(a, b, c));
         }
         this->n = glm::fvec3(a / l, b / l, c / l);
         this->d = d / l;
@@ -40,6 +42,7 @@ public:
         this->far = far;
         this->transform = Transform();
         this->projection = glm::mat4();
+        this->view_frustum = Frustum();
     }
 
     ~Camera() {};
@@ -70,61 +73,13 @@ public:
 
         // Update frustum planes
         glm::fmat4 A = this->GetViewProjection();
-
-        // Left
-        this->frustum_planes[0] = Plane(
-            A[3][0] + A[0][0],
-            A[3][1] + A[0][1],
-            A[3][2] + A[0][2],
-            A[3][3] + A[0][3],
-            true
-        );
-        // Right
-        this->frustum_planes[1] = Plane(
-            A[3][0] - A[0][0],
-            A[3][1] - A[0][1],
-            A[3][2] - A[0][2],
-            A[3][3] - A[0][3],
-            true
-        );
-        // Top
-        this->frustum_planes[2] = Plane(
-            A[3][0] - A[1][0],
-            A[3][1] - A[1][1],
-            A[3][2] - A[1][2],
-            A[3][3] - A[1][3],
-            true
-        );
-        // Bottom
-        this->frustum_planes[3] = Plane(
-            A[3][0] + A[1][0],
-            A[3][1] + A[1][1],
-            A[3][2] + A[1][2],
-            A[3][3] + A[1][3],
-            true
-        );
-        // Near
-        this->frustum_planes[4] = Plane(
-            A[3][0] + A[2][0],
-            A[3][1] + A[2][1],
-            A[3][2] + A[2][2],
-            A[3][3] + A[2][3],
-            true
-        );
-        // Far
-        this->frustum_planes[5] = Plane(
-            A[3][0] - A[2][0],
-            A[3][1] - A[2][1],
-            A[3][2] - A[2][2],
-            A[3][3] - A[2][3],
-            true
-        );
+        this->view_frustum.UpdatePlanes(A);
     }
 
     Transform transform;
     glm::fmat4 view;
     glm::fmat4 projection;
-    Plane frustum_planes[6];
+    Frustum view_frustum;
 
     float aspect_ratio = 0.0f;
     float fov   = 60.0f;
