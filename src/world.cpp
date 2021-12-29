@@ -1,65 +1,58 @@
+#define GLM_FORCE_RADIANS
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "world.hpp"
 
-entityHandle_t World::AddEntity(const char* name) 
-{
-    entityHandle_t handle;
-    handle.id   = _entities_top + 1;
-    handle.slot = _entities_top;
-    handle.name = name;
 
-    this->_entity_handles[this->_entities_top] = handle;
+void World::AddEntity(entityHandle_t entity)
+{
+    this->_entity_handles[this->_entities_top] = entity;
     this->_entities_top += 1;
-
-    // Add a spatial component by default because how can an entity exist in the world if it's not IN the world?
-    this->entity_transforms.Add(handle);
-
-    return handle;
 }
 
-entityHandle_t World::AddChildEntity(entityHandle_t parent)
+std::vector<entityHandle_t> World::SphereFrustumCull()
 {
-    entityHandle_t handle = this->AddEntity(parent.name.c_str());
+    std::vector<entityHandle_t> entities;
+   
+    for (int i = 0; i < this->_entities_top; i++)
+    {
+        entityHandle_t entity = this->_entity_handles[i];
+        entitySlot_t model = this->model_manager->FindResource(entity);
 
-    // Clone the spatial data from the parent
-    this->entity_transforms.positions[handle.slot] = this->entity_transforms.positions[parent.slot];
-    this->entity_transforms.rotations[handle.slot] = this->entity_transforms.rotations[parent.slot];
-    this->entity_transforms.scales[handle.slot] = this->entity_transforms.scales[parent.slot];
+        float radius = this->model_manager->bounding_sphere_radiuses[model.slot];
+        glm::fvec3 position = this->entity_manager->spatial_components.GetPosition(entity);
 
-    return handle;
-}
-
-materialHandle_t World::AddMaterial(RenderMaterial material)
-{
-    for (int i = 0; i < this->_materials_top; i++) {
-        if (this->_material_handles[i].name == material.name) {
-            return this->_material_handles[i];
+        auto cull_result = this->camera->view_frustum.SphereIntersect(position, radius);
+        if (cull_result != FrustumIntersectResult::OUT) {
+            entities.push_back(entity);
         }
     }
-    materialHandle_t handle;
-    handle.id = this->_materials_top + 1;
-    handle.slot = this->_materials_top;
-    handle.name = material.name;
 
-    this->_materials[this->_materials_top] = material;
-    this->_material_handles[this->_materials_top] = handle;
-    this->_materials_top += 1;
-
-    return handle;
+    return entities;
 }
 
-// Hmmmm...
-void World::UpdateHandle(entityHandle_t handle)
+std::vector<entityHandle_t> World::BoundingBoxFrustumCull()
 {
-    if (handle.valid()) {
-        this->_entity_handles[handle.slot] = handle;
-    }
-}
+    std::vector<entityHandle_t> input_entities;
+    std::vector<entityHandle_t> entities;
 
-entityHandle_t World::GetHandle(const char* name)
-{
-    for (int i = 0; i < this->_entities_top; i++) {
-        if (this->_entity_handles[i].name == name) {
-            return this->_entity_handles[i];
-        }
+    for (int i = 0; i < this->_entities_top; i++)
+    {
+        entityHandle_t entity = input_entities[i];
+        AABB aabb = this->model_manager->AABBs[this->model_manager->FindResource(entity).slot];
+
+        glm::fvec3 corners[8] = {
+            glm::fvec3(aabb.min.x, aabb.min.y, aabb.min.z),
+            glm::fvec3(aabb.max.x, aabb.min.y, aabb.min.z),
+            glm::fvec3(aabb.min.x, aabb.max.y, aabb.min.z),
+            glm::fvec3(aabb.max.x, aabb.max.y, aabb.min.z),
+
+            glm::fvec3(aabb.min.x, aabb.min.y, aabb.max.z),
+            glm::fvec3(aabb.max.x, aabb.min.y, aabb.max.z),
+            glm::fvec3(aabb.min.x, aabb.max.y, aabb.max.z),
+            glm::fvec3(aabb.max.x, aabb.max.y, aabb.max.z),
+        };
     }
+
+    return entities;
 }

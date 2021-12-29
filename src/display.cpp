@@ -17,14 +17,16 @@ bool Display::Init(const int w, const int h) {
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 
     Uint32 window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-    _window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height, window_flags);
-    _context = SDL_GL_CreateContext(_window);
+    this->_window = SDL_CreateWindow("cppengine", 32, 32, this->width, this->height, window_flags);
+    this->_context = SDL_GL_CreateContext(_window);
+    this->_glsl_version = "#version 330";
     printf("%s : \n", glGetString(GL_VERSION));
 
     SDL_GL_SetSwapInterval(0);  // 0: immediate, 1: vsync, -1: adaptive vsync

@@ -7,6 +7,26 @@
 *.tmp
 *.TMP
 
+#################
+## CMake Files ##
+#################
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# Don't include generated project files
+*.sln
+*.vcxproj*
+
 # Folders
 bin/
 .DS_Store
@@ -45,6 +65,7 @@ bin/
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
+*.rsuser
 *.suo
 *.user
 *.userosscache

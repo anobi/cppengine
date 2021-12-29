@@ -29,18 +29,35 @@ TEST_CASE("Test Array clear function", "[Containers::Array]") {
     Array<int, array_size> a;
 
     // Init the array with positive, non-zero numbers
-    for (int i = 0; i < array_size; i++) {
+    for (unsigned int i = 0; i < array_size; i++) {
         a[i] = i + 1;
     }
 
     // Check that it is in fact filled with positive numbers! Because why not.
-    for (int i = 0; i < array_size; i++) {
+    for (unsigned int i = 0; i < array_size; i++) {
         REQUIRE(a[0] != 0);
     }
 
     // Clear it and check that the content is all zeroes
     a.Clear();
-    for (int i = 0; i < array_size; i++) {
+    for (unsigned int i = 0; i < array_size; i++) {
         REQUIRE(a[0] == 0);
     }
+}
+
+TEST_CASE("Test Array copy", "[Containers::Array::operator=]") {
+    Array<int, 3> a1;
+    Array<int, 3> a2;
+
+    a1[0] = 1;
+    a1[1] = 2;
+    a1[2] = 3;
+    REQUIRE(a1[0] != a2[0]);
+    REQUIRE(a1[1] != a2[1]);
+    REQUIRE(a1[2] != a2[2]);
+
+    a2 = a1;
+    REQUIRE(a1[0] == a2[0]);
+    REQUIRE(a1[1] == a2[1]);
+    REQUIRE(a1[2] == a2[2]);
 }

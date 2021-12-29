@@ -1,8 +1,7 @@
-#include "model_loader.hpp"
-#include "../configuration.hpp"
+#include "loading/model_loader.hpp"
+#include "types.hpp"
+#include "configuration.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "../lib/stb_image.h"
 
 // TODO: move to some tyoe definitions file or something
 // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
@@ -30,15 +29,15 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
         | aiProcess_FindInvalidData
         | aiProcess_FindInstances
         | aiProcess_FindDegenerates
+        | aiProcess_RemoveComponent
+        | aiProcess_RemoveRedundantMaterials
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
-        | aiProcess_OptimizeMeshes
+        // | aiProcess_OptimizeMeshes
         | aiProcess_SortByPType
         | aiProcess_SplitLargeMeshes
-        | aiProcess_RemoveRedundantMaterials
-        | aiProcess_GenUVCoords
         | aiProcess_GenSmoothNormals
-        | aiProcess_FixInfacingNormals
+        // | aiProcess_FixInfacingNormals
         | aiProcess_FlipUVs
         | aiProcess_CalcTangentSpace
         | aiProcess_ImproveCacheLocality
@@ -50,30 +49,38 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
         return LOADINGSTATE::INVALID;
     }
 
-    this->ProcessNode(scene->mRootNode, scene, entity, false);
+    this->ProcessNode(scene->mRootNode, scene, entity);
 
     return LOADINGSTATE::VALID;
 }
 
-void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity, bool child)
+void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity)
 {
-    for (int i = 0; i < node->mNumMeshes; i++)
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
-        aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        this->ProcessMesh(aiMesh, scene, entity, (child || i > 0));
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        if (i > 0) {
+            auto child = this->world->entity_manager->AddChild(mesh->mName.C_Str(), entity);
+            if (child.valid()) 
+            {
+                this->ProcessMesh(mesh, scene, child);
+            }
+        }
+        else {
+            this->ProcessMesh(mesh, scene, entity);
+        }
     }
 
-    for (int i = 0; i < node->mNumChildren; i++)
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        this->ProcessNode(node->mChildren[i], scene, entity, true);
+        this->ProcessNode(node->mChildren[i], scene, entity);
     }
 }
 
-void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity, bool child)
+void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHandle_t entity)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
@@ -127,95 +134,61 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
         }
     }
 
-    if (child) 
-    {
-        auto child_entity = this->world->AddChildEntity(entity);
-        this->world->render_entities.LoadModel(child_entity, vertices, indices);
-        entity = child_entity;  // For material processing
-    }
-    else 
-    {
-        this->world->render_entities.LoadModel(entity, vertices, indices);
-    }
+    this->world->model_manager->Add(entity);
+    this->world->model_manager->LoadModel(entity, vertices, indices);
 
     if (mesh->mMaterialIndex >= 0)
     {
-        RenderMaterial renderMaterial = RenderMaterial();
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
-        this->ProcessMaterial(aiMat, &renderMaterial);
+        auto material = this->ProcessMaterial(aiMat);
+        this->world->entity_manager->AddMaterialComponent(entity, material);
 
-        auto handle = this->world->AddMaterial(renderMaterial);
-        entity.render_material_slot = handle.slot;
-        this->world->UpdateHandle(entity);
+        // delete aiMat;
     }
 }
 
-void ModelLoader::ProcessMaterial(const aiMaterial* aiMat, RenderMaterial* material)
+materialHandle_t ModelLoader::ProcessMaterial(const aiMaterial* aiMat)
 {
     // Name the material so we can utilize the material cache
     aiString matName;
     aiMat->Get(AI_MATKEY_NAME, matName);
-    material->name = matName.C_Str();
+
+    // Check if the material has already been loaded
+    materialHandle_t handle = this->world->material_manager->Find(matName.C_Str());
+    if (handle.valid()) {
+        return handle;
+    }
+
+    materialHandle_t material = this->world->material_manager->Add(matName.C_Str());
 
     // TODO: Dry. Loop a types list and do same stuff for every map. Don't repeat it like that.
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_DIFFUSE); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_DIFFUSE, i, &texFile);
-        this->LoadTexture(texFile.C_Str(), material, &material->diffuseMap);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::DIFFUSE);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_SPECULAR, i, &texFile);
-        this->LoadTexture(texFile.C_Str(), material, &material->specularMap);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::SPECULAR);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_HEIGHT, i, &texFile);
-        this->LoadTexture(texFile.C_Str(), material, &material->normalMap);
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::NORMAL);
     }
 
-    for (int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
+    for (unsigned int i = 0; i < aiMat->GetTextureCount(aiTextureType_OPACITY); i++)
     {
         aiString texFile;
         aiMat->GetTexture(aiTextureType_OPACITY, i, &texFile);
-        this->LoadTexture(texFile.C_Str(), material, &material->alphaMap);
-    }
-}
-
-LOADINGSTATE ModelLoader::LoadTexture(const char* filename, RenderMaterial* material, GLuint* texture)
-{
-
-#ifdef _WIN32 
-    const char* textures_dir = "res/textures/";
-#else
-    const char* textures_dir = "/res/textures/";
-#endif
-
-    // TODO: move to some tyoe definitions file or something
-    // Using the more sensible linux max path length here, since 32k+ char limit in NTFS is quite insane
-    char path[4096];
-    const char* cwd = Configuration::Get().workingDirectory.c_str();
-    snprintf(path, 4096, "%s%s%s", cwd, textures_dir, filename);
-
-    int width, height, numComponents;
-    unsigned char* data = stbi_load(path, &width, &height, &numComponents, 4);
-
-    if (!data)
-    {
-        // TODO: Load some ugly generated default texture that doesn't require any files?
-        printf("  !! ERROR: Unable to load texture: %s \n", filename);
-        return LOADINGSTATE::INVALID;
+        this->world->material_manager->LoadTexture(texFile.C_Str(), material, TextureType_e::ALPHA);
     }
 
-    material->Setup(texture, width, height, data);
-
-    stbi_image_free(data);
-
-    return LOADINGSTATE::VALID;
+    return material;
 }
-

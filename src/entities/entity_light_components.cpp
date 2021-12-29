@@ -1,37 +1,52 @@
-#include "entity_light_components.hpp"
+#include "entities/entity_light_components.hpp"
 
-entityHandle_t EntityLightComponents::AddBaseComponents(entityHandle_t entity, baseLight_t base_light)
+entitySlot_t EntityLightComponents::AddBaseComponents(entityHandle_t entity, baseLight_t base_light)
 {
-    entity.light_component_slot = this->entities_top;
-    this->entities[this->entities_top]  = entity;
+    entitySlot_t resource = this->AllocateResource(entity);
 
-    this->intensities[entity.light_component_slot]  = base_light.intensity;
-    this->cutoffs[entity.light_component_slot]      = base_light.cutoff;
-    this->colors[entity.light_component_slot]       = base_light.color;
+    this->intensities[resource.slot]  = base_light.intensity;
+    this->cutoffs[resource.slot]      = base_light.cutoff;
+    this->colors[resource.slot]       = base_light.color;
 
-    this->entities_top += 1;
-
-    return entity;
+    return resource;
 }
 
-entityHandle_t EntityLightComponents::AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc)
+void EntityLightComponents::AddDirectionalLight(entityHandle_t entity, dirLight_t light_desc)
 {
     if (entity.valid()) {
-        entity = AddBaseComponents(entity, light_desc.light);
-        this->light_types[entity.light_component_slot] = lightTypes::DIRECTIONAL_LIGHT;
-        this->directions[entity.light_component_slot] = light_desc.direction;
+        entitySlot_t resource = AddBaseComponents(entity, light_desc.light);
+        this->light_types[resource.slot] = lightTypes::DIRECTIONAL_LIGHT;
+        this->directions[resource.slot] = light_desc.direction;
     }
-
-    return entity;
 }
 
-entityHandle_t EntityLightComponents::AddPointLight(entityHandle_t entity, pointLight_t light_desc)
+void EntityLightComponents::AddPointLight(entityHandle_t entity, pointLight_t light_desc)
 {
     if (entity.valid()) {
-        entity = AddBaseComponents(entity, light_desc.light);
-        this->light_types[entity.light_component_slot] = lightTypes::POINTLIGHT;
-        this->radiuses[entity.light_component_slot] = light_desc.radius;
+        entitySlot_t resource = AddBaseComponents(entity, light_desc.light);
+        this->light_types[resource.slot] = lightTypes::POINTLIGHT;
+        this->radiuses[resource.slot] = light_desc.radius;
     }
+}
 
-    return entity;
+entitySlot_t EntityLightComponents::AllocateResource(entityHandle_t entity)
+{
+    entitySlot_t resource;
+    if (this->_entities_top < MAX_GAME_ENTITIES) {
+        resource.slot = this->_entities_top;
+        resource.entity = entity;
+        this->_entity_index[this->_entities_top] = resource;
+        this->_entities_top += 1;
+    }
+    return resource;
+}
+
+entitySlot_t EntityLightComponents::FindResource(entityHandle_t entity)
+{
+    for (int i = 0; i < this->_entities_top; i++) {
+        if (this->_entity_index[i].entity == entity) {
+            return this->_entity_index[i];
+        }
+    }
+    return entitySlot_t();
 }
