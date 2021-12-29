@@ -26,6 +26,10 @@ target_link_libraries(${PROJECT_NAME}
     ${ASSIMP_LIBRARIES}
 )
 
+if(APPLE)
+    target_link_libraries(${PROJECT_NAME} GLEW::GLEW)
+endif()
+
 target_sources(${PROJECT_NAME} PUBLIC
     external/imgui/imgui.cpp
     external/imgui/imgui_draw.cpp
