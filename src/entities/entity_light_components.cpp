@@ -1,4 +1,4 @@
-#include "entity_light_components.hpp"
+#include "entities/entity_light_components.hpp"
 
 entitySlot_t EntityLightComponents::AddBaseComponents(entityHandle_t entity, baseLight_t base_light)
 {

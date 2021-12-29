@@ -1,8 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "../configuration.hpp"
-#include "material_manager.hpp"
+#include "configuration.hpp"
+#include "rendering/material_manager.hpp"
 
 
 

@@ -1,4 +1,4 @@
-#include "entity_model_components.hpp"
+#include "entities/entity_model_components.hpp"
 
 Entities::ModelComponents::ModelComponents()
 {

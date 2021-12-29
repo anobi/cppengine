@@ -1,4 +1,4 @@
-#include "entity_manager.hpp"
+#include "entities/entity_manager.hpp"
 
 Entities::EntityManager::EntityManager()
 {

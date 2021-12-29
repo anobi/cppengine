@@ -1,5 +1,5 @@
 #include <vector>
-#include "entity_transforms.hpp"
+#include "entities/entity_transforms.hpp"
 
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>

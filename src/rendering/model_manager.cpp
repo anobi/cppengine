@@ -2,8 +2,8 @@
 #include <functional>
 #include <algorithm>
 
-#include "../opengl.hpp"
-#include "model_manager.hpp"
+#include "opengl.hpp"
+#include "rendering/model_manager.hpp"
 
 Rendering::ModelManager::ModelManager()
 {

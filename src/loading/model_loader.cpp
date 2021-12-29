@@ -1,6 +1,6 @@
-#include "model_loader.hpp"
-#include "../types.hpp"
-#include "../configuration.hpp"
+#include "loading/model_loader.hpp"
+#include "types.hpp"
+#include "configuration.hpp"
 
 
 // TODO: move to some tyoe definitions file or something

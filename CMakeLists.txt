@@ -8,9 +8,9 @@ include_directories(${SDL2_INCLUDE_DIRS})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
-FILE(GLOB_RECURSE HEADERS "include/*.hpp")
+FILE(GLOB_RECURSE CPPE_HEADERS "include/*.hpp")
 
-add_executable(${PROJECT_NAME} src/main.cpp ${HEADERS})
+add_executable(${PROJECT_NAME} src/main.cpp ${CPPE_HEADERS})
 include_directories(include/)
 
 target_link_libraries(${PROJECT_NAME}
