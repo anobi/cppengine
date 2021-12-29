@@ -14,11 +14,22 @@ public:
     };
     ~Controls() {};
 
-    bool Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime);
     void ResetMousePosition(SDL_Window* window, int center_x, int center_y);
+
+    void Rotate(const int x, const int y);
+    void Move(const Uint8* keystate);
+
+    void NewFrame(Camera* camera, const float delta_time);
+    bool Commit();
 
     float movementSpeed;
     float mouseSensitivity;
+
+private:
+    Camera* _camera;
+    float _delta_time;
+    glm::fvec3 _position_accumulator;
+    glm::fvec3 _rotation_accumulator;
 };
 
 #endif

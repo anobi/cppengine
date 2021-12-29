@@ -25,6 +25,10 @@ std::vector<entityHandle_t> World::SphereFrustumCull()
         entityHandle_t entity = this->_entity_handles[i];
         entitySlot_t model = this->model_manager->FindResource(entity);
 
+        // Temporarily disable culling
+        entities.push_back(entity);
+        continue;
+
         float radius = this->model_manager->bounding_sphere_radiuses[model.slot];
         glm::fvec3 position = this->entity_manager->spatial_components.GetPosition(entity);
         int culled = false;

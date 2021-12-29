@@ -10,59 +10,63 @@ void Controls::ResetMousePosition(SDL_Window* window, int center_x, int center_y
     SDL_WarpMouseInWindow(window, center_x, center_y);
 }
 
-bool Controls::Update(SDL_Event& sdlEvent, Camera* camera, const float deltaTime) {
+void Controls::NewFrame(Camera* camera, const float delta_time) {
+    this->_delta_time = delta_time;
+    this->_position_accumulator = glm::zero<glm::fvec3>();
+    this->_rotation_accumulator = glm::zero<glm::fvec3>();
+    this->_camera = camera;
+}
 
-    glm::fvec3 oPos = camera->transform.GetPosition();
-    glm::fvec3 oRot = camera->transform.GetRotation();
-    glm::fvec3& cPos = camera->transform.GetPosition();
-    glm::fvec3& cRot = camera->transform.GetRotation();
+void Controls::Rotate(const int x, const int y) {
+    float realMouseSensitivity = this->mouseSensitivity / 10000.0f;
 
-    if (sdlEvent.type == SDL_MOUSEMOTION)
-    {
-        //handle mouse movements
-        int x, y;
-        SDL_GetRelativeMouseState(&x, &y);
+    constexpr float yLimit = glm::radians(90.0f);
+    float dx = x * realMouseSensitivity * this->_delta_time;
+    float dy = y * realMouseSensitivity * this->_delta_time;
 
-        float realMouseSensitivity = this->mouseSensitivity / 10000.0f;
+    this->_rotation_accumulator.x -= dx;
+    this->_rotation_accumulator.y = glm::clamp(this->_rotation_accumulator.y - dy, -yLimit, yLimit);
+}
 
-        float yLimit = glm::radians(90.0f);
-        float dx = x * realMouseSensitivity * deltaTime;
-        float dy = y * realMouseSensitivity * deltaTime;
-
-        cRot.x -= dx;
-        cRot.y = glm::clamp(cRot.y - dy, -yLimit, yLimit);
-    }
-
-    //handle keyboard
-    const Uint8* keystate = SDL_GetKeyboardState(NULL);
-
+void Controls::Move(const Uint8* keystate) 
+{
     if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
-        cPos -= camera->transform.GetRight() * this->movementSpeed * deltaTime;
+        this->_position_accumulator -= this->_camera->transform.GetRight() * this->movementSpeed * this->_delta_time;
     }
 
     if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
-        cPos += camera->transform.GetRight() * this->movementSpeed * deltaTime;
+        this->_position_accumulator += this->_camera->transform.GetRight() * this->movementSpeed * this->_delta_time;
     }
 
     if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
-        cPos += camera->transform.GetDirection() * this->movementSpeed * deltaTime;
+        this->_position_accumulator += this->_camera->transform.GetDirection() * this->movementSpeed * this->_delta_time;
     }
 
     if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
-        cPos -= camera->transform.GetDirection() * this->movementSpeed * deltaTime;
+        this->_position_accumulator -= this->_camera->transform.GetDirection() * this->movementSpeed * this->_delta_time;
     }
 
     if (keystate[SDL_SCANCODE_SPACE]) {
-        cPos += camera->transform.GetUp() * this->movementSpeed * deltaTime;
+        this->_position_accumulator += this->_camera->transform.GetUp() * this->movementSpeed * this->_delta_time;
     }
 
     if (keystate[SDL_SCANCODE_LCTRL]) {
-        cPos -= camera->transform.GetUp() * this->movementSpeed * deltaTime;
+        this->_position_accumulator -= this->_camera->transform.GetUp() * this->movementSpeed * this->_delta_time;
+    }
+}
+
+bool Controls::Commit() 
+{
+    bool updated = false;
+    if (this->_position_accumulator.length() != 0.0f) {
+        this->_camera->transform.GetPosition() += this->_position_accumulator;
+        updated = true;
     }
 
-    if (cPos != oPos || cRot != oRot) {
-        return true;
+    if (this->_position_accumulator.length() != 0.0f) {
+        this->_camera->transform.GetRotation() += this->_rotation_accumulator;
+        updated = true;
     }
 
-    return false;
+    return updated;
 }

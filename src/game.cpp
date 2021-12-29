@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
 
 #include "configuration.hpp"
 #include "game.hpp"
@@ -15,6 +16,8 @@
 
 #include "containers/array.hpp"
 
+
+ImGuiIO imgui_io;
 
 // TODO: Temp holders. Create new homes for these.
 Shader defaultShader;
@@ -72,7 +75,14 @@ bool Game::Init()
     }
     else printf("done \n");
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    imgui_io = ImGui::GetIO();
+    (void)imgui_io;
+    imgui_io.WantCaptureMouse = true;
+
     ImGui_ImplSDL2_InitForOpenGL(this->display.GetWindow(), this->display.GetContext());
+    ImGui_ImplOpenGL3_Init(this->display.GetGLSLVersion());
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
@@ -143,53 +153,72 @@ void Game::Loop()
         * Handle controls and events *
         ******************************/
 
+        this->controls.NewFrame(this->world.camera, delay);
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT)
-            {
-                Quit();
-            }
-
-            if (event.type == SDL_KEYDOWN)
-            {
-                switch (event.key.keysym.sym)
-                {
-                case SDLK_ESCAPE:
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            switch (event.type) {
+                case SDL_QUIT:
                     Quit();
                     break;
 
-                case SDLK_LALT:
-                    menu = !menu;
-                    SDL_SetRelativeMouseMode((SDL_bool)!menu);
-                    this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
-                    SDL_ShowCursor(menu);
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
+                    {
+                        case SDLK_ESCAPE:
+                            Quit();
+                            break;
+
+                        case SDLK_LALT:
+                            menu = !menu;
+                    
+                            SDL_SetRelativeMouseMode((SDL_bool)!menu);
+                            this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
+                            SDL_ShowCursor(menu);
+                            break;
+
+                        case SDLK_F1:
+                            this->debug_ui = !debug_ui;
+                            break;
+
+                        default:
+                            break;
+                    }
                     break;
 
-                case SDLK_F1:
-                    this->debug_ui = !debug_ui;
+                case SDL_MOUSEMOTION:
+                    int x, y;
+                    SDL_GetRelativeMouseState(&x, &y);
+                    this->controls.Rotate(x, y);
+
+                    break;
+
+                case SDL_WINDOWEVENT:
+                    switch (event.window.event)
+                    {
+                        case SDL_WINDOWEVENT_RESIZED:
+                            this->display.SetResolution(event.window.data1, event.window.data2, true);
+                            this->renderer.UpdateResolution(this->display.width, this->display.height);
+                            this->world.camera->SetAspectRatio(this->display.GetAspectRatio());
+                            break;
+
+                        default:
+                            break;
+                    }
                     break;
 
                 default:
                     break;
-                }
-            }
-
-            if (event.type == SDL_WINDOWEVENT)
-            {
-                switch (event.window.event)
-                {
-                case SDL_WINDOWEVENT_RESIZED:
-                    this->display.SetResolution(event.window.data1, event.window.data2, true);
-                    this->renderer.UpdateResolution(this->display.width, this->display.height);
-                    this->world.camera->SetAspectRatio(this->display.GetAspectRatio());
-                    break;
-                }
             }
         }
 
         bool dirty_camera = false;
         if (!this->menu) {
-            dirty_camera = this->controls.Update(event, this->world.camera, delay);
+            // Update keyboard controls outside the events
+            const Uint8* keystate = SDL_GetKeyboardState(NULL);
+            this->controls.Move(keystate);
+
+            dirty_camera = this->controls.Commit();
             if (dirty_camera) {
                 this->world.camera->Update();
             }
@@ -229,9 +258,14 @@ void Game::Loop()
 
         if (this->debug_ui)
         {
-            ImGui_ImplSDL2_NewFrame(this->display.GetWindow());
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplSDL2_NewFrame();
+            ImGui::NewFrame();
+
             UpdateUI();
+
             ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
         this->display.Update();
@@ -248,6 +282,8 @@ void Game::Shutdown()
     printf("Shutting down... \n");
     printf("-------------------- \n");
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
     printf("* Input \n");

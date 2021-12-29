@@ -12,6 +12,8 @@ private:
     SDL_GLContext _context;
     SDL_Window* _window;
 
+    const char* _glsl_version;
+
     bool resizing;
     void InitGL();
 
@@ -31,6 +33,8 @@ public:
     inline const SDL_Window& GetWindow() const { return *this->_window; }
 
     inline SDL_GLContext* GetContext() { return &this->_context; }
+
+    const char* GetGLSLVersion() { return this->_glsl_version; }
 
     inline float GetAspectRatio() { return (float)this->width / (float)this->height; }
 
