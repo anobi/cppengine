@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "game.hpp"
 #include "input.hpp"
 
