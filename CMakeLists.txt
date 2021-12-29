@@ -43,6 +43,7 @@ target_sources(${PROJECT_NAME} PUBLIC
     src/renderer.cpp
     src/input.cpp
     src/controls.cpp
+    src/frustum.cpp
     src/world.cpp
     src/entities/entity_transforms.cpp
     src/entities/entity_light_components.cpp
