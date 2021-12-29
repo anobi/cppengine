@@ -2,9 +2,9 @@
 #include <chrono>
 #include <SDL2/SDL.h>
 
-#include "lib/imgui.h"
-#include "lib/imgui_internal.h"
-#include "lib/imgui_impl_sdl_gl3.h"
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "imgui_impl_sdl.h"
 
 #include "configuration.hpp"
 #include "game.hpp"
