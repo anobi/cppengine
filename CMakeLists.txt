@@ -44,6 +44,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     external/glm
     external/stb
     external/imgui
+    external/imgui/backends
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

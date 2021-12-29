@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <chrono>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -72,7 +72,7 @@ bool Game::Init()
     }
     else printf("done \n");
 
-    ImGui_ImplSdlGL3_Init(this->display.GetWindow());
+    ImGui_ImplSDL2_InitForOpenGL(this->display.GetWindow(), this->display.GetContext());
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     this->controls.ResetMousePosition(this->display.GetWindow(), this->display.width / 2, this->display.height / 2);
@@ -229,7 +229,7 @@ void Game::Loop()
 
         if (this->debug_ui)
         {
-            ImGui_ImplSdlGL3_NewFrame(this->display.GetWindow());
+            ImGui_ImplSDL2_NewFrame(this->display.GetWindow());
             UpdateUI();
             ImGui::Render();
         }
@@ -248,7 +248,7 @@ void Game::Shutdown()
     printf("Shutting down... \n");
     printf("-------------------- \n");
 
-    ImGui::Shutdown();
+    ImGui::DestroyContext();
 
     printf("* Input \n");
     this->inputs.Shutdown();
@@ -344,8 +344,8 @@ int selected_entity = 0;
 void Game::UpdateUI()
 {
     // Debug info window
-    ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiSetCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(350, 80), ImGuiSetCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(10, 10));
+    ImGui::SetNextWindowSize(ImVec2(350, 80));
     ImGui::Begin("Info");
 
     glm::fvec3 cPos = this->world.camera->transform.GetPosition();
@@ -357,8 +357,8 @@ void Game::UpdateUI()
     ImGui::End();
 
     // Entity debug window
-    ImGui::SetNextWindowPos(ImVec2(10, 100), ImGuiSetCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiSetCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(10, 100));
+    ImGui::SetNextWindowSize(ImVec2(350, 400));
     ImGui::Begin("Entities");
 
     ImGui::PushItemWidth(-1);
@@ -384,8 +384,8 @@ void Game::UpdateUI()
     ImGui::End();
 
     // Settings window
-    ImGui::SetNextWindowPos(ImVec2(10, 1000), ImGuiSetCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(350, 200), ImGuiSetCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(10, 1000));
+    ImGui::SetNextWindowSize(ImVec2(350, 200));
     ImGui::Begin("Settings");
 
     ImGui::DragFloat("Mouse sensitivity", &this->controls.mouseSensitivity, 0.1f, 0.0f, 10.0f);
