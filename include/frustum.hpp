@@ -24,7 +24,7 @@ public:
     FrustumIntersectResult SphereIntersect(const glm::fvec3 sphere_position, const float sphere_radius);
 
     glm::fvec4 planes[6];
-    bool normalize = true;
+    bool normalize = false;
 };
 
 #endif

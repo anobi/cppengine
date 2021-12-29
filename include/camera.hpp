@@ -72,14 +72,15 @@ public:
         );
 
         // Update frustum planes
-        glm::fmat4 A = this->GetViewProjection();
+        glm::fmat4 A = glm::transpose(this->GetViewProjection());
         this->view_frustum.UpdatePlanes(A);
     }
 
     Transform transform;
+    Frustum view_frustum;
+
     glm::fmat4 view;
     glm::fmat4 projection;
-    Frustum view_frustum;
 
     float aspect_ratio = 0.0f;
     float fov   = 60.0f;
