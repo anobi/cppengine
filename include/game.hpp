@@ -62,6 +62,10 @@ private:
 
     bool menu = false;
     bool debug_ui = true;
+
+    // Test stuff
+    void LoadCubeScene(ModelLoader* modelLoader);
+    void LoadSponzaScene(ModelLoader* modelLoader);
 };
 
 #endif  // __GAME_H__

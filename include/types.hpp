@@ -22,6 +22,11 @@ struct AABB {
     }
 };
 
+struct BoundingSphere {
+    glm::fvec3 position;
+    float radius;
+};
+
 enum class lightTypes
 {
     NONE,
