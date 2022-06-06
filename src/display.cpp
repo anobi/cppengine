@@ -11,7 +11,6 @@
 #include "opengl.hpp"
 
 bool Display::Init(const int w, const int h) {
-
     this->width = w;
     this->height = h;
 
@@ -33,6 +32,7 @@ bool Display::Init(const int w, const int h) {
 
     InitGL();
 
+    this->SetResolution(w, h, false);
     this->Update();
 
     resizing = false;
@@ -47,8 +47,8 @@ void Display::Update()
 void Display::SetResolution(const int w, const int h, bool fullScreen)
 {
     resizing = true;
-    SDL_DisplayMode displayMode;
-    int getMode = SDL_GetCurrentDisplayMode(0, &displayMode);
+    SDL_DisplayMode display_mode;
+    int getMode = SDL_GetCurrentDisplayMode(0, &display_mode);
 
     if (getMode != 0) {
         printf("failed to get display mode \n");
@@ -56,11 +56,12 @@ void Display::SetResolution(const int w, const int h, bool fullScreen)
 
     this->width = w;
     this->height = h;
+    this->refresh_rate = display_mode.refresh_rate;
 
     SDL_SetWindowSize(_window, this->width, this->height);
-    displayMode.w = w;
-    displayMode.h = h;
-    SDL_SetWindowDisplayMode(_window, &displayMode);
+    display_mode.w = w;
+    display_mode.h = h;
+    SDL_SetWindowDisplayMode(_window, &display_mode);
     SDL_GL_MakeCurrent(_window, _context);
 
     glViewport(0, 0, this->width, this->height);

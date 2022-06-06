@@ -18,10 +18,7 @@ private:
     void InitGL();
 
 public:
-    Display() {
-        this->width = 800;
-        this->height = 600;
-    }
+    Display() {};
     ~Display() {};
 
     bool Init(const int width, const int height);
@@ -40,8 +37,9 @@ public:
 
     inline bool IsResizing() { return this->resizing; }
 
-    int width;
-    int height;
+    int width = 800;
+    int height = 600;
+    int refresh_rate = 60;
 };
 
 #endif

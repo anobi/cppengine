@@ -98,7 +98,6 @@ void Game::Start()
     if (this->Init())
     {
         this->renderer.UpdateResolution(this->display.width, this->display.height);
-
         this->renderer.material_manager = &this->material_manager;
         this->renderer.model_manager = &this->model_manager;
 
@@ -128,10 +127,7 @@ void Game::Loop()
     SDL_Event event;
     int ticks = 0;
 
-    // float target_framerate = 60.0f;
-    // float target_framerate = 90.0f;
-    float target_framerate = 144.0f;
-
+    float target_framerate = (float) this->display.refresh_rate;
     float target_frame_time = 1000.0f / target_framerate;
     Uint64 loop_start = SDL_GetPerformanceCounter();
 
@@ -315,15 +311,25 @@ RenderWorld Game::ConstructRenderWorld(std::vector<entityHandle_t> entities)
 
     std::vector<entityHandle_t> lights;
     std::vector<entityHandle_t> models;
+    #pragma omp parallel 
+    {
+        std::vector<entityHandle_t> _lights;
+        std::vector<entityHandle_t> _models;
 
-    for (int i = 0; i < entities.size(); i++) {
-        entitySlot_t resource = this->entity_manager.FindResource(entities[i]);
-        if (resource.has_dirlight_component || resource.has_pointlight_component) {
-            lights.push_back(resource.entity);
+        #pragma omp for nowait
+        for (int i = 0; i < entities.size(); i++) {
+            entitySlot_t resource = this->entity_manager.FindResource(entities[i]);
+            if (resource.has_dirlight_component || resource.has_pointlight_component) {
+                _lights.push_back(resource.entity);
+            }
+            else if (resource.has_model_component) {
+                _models.push_back(resource.entity);
+            }
         }
-        else if (resource.has_model_component) {
-            models.push_back(resource.entity);
-        }
+
+        #pragma omp critical
+        lights.insert(lights.end(), _lights.begin(), _lights.end());
+        models.insert(models.end(), _models.begin(), _models.end());
     }
 
     // Set lights
