@@ -1,6 +1,8 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <chrono>
+#include <SDL.h>
+#include <omp.h>
 #include "world.hpp"
 
 
@@ -13,19 +15,27 @@ void World::AddEntity(entityHandle_t entity)
 std::vector<entityHandle_t> World::SphereFrustumCull()
 {
     std::vector<entityHandle_t> entities;
-   
-    for (int i = 0; i < this->_entities_top; i++)
+    #pragma omp parallel 
     {
-        entityHandle_t entity = this->_entity_handles[i];
-        entitySlot_t model = this->model_manager->FindResource(entity);
+        std::vector<entityHandle_t> _entities;
 
-        float radius = this->model_manager->bounding_sphere_radiuses[model.slot];
-        glm::fvec3 position = this->entity_manager->spatial_components.GetPosition(entity);
+        #pragma omp for nowait
+        for (auto i = 0; i < this->_entities_top; i++)
+        {
+            entityHandle_t entity = this->_entity_handles[i];
+            entitySlot_t model = this->model_manager->FindResource(entity);
 
-        auto cull_result = this->camera->view_frustum.SphereIntersect(position, radius);
-        if (cull_result != FrustumIntersectResult::OUT) {
-            entities.push_back(entity);
+            BoundingSphere bsphere = this->model_manager->bounding_spheres[model.slot];
+            glm::fvec3 position = this->entity_manager->spatial_components.GetPosition(entity);
+
+            auto cull_result = this->camera->view_frustum.SphereIntersect(position, bsphere.radius);
+            if (cull_result != FrustumIntersectResult::OUT) {
+                _entities.push_back(entity);
+            }
         }
+
+        #pragma omp critical
+        entities.insert(entities.end(), _entities.begin(), _entities.end());
     }
 
     return entities;

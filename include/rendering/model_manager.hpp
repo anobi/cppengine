@@ -27,8 +27,7 @@ namespace Rendering
         Array<unsigned int, MAX_GAME_ENTITIES> VAOs;
         Array<unsigned int, MAX_GAME_ENTITIES> indices;
 
-        Array<float, MAX_GAME_ENTITIES> bounding_sphere_radiuses;
-        Array<glm::fvec3, MAX_GAME_ENTITIES> object_centers;  // Until the stuff can be properly positionalized
+        Array<BoundingSphere, MAX_GAME_ENTITIES> bounding_spheres;
         Array<AABB, MAX_GAME_ENTITIES> AABBs;
     };
 }

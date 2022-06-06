@@ -48,7 +48,6 @@ void Rendering::ModelManager::LoadModel(entityHandle_t entity, std::vector<Verte
     float y_dist = std::abs(minmax_y.second[0] - minmax_y.first[0]);
     float z_dist = std::abs(minmax_z.second[0] - minmax_z.first[0]);
     float radius = std::fmax(std::fmax(x_dist, y_dist), z_dist) / 2.0f;
-    this->bounding_sphere_radiuses[resource.slot] = radius;
 
     AABB aabb = AABB(
         glm::fvec3(minmax_x.first[0], minmax_y.first[0], minmax_z.first[0]),
@@ -57,19 +56,23 @@ void Rendering::ModelManager::LoadModel(entityHandle_t entity, std::vector<Verte
     this->AABBs[resource.slot] = aabb;
 
     glm::fvec3 midpoint = (aabb.min + aabb.max) / 2.0f;
-    this->object_centers[resource.slot] = midpoint;
+    BoundingSphere bsphere = BoundingSphere(
+        midpoint,
+        radius
+    );
+    this->bounding_spheres[resource.slot] = bsphere;
 
-    // Calculate new vertex posisions offset around the origin
+    //// Calculate new vertex posisions offset around the origin
     //for (int i = 0; i < vertices.size(); i++) {
     //    vertices[i].position = glm::fvec3(
-    //        vertices[i].position.x - center_position.x,
-    //        vertices[i].position.y - center_position.y,
-    //        vertices[i].position.z - center_position.z
+    //        vertices[i].position.x - midpoint.x,
+    //        vertices[i].position.y - midpoint.y,
+    //        vertices[i].position.z - midpoint.z
     //    );
     //}
 
     //// Translate the entity into the new center position
-    //this->world->entity_manager->SetPosition(entity, center_position);
+    //this->world->entity_manager->SetPosition(entity, midpoint);
 
     this->indices[resource.slot] = indexes.size();
 

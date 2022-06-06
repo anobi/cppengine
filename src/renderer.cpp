@@ -1,3 +1,4 @@
+#include <omp.h>
 #include "opengl.hpp"
 #include "renderer.hpp"
 #include "rendering/material_manager.hpp"
@@ -20,6 +21,8 @@ void Renderer::Render(RenderWorld render_world, Shader* shader)
     // TODO: Replace with unified light data
     unsigned int loc = 32; // PointLight uniform offset
     unsigned int dloc = 64; // PointLight uniform offset
+
+    #pragma omp parallel for
     for (int i = 0; i < render_world.light_count; i++)
     {
         if (render_world.light_types[i] == lightTypes::DIRECTIONAL_LIGHT)

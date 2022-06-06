@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <chrono>
+#include <omp.h>
 #include <SDL.h>
 
 #include "imgui.h"
@@ -326,7 +327,8 @@ RenderWorld Game::ConstructRenderWorld(std::vector<entityHandle_t> entities)
     }
 
     // Set lights
-    for (int i = 0; i < lights.size(); i++) 
+    #pragma omp parallel for
+    for (auto i = 0; i < lights.size(); i++) 
     {
         entityHandle_t entity = lights[i];
         entitySlot_t light = this->entity_manager.light_components.FindResource(entity);
@@ -344,7 +346,8 @@ RenderWorld Game::ConstructRenderWorld(std::vector<entityHandle_t> entities)
         render_world.light_count += 1;
     }
 
-    for (int i = 0; i < models.size(); i++) {
+    #pragma omp parallel for
+    for (auto i = 0; i < models.size(); i++) {
         entityHandle_t entity = models[i];
         entitySlot_t model              = this->entity_manager.model_components.FindResource(entity);
         render_world.materials[i]       = this->entity_manager.model_components.materials[model.slot];

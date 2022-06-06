@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef __CPPE_CAMERA_H__
+#define __CPPE_CAMERA_H__
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -8,26 +8,6 @@
 
 #include "transform.hpp"
 #include "frustum.hpp"
-
-struct Plane {
-    glm::fvec3 n;
-    float d;
-
-    Plane() { 
-        this->n = glm::fvec3(); 
-        this->d = 0.0f;
-    }
-
-    Plane(float a, float b, float c, float d, bool normalize) {
-        float l = 1.0f;
-        if (normalize) {
-            // float l = glm::sqrt((a * a) + (b * b) + (c * c));
-            float l = glm::length(glm::fvec3(a, b, c));
-        }
-        this->n = glm::fvec3(a / l, b / l, c / l);
-        this->d = d / l;
-    }
-};
 
 class Camera {
 public:
@@ -88,4 +68,4 @@ public:
     float far   = 100.0f;
 };
 
-#endif
+#endif  // __CPPE_CAMERA_H__

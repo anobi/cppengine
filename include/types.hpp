@@ -25,6 +25,11 @@ struct AABB {
 struct BoundingSphere {
     glm::fvec3 position;
     float radius;
+
+    BoundingSphere(glm::fvec3 position, float radius) {
+        this->position = position;
+        this->radius = radius;
+    }
 };
 
 enum class lightTypes

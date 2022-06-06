@@ -1,3 +1,6 @@
+#include <chrono>
+#include <SDL.H>
+#include <omp.h>
 #include "loading/model_loader.hpp"
 #include "types.hpp"
 #include "configuration.hpp"
@@ -33,7 +36,7 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
         | aiProcess_RemoveRedundantMaterials
         | aiProcess_JoinIdenticalVertices
         | aiProcess_OptimizeGraph
-        // | aiProcess_OptimizeMeshes
+        | aiProcess_OptimizeMeshes
         | aiProcess_SortByPType
         | aiProcess_SplitLargeMeshes
         | aiProcess_GenSmoothNormals
@@ -56,6 +59,7 @@ LOADINGSTATE ModelLoader::Load(const char* modelFile, entityHandle_t entity)
 
 void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHandle_t entity)
 {
+    #pragma omp parallel for
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -71,6 +75,7 @@ void ModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, entityHa
         }
     }
 
+    #pragma omp parallel for
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
         this->ProcessNode(node->mChildren[i], scene, entity);
@@ -81,6 +86,8 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
+
+    #pragma omp parallel for
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
@@ -122,6 +129,7 @@ void ModelLoader::ProcessMesh(const aiMesh* mesh, const aiScene* scene, entityHa
     }
 
     //indices
+    #pragma omp parallel for
     if (mesh->HasFaces())
     {
         for (unsigned int j = 0; j < mesh->mNumFaces; j++)

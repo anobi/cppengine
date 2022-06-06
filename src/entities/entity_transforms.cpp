@@ -1,3 +1,4 @@
+#include <omp.h>
 #include <vector>
 #include "entities/entity_transforms.hpp"
 
@@ -17,6 +18,7 @@ void EntityTransforms::Add(entityHandle_t entity)
 // TODO: This belongs into a render/mesh component. Or the render world?
 void EntityTransforms::Update(std::vector<entityHandle_t> entities, glm::fmat4 view_projection)
 {
+    #pragma omp parallel for
     for (int i = 0; i < entities.size(); i++) {
         entitySlot_t resource = this->FindResource(entities[i]);
 
@@ -27,6 +29,7 @@ void EntityTransforms::Update(std::vector<entityHandle_t> entities, glm::fmat4 v
 
 void EntityTransforms::UpdateModels()
 {
+    #pragma omp parallel for
     for (int i = 0; i < this->_model_update_queue.size(); i++) {
         unsigned int slot = this->_model_update_queue[i].slot;
 
